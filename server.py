@@ -3,9 +3,8 @@ import os
 from flask import Flask, request, render_template, redirect
 # from OpenSSL import SSL
 
-# FIX ME os and secrets.sh
-# pinterest_client_id = os.environ('PINTEREST_CLIENT_ID')
-# access_token = os.environ('ACCESS_TOKEN')
+pinterest_client_id = os.environ['PINTEREST_CLIENT_ID']
+access_token = os.environ['ACCESS_TOKEN']
 
 app = Flask(__name__)
 
