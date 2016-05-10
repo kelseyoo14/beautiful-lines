@@ -36,8 +36,10 @@ class Board(db.Model):
 
 
     board_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    board_name = db.Column(db.String(30), nullable=False)
-    user_id = db.Column(db.Integer, nullable=False)
+    board_name = db.Column(db.String(50), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+
+    user = db.relationship('User', backref=db.backref('boards'))
 
 
     def __repr__(self):
@@ -47,13 +49,33 @@ class Board(db.Model):
             self.board_id, self.board_name, self.user_id)
 
 
+class BoardImage(db.Model):
+    """Association table for boards and images"""
+
+    __tablename__ = 'boards_images'
+
+
+    board_image_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    board_id = db.Column(db.Integer, db.ForeignKey('boards.board_id'), nullable=False)
+    image_id = db.Column(db.Integer, db.ForeignKey('images.image_id'), nullable=False)
+
+    # ??? name for backref for association table
+    board = db.relationship('Board', backref=db.backref('boards_images'))
+    image = db.relationship('Image', backref=db.backref('boards_images'))
+
+    def __repr__(self):
+        """Provide helpful representation when printed to console"""
+
+        return "<User board_image_id=%s board_id=%s image_id=%s>" % (
+            self.board_image_id, self.board_id, self.image_id)
+
+
 class Image(db.Model):
 
     __tablename__ = 'images'
 
 
     image_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    board_id = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(1000), nullable=True)
     url = db.Column(db.String(150), nullable=False)
 
@@ -63,6 +85,26 @@ class Image(db.Model):
 
         return "<User image_id=%s board_id=%s>" % (self.image_id, self.board_id)
 
+
+class ImageTag(db.Model):
+    """Association table for images and tags"""
+
+    __tablename__ = 'images_tags'
+
+
+    image_tag_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    image_id = db.Column(db.Integer, db.ForeignKey('images.image_id'), nullable=False)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.tag_id'), nullable=False)
+
+    # ??? name for backref for association table
+    image = db.relationship('Image', backref=db.backref('images_tags'))
+    tag = db.relationship('Tag', backref=db.backref('images_tags'))
+
+    def __repr__(self):
+        """Provide helpful representation when printed to console"""
+
+        return "<User image_tag_id=%s image_id=%s tag_id=%s>" % (
+            self.image_tag_id, self.image_id, self.tag_id)
 
 
 class Tag(db.Model):
@@ -100,5 +142,3 @@ if __name__ == "__main__":
     from server import app
     connect_to_db(app)
     print "Connected to DB."
-
-
