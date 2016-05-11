@@ -16,9 +16,9 @@ class User(db.Model):
 
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    first_name = db.Column(db.String(20), nullable=False)
-    last_name = db.Column(db.String(20), nullable=False)
-    pinterest_url = db.Column(db.String(150), nullable=False)
+    first_name = db.Column(db.String(64), nullable=False)
+    last_name = db.Column(db.String(64), nullable=False)
+    pinterest_url = db.Column(db.String(300), nullable=False)
     access_token = db.Column(db.String(100), nullable=False)
 
 
@@ -36,7 +36,7 @@ class Board(db.Model):
 
 
     board_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    board_name = db.Column(db.String(50), nullable=False)
+    board_name = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
 
     user = db.relationship('User', backref=db.backref('boards'))
@@ -77,7 +77,7 @@ class Image(db.Model):
 
     image_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     description = db.Column(db.String(1000), nullable=True)
-    url = db.Column(db.String(150), nullable=False)
+    url = db.Column(db.String(300), nullable=False)
 
 
     def __repr__(self):
@@ -113,7 +113,7 @@ class Tag(db.Model):
 
 
     tag_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    tag_name = db.Column(db.String(20), nullable=False)
+    tag_name = db.Column(db.String(64), nullable=False)
 
 
     def __repr__(self):

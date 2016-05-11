@@ -3,8 +3,8 @@ import os
 from flask import Flask, request, render_template, redirect
 # from OpenSSL import SSL
 
-pinterest_client_id = os.environ['PINTEREST_CLIENT_ID']
-access_token = os.environ['ACCESS_TOKEN']
+CLIENT_ID = os.environ['PINTEREST_CLIENT_ID']
+ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 # headers = {'Authorization': 'Bearer %s' % access_token}
 
 app = Flask(__name__)
@@ -24,14 +24,21 @@ def homepage():
 def testing_request():
     """render new html template!"""
 
-    # Start here with your access token.
-    headers = {'Authorization': 'Bearer %s' % access_token}
-    new_request = requests.get('https://api.pinterest.com/v1/me/boards/', headers = headers)
+    # https://api.pinterest.com/v1/me/pins/?
+    # access_token=<YOUR-ACCESS-TOKEN>
+    # &fields=id,creator,note
+    # &limit=1
+
+    headers = {'Authorization': 'Bearer %s' % ACCESS_TOKEN}
+    payload = {'fields': 'id,note,image', 'limit': 1}
+
+    new_request = requests.get('https://api.pinterest.com/v1/me/pins/', headers=headers, params=payload)
     new_request_edited = new_request.json()
 
     return render_template('testserverpage.html',
                             new_request=new_request,
-                            new_request_edited=new_request_edited)
+                            new_request_edited=new_request_edited,
+                            client_id=CLIENT_ID)
 
 
 @app.route('/login', methods=['POST'])
@@ -46,9 +53,10 @@ def login():
 def dashboard():
     """User dashboard that lists there boards"""
 
-    headers = {'Authorization': 'Bearer %s' % access_token}
-    new_request = requests.get('https://api.pinterest.com/v1/me/boards/', headers = headers)
-    boards_request = request.json()
+    headers = {'Authorization': 'Bearer %s' % ACCESS_TOKEN}
+    payload = {'fields': 'id,name,image,description'}
+    new_request = requests.get('https://api.pinterest.com/v1/me/boards/', headers = headers, params=payload)
+    boards_request = new_request.json()
 
     return render_template('dashboard.html',
                             boards_request=boards_request)
@@ -57,8 +65,9 @@ def dashboard():
 def show_board():
     """Displays user board"""
 
-    headers = {'Authorization': 'Bearer %s' % access_token}
-    new_request = requests.get('https://api.pinterest.com/v1/me/boards/painting/pins', headers = headers)
+    headers = {'Authorization': 'Bearer %s' % ACCESS_TOKEN}
+    payload = {'fields': 'id,note,image'}
+    new_request = requests.get('https://api.pinterest.com/v1/me/boards/environments/pins', headers = headers, params=payload)
     pins_request = new_request.json()
 
     return render_template('user_board.html',

@@ -1,2 +1,9 @@
 env
 secrets.sh
+*.pyc
+*test*
+server-files/
+*example*
+*prototype*
+.idea/
+bootstrap-3.3.6-dist/
