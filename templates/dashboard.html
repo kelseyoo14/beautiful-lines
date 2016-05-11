@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+    <p>Top section with User Information</p>
+</div>
+
+
+<div>
+    <ul>
+        {% for board in boards_request['data'] %}
+            <div class='board'>
+                <!-- need to be able to click board -->
+                <h6>{{ board['name'] }}</h6>
+                <img src="{{ board['url'] }}">
+            </div>
+        {% endfor %}
+    </ul>
+</div>
+
+
+
+{% endblock %}
