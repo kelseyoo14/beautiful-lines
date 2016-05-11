@@ -1,3 +1,15 @@
+.user-pins-search {
+    display: block;
+    margin: 30px;
+}
+
+.boards-container {
+    display: block;
+    padding: 10px;
+    margin: 40px;
+}
+
+
 .board {
     display: inline-block;
     border: 1px solid black;

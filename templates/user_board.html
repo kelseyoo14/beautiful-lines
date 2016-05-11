@@ -2,11 +2,15 @@
 
 {% block content %}
 
-<div>
-    <li>Images listed on page</li>
-</div>
+<!-- {{ pins_request }} -->
 
-
-{{ pins_request }}
+ <ul>
+    {% for pin in pins_request['data'] %}
+        <img src="{{ pin['image']['original']['url'] }}">
+        <li>{{ pin['note'] }}</li>
+<!--                 <li>{{ pin['id'] }}</li> -->
+        <br><br>
+    {% endfor %}
+</ul>
 
 {% endblock %}

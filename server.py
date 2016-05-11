@@ -45,6 +45,11 @@ def testing_request():
 def login():
     """Log in User"""
 
+    # first_name = request.form.get('firstname')
+    # last_name = request.form.get('lastname')
+
+    # user = User(first_name=)
+
     return render_template('dashboard.html')
 
 
@@ -54,20 +59,41 @@ def dashboard():
     """User dashboard that lists there boards"""
 
     headers = {'Authorization': 'Bearer %s' % ACCESS_TOKEN}
-    payload = {'fields': 'id,name,image,description'}
+    payload = {'fields': 'id,name,image,description,url'}
     new_request = requests.get('https://api.pinterest.com/v1/me/boards/', headers = headers, params=payload)
     boards_request = new_request.json()
+    for index, board in enumerate(boards_request['data']):
+        url = board['url']
+        url = url.split('/')
+        board_name = url[-2]
+        board['url'] = board_name
+        # boards_request['data'][index]['url'] = board_name
+
 
     return render_template('dashboard.html',
                             boards_request=boards_request)
 
-@app.route('/show_board')
-def show_board():
+@app.route('/show_board/<url>')
+def show_board(url):
     """Displays user board"""
 
     headers = {'Authorization': 'Bearer %s' % ACCESS_TOKEN}
     payload = {'fields': 'id,note,image'}
-    new_request = requests.get('https://api.pinterest.com/v1/me/boards/environments/pins', headers = headers, params=payload)
+    new_request = requests.get('https://api.pinterest.com/v1/boards/kelseyoo14/%s/pins' % (url), headers=headers, params=payload)
+    pins_request = new_request.json()
+    print url
+
+    return render_template('user_board.html',
+                            pins_request=pins_request)
+
+@app.route('/test_show_board/')
+def test_show_board():
+    """Displays user board"""
+
+
+    headers = {'Authorization': 'Bearer %s' % ACCESS_TOKEN}
+    payload = {'fields': 'id,note,image'}
+    new_request = requests.get('https://api.pinterest.com/v1/boards/kelseyoo14/environments/pins', headers=headers, params=payload)
     pins_request = new_request.json()
 
     return render_template('user_board.html',
