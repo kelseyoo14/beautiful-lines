@@ -1,13 +1,17 @@
 import requests
 import os
 from urllib import urlencode
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session
+# redirect was getting overwritten somehow - still need to figure out why
+# solution for now is to import separately as 'flaskredirect'
 from flask import redirect as flaskredirect
 # import flask
 # from OpenSSL import SSL
 
 CLIENT_ID = os.environ['PINTEREST_CLIENT_ID']
 APP_SECRET = os.environ['PINTEREST_APP_SECRET']
+
+# My Global access_token. Need to use session to store user's access token
 ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 # headers = {'Authorization': 'Bearer %s' % access_token}
 
@@ -64,21 +68,22 @@ def redirect():
         # My app's client_id and client_secret, so Pinterest knows who is requesting the user's access token
         'client_id': CLIENT_ID,
         'client_secret': APP_SECRET,
-        # Grabbing code from
+        # Grabbing code from pinterest that is sent when pinterest redirect's to this route
         'code': request.args.get('code')
     }
 
     # Add data to url for post to Pinterest to ask for access token
     response = requests.post('https://api.pinterest.com/v1/oauth/token', data=request_data)
     auth_response = response.json()
-    print auth_response
     access_token = auth_response['access_token']
 
-    # Start here with your access token.
-    headers = {
-        'Authorization': 'Bearer %s' % access_token
-    }
+    # Need to store access_token in session so that I can have global use
+    session['user_token'] = access_token
 
+    # for test request
+    headers = {'Authorization': 'Bearer %s' % access_token}
+
+    # test request using access_token
     new_request = requests.get('https://api.pinterest.com/v1/me', headers=headers)
 
     return render_template('search.html')
