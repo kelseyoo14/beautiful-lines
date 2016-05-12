@@ -14,5 +14,14 @@
     display: inline-block;
     border: 1px solid black;
     padding: 20px 30px 60px 30px;
-    margin: auto;
+}
+
+.pin-container {
+    display: inline-block;
+    max-width: 200px;
+    margin: 30px;
+}
+
+.pin-image {
+    max-width: 200px;
 }

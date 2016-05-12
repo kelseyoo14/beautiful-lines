@@ -6,10 +6,11 @@
 
  <ul>
     {% for pin in pins_request['data'] %}
-        <img src="{{ pin['image']['original']['url'] }}">
-        <li>{{ pin['note'] }}</li>
-<!--                 <li>{{ pin['id'] }}</li> -->
-        <br><br>
+        <div class='pin-container'>
+            <img class="pin-image" src="{{ pin['image']['original']['url'] }}">
+            <p>{{ pin['note'] }}</p>
+    <!--                 <li>{{ pin['id'] }}</li> -->
+        </div>
     {% endfor %}
 </ul>
 

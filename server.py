@@ -1,9 +1,13 @@
 import requests
 import os
-from flask import Flask, request, render_template, redirect
+from urllib import urlencode
+from flask import Flask, request, render_template
+from flask import redirect as flaskredirect
+# import flask
 # from OpenSSL import SSL
 
 CLIENT_ID = os.environ['PINTEREST_CLIENT_ID']
+APP_SECRET = os.environ['PINTEREST_APP_SECRET']
 ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 # headers = {'Authorization': 'Bearer %s' % access_token}
 
@@ -20,9 +24,72 @@ def homepage():
     return render_template('homepage.html')
 
 
+# OAuth and Log In Start ------------------------------------------------------------
+
+@app.route('/login')
+def login():
+    """OAuth - Redirect user to log in"""
+
+    # Data that pinterest requests is sent
+    auth_data = {
+                # Pinterest says to use 'code'
+                'response_type': 'code',
+                # Route I want Pinterest to go to once user logs in and Pinterest processes the log in
+                # Need to remember to register this redirect route on pinterest app!
+                'redirect_uri': 'https://localhost:5000/get_access_token',
+                # My apps's client_id, so pinterest know's who's redirecting the user to their page
+                'client_id':CLIENT_ID,
+                # What I want to be able to do with user's account
+                'scope': 'read_public,write_public',
+                # Note for myself
+                'state': 'Random!'
+                }
+
+    url = 'https://api.pinterest.com/oauth?'
+
+    # urlencode changes auth_data into url string, redirect needs url, can't take params
+    # need to import urlencode from urllib
+    full_url = url + urlencode(auth_data)
+
+    return flaskredirect(full_url)
+
+
+@app.route('/get_access_token')
+def redirect():
+    """render new html template!"""
+
+    # Data I need to send to Pinterest to retrieve access_token
+    request_data = {
+        'grant_type': 'authorization_code',
+        # My app's client_id and client_secret, so Pinterest knows who is requesting the user's access token
+        'client_id': CLIENT_ID,
+        'client_secret': APP_SECRET,
+        # Grabbing code from
+        'code': request.args.get('code')
+    }
+
+    # Add data to url for post to Pinterest to ask for access token
+    response = requests.post('https://api.pinterest.com/v1/oauth/token', data=request_data)
+    auth_response = response.json()
+    print auth_response
+    access_token = auth_response['access_token']
+
+    # Start here with your access token.
+    headers = {
+        'Authorization': 'Bearer %s' % access_token
+    }
+
+    new_request = requests.get('https://api.pinterest.com/v1/me', headers=headers)
+
+    return render_template('search.html')
+
+# OAuth and Log In End ---------------------------------------------------------------
+
+
+
 @app.route('/testing_request')
 def testing_request():
-    """render new html template!"""
+    """testing route for making requests to Pinterest"""
 
     # https://api.pinterest.com/v1/me/pins/?
     # access_token=<YOUR-ACCESS-TOKEN>
@@ -41,16 +108,17 @@ def testing_request():
                             client_id=CLIENT_ID)
 
 
-@app.route('/login', methods=['POST'])
-def login():
-    """Log in User"""
+# Don't need anymore???
+# @app.route('/login', methods=['POST'])
+# def login():
+#     """Log in User"""
 
-    # first_name = request.form.get('firstname')
-    # last_name = request.form.get('lastname')
+#     # first_name = request.form.get('firstname')
+#     # last_name = request.form.get('lastname')
 
-    # user = User(first_name=)
+#     # user = User(first_name=)
 
-    return render_template('dashboard.html')
+#     return render_template('dashboard.html')
 
 
 
@@ -86,9 +154,11 @@ def show_board(url):
     return render_template('user_board.html',
                             pins_request=pins_request)
 
+
+# Test route
 @app.route('/test_show_board/')
 def test_show_board():
-    """Displays user board"""
+    """test - Displays user board"""
 
 
     headers = {'Authorization': 'Bearer %s' % ACCESS_TOKEN}
@@ -107,9 +177,11 @@ def show_search():
     return render_template('search.html')
 
 
-# @app.route('study_mode')
+# @app.route('/study')
 # def study_mode():
-#     """Should this be a model??? User setup study mode. Displays user picked images at user set intervals"""
+#     """Displays pins from board chosen by user to set time intervals to study"""
+
+#     return render_template('study.html')
 
 
 
