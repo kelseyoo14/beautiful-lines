@@ -49,7 +49,7 @@ class Board(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed to console"""
 
-        return "<User board_id=%s board_name=%s user_id=%s>" % (
+        return "<Board board_id=%s board_name=%s user_id=%s>" % (
             self.board_id, self.board_name, self.user_id)
 
 
@@ -68,7 +68,7 @@ class BoardImage(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed to console"""
 
-        return "<User board_image_id=%s board_id=%s image_id=%s>" % (
+        return "<BoardImage board_image_id=%s board_id=%s image_id=%s>" % (
             self.board_image_id, self.board_id, self.image_id)
 
 
@@ -85,7 +85,7 @@ class Image(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed to console"""
 
-        return "<User image_id=%s board_id=%s>" % (self.image_id, self.board_id)
+        return "<Image image_id=%s pinterest_image_id=%s>" % (self.image_id, self.pinterest_image_id)
 
 
 class ImageTag(db.Model):
@@ -103,7 +103,7 @@ class ImageTag(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed to console"""
 
-        return "<User image_tag_id=%s image_id=%s tag_id=%s>" % (
+        return "<ImageTag image_tag_id=%s image_id=%s tag_id=%s>" % (
             self.image_tag_id, self.image_id, self.tag_id)
 
 
@@ -117,7 +117,7 @@ class Tag(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed to console"""
 
-        return "<User tag_id=%s tag_name=%s>" % (self.tag_id, self.tag_name)
+        return "<Tag tag_id=%s tag_name=%s>" % (self.tag_id, self.tag_name)
 
 
 ##############################################################################

@@ -17,7 +17,7 @@
             <p>{{ pin['note'] }}</p>
             <!-- If Pin's board is saved, link or button for user to click save. JS? -->
             <!-- default display is none, unless board is saved, then display -->
-            <a href="/save_pin">Save Image</a>
+            <a href="/save_image/{{ pin['id'] }}">Save Image</a>
         </div>
     {% endfor %}
 </ul>

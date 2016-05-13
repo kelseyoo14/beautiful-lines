@@ -18,7 +18,7 @@ app = Flask(__name__)
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
 
-
+# 1
 @app.route('/')
 def homepage():
     """Website Homepage/Welcome"""
@@ -27,7 +27,7 @@ def homepage():
 
 
 # OAuth and Log In Start ------------------------------------------------------------
-
+# 2
 @app.route('/login')
 def login():
     """OAuth - Redirect user to log in"""
@@ -55,7 +55,7 @@ def login():
 
     return flaskredirect(full_url)
 
-
+# 3
 @app.route('/process_login')
 def redirect():
     """render new html template!"""
@@ -118,7 +118,7 @@ def redirect():
 
 # OAuth and Log In End ---------------------------------------------------------------
 
-
+# 4
 @app.route('/logout')
 def logout():
     session.clear()
@@ -126,6 +126,7 @@ def logout():
 
     return render_template('homepage.html')
 
+# 5
 @app.route('/dashboard')
 def dashboard():
     """User dashboard that lists user's boards saved to blines db"""
@@ -135,14 +136,14 @@ def dashboard():
     return render_template('dashboard.html',
                             user_boards=user_boards)
 
-
+# 6
 @app.route('/user_pinterest')
 def user_pinterest():
     """Displays user's boards from their pinterest"""
 
     headers = {'Authorization': 'Bearer %s' % session['access_token']}
     payload = {'fields': 'id,name,image,description,url'}
-    new_request = requests.get('https://api.pinterest.com/v1/me/boards/', headers = headers, params=payload)
+    new_request = requests.get('https://api.pinterest.com/v1/me/boards/', headers=headers, params=payload)
     boards_request = new_request.json()
     for index, board in enumerate(boards_request['data']):
         url = board['url']
@@ -153,10 +154,10 @@ def user_pinterest():
     # print boards_request
         # boards_request['data'][index]['url'] = board_name
 
-
     return render_template('user_pinterest.html',
                             boards_request=boards_request)
 
+# 7
 @app.route('/show_board/<url>')
 def show_board(url):
     """Displays user board"""
@@ -164,7 +165,7 @@ def show_board(url):
     user = User.query.filter(User.user_id == session['user_id']).first()
     username = user.username
     headers = {'Authorization': 'Bearer %s' % session['access_token']}
-    payload = {'fields': 'id,board,image,note'}
+    payload = {'fields': 'id,url,board,image,note'}
     new_request = requests.get('https://api.pinterest.com/v1/boards/%s/%s/pins' % (username, url), headers=headers, params=payload)
     pins_request = new_request.json()
     print pins_request
@@ -172,31 +173,7 @@ def show_board(url):
     return render_template('user_board.html',
                             pins_request=pins_request)
 
-
-# Routes that need to be made ----------------------------------------------------------
-# @app.route('/board_exists')
-# def board_exists():
-#     """Check if board exists"""
-
-
-# example board request
-# environments
-# --------------------------------------
-# {u'data': {
-#     u'url': u'https://www.pinterest.com/kelseyoo14/environments/', 
-#     u'image': {
-#         u'60x60': {
-#             u'url': u'https://s-media-cache-ak0.pinimg.com/60x60/a3/21/3c/a3213cedd3be727cf6a15998d0cc7b1e.jpg', 
-#             u'width': 60, 
-#             u'height': 60
-#         }
-#     }, 
-#     u'id': u'146648600305428549', 
-#     u'name': u'Environments', 
-#     u'description': u''
-# }}
-
-
+# 8
 @app.route('/save_board/<board>/')
 def save_board(board):
     """Saves board to Beautiful Lines"""
@@ -213,21 +190,97 @@ def save_board(board):
 
     pinterest_board_id = board_request['data']['id']
     board_name = board_request['data']['name']
-    board_description = board_request['data']['image']['60x60']['url']
+    board_description = board_request['data']['description']
+    image_url = board_request['data']['image']['60x60']['url']
 
     # Create new_board for db
-    new_board = Board(pinterest_board_id=pinterest_board_id, url_name=board, board_name=board_name,
-                    board_description=board_description, user_id=session['user_id'])
-
-    print new_board
+    new_board = Board(pinterest_board_id=pinterest_board_id,
+                      url_name=board,
+                      board_name=board_name,
+                      board_description=board_description,
+                      image_url=image_url,
+                      user_id=session['user_id'])
 
     db.session.add(new_board)
     db.session.commit()
 
+    session['board_url'] = new_board.url_name
+
+    return flaskredirect('/save_images_on_board')
+
+# 9
+# FIX ME - save all images on a board that is saved
+@app.route('/save_images_on_board')
+def save_images_on_board():
+
+    user = User.query.filter(User.user_id == session['user_id']).first()
+    username = user.username
+    headers = {'Authorization': 'Bearer %s' % session['access_token']}
+    payload = {'fields': 'id,url,board,image,note'}
+    new_request = requests.get('https://api.pinterest.com/v1/boards/%s/%s/pins' % (username, session['board_url']), headers=headers, params=payload)
+    pins_request = new_request.json()
+
+    # make for loop to save each image in pins_request['data']
+    for pin in pins_request['data']:
+        pinterest_image_id = pin['id']
+        original_url = pin['image']['original']['url']
+        pinterest_url = pin['url']
+        description = pin['note']
+
+        # Create new_board for db
+        new_image = Image(pinterest_image_id=pinterest_image_id,
+                          original_url=original_url,
+                          pinterest_url=pinterest_url,
+                          description=description)
+
+        db.session.add(new_image)
+
+    db.session.commit()
+
     return flaskredirect('/user_pinterest')
 
-# @app.route('/save_image/<image>')
-# def save_image(image):
+# 10
+@app.route('/delete_board/<board_id>')
+def delete_board(board_id):
+    """Deletes user board from blines db"""
+
+    Board.query.filter(Board.board_id == board_id).delete()
+    db.session.commit()
+
+    return flaskredirect('/dashboard')
+
+# 11
+@app.route('/save_image/<pin_id>')
+def save_image(pin_id):
+    """Saves image to Beautiful Lines"""
+    print pin_id
+    print '--------------------------------------'
+
+    headers = {'Authorization': 'Bearer %s' % session['access_token']}
+    payload = {'fields': 'id,url,board,image,note'}
+    new_request = requests.get('https://api.pinterest.com/v1/pins/%s' % (pin_id), headers=headers, params=payload)
+    pin_request = new_request.json()
+    print pin_request
+    print '---------------------------'
+
+
+    pinterest_image_id = pin_request['data']['id']
+    original_url = pin_request['data']['image']['original']['url']
+    pinterest_url = pin_request['data']['url']
+    description = pin_request['data']['note']
+
+    # Create new_board for db
+    new_image = Image(pinterest_image_id=pin_id,
+                      original_url=original_url,
+                      pinterest_url=pinterest_url,
+                      description=description)
+
+    print new_image
+
+    db.session.add(new_image)
+    db.session.commit()
+
+    return flaskredirect('/user_pinterest')
 
 
 #     new_image = Image()
@@ -239,7 +292,6 @@ def save_board(board):
 #     """Search Pinterest(?) and display pins related to user search terms"""
 
 #     return render_template('search.html')
-
 
 
 # @app.route('/study')
