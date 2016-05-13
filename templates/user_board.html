@@ -2,14 +2,22 @@
 
 {% block content %}
 
-<!-- {{ pins_request }} -->
+<!-- {{ pins_request }}
+ -->
+<!-- {{ pins_request['data'] }}
+ -->
+
+ <h2>{{ pins_request['data'][0]['board']['name'] }}</h2>
+
 
  <ul>
     {% for pin in pins_request['data'] %}
         <div class='pin-container'>
             <img class="pin-image" src="{{ pin['image']['original']['url'] }}">
             <p>{{ pin['note'] }}</p>
-    <!--                 <li>{{ pin['id'] }}</li> -->
+            <!-- If Pin's board is saved, link or button for user to click save. JS? -->
+            <!-- default display is none, unless board is saved, then display -->
+            <a href="/save_pin">Save Image</a>
         </div>
     {% endfor %}
 </ul>

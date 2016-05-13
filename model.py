@@ -14,13 +14,15 @@ class User(db.Model):
 
     __tablename__ = 'users'
 
-
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    first_name = db.Column(db.String(64), nullable=False)
-    last_name = db.Column(db.String(64), nullable=False)
-    pinterest_url = db.Column(db.String(300), nullable=False)
+    pinterest_user_id = db.Column(db.String(100), nullable=False)
+    # pinterest_user_id = db.Column(db.String(100), nullable=False, unique=True)
+    username = db.Column(db.String(64), nullable=False)
+    first_name = db.Column(db.String(64), nullable=True)
+    last_name = db.Column(db.String(64), nullable=True)
+    bio = db.Column(db.String(64), nullable=True)
+    # pinterest_url = db.Column(db.String(300), nullable=False)
     access_token = db.Column(db.String(100), nullable=False)
-
 
     def __repr__(self):
         """Provide helpful representation when printed to console"""
@@ -34,13 +36,15 @@ class Board(db.Model):
 
     __tablename__ = 'boards'
 
-
     board_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    pinterest_board_id = db.Column(db.String(100), nullable=False)
+    url_name = db.Column(db.String(100), nullable=False)
     board_name = db.Column(db.String(100), nullable=False)
+    board_description = db.Column(db.String(1000), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    image_url = db.Column(db.String(300), nullable=False)
 
     user = db.relationship('User', backref=db.backref('boards'))
-
 
     def __repr__(self):
         """Provide helpful representation when printed to console"""
@@ -54,12 +58,10 @@ class BoardImage(db.Model):
 
     __tablename__ = 'boards_images'
 
-
     board_image_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     board_id = db.Column(db.Integer, db.ForeignKey('boards.board_id'), nullable=False)
     image_id = db.Column(db.Integer, db.ForeignKey('images.image_id'), nullable=False)
 
-    # ??? name for backref for association table
     board = db.relationship('Board', backref=db.backref('boards_images'))
     image = db.relationship('Image', backref=db.backref('boards_images'))
 
@@ -74,11 +76,11 @@ class Image(db.Model):
 
     __tablename__ = 'images'
 
-
     image_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    pinterest_image_id = db.Column(db.String(100), nullable=False)
+    original_url = db.Column(db.String(300), nullable=False)
+    pinterest_url = db.Column(db.String(300), nullable=False)
     description = db.Column(db.String(1000), nullable=True)
-    url = db.Column(db.String(300), nullable=False)
-
 
     def __repr__(self):
         """Provide helpful representation when printed to console"""
@@ -91,12 +93,10 @@ class ImageTag(db.Model):
 
     __tablename__ = 'images_tags'
 
-
     image_tag_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     image_id = db.Column(db.Integer, db.ForeignKey('images.image_id'), nullable=False)
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.tag_id'), nullable=False)
 
-    # ??? name for backref for association table
     image = db.relationship('Image', backref=db.backref('images_tags'))
     tag = db.relationship('Tag', backref=db.backref('images_tags'))
 
@@ -111,16 +111,13 @@ class Tag(db.Model):
 
     __tablename__ = 'tags'
 
-
     tag_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     tag_name = db.Column(db.String(64), nullable=False)
-
 
     def __repr__(self):
         """Provide helpful representation when printed to console"""
 
         return "<User tag_id=%s tag_name=%s>" % (self.tag_id, self.tag_name)
-
 
 
 ##############################################################################
