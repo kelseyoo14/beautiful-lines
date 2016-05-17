@@ -146,9 +146,11 @@ def images_in_blines(board_id):
     """Displays images from chosen board that exist in blines db"""
 
     images = Board.query.get(board_id).images
+    boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
 
     return render_template('user_board.html',
-                            images=images)
+                            images=images,
+                            boards=boards_in_blines)
 
 
 # 7
@@ -189,9 +191,6 @@ def show_pinterest_boards(url):
 
     # Sending boards in blines db to display in modal if user wants to save image
     boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
-    print '-----------------------------------------------------------------'
-    print boards_in_blines
-    print '-----------------------------------------------------------------'
 
     return render_template('pinterest_board.html',
                             pins=pins_request,
@@ -311,17 +310,10 @@ def save_image():
     board_id = request.form.get('board')
     pin_id = request.form.get('pin_id')
 
-    print '----------------------------------------------------------------'
-    print pin_id
-    print '----------------------------------------------------------------'
-
     headers = {'Authorization': 'Bearer %s' % session['access_token']}
     payload = {'fields': 'id,url,board,image,note'}
     new_request = requests.get('https://api.pinterest.com/v1/pins/%s' % (pin_id), headers=headers, params=payload)
     pin_request = new_request.json()
-    print '----------------------------------------------------------------'
-    print pin_request
-    print '----------------------------------------------------------------'
 
     # pinterest_image_id = pin_request['data']['id']
     original_url = pin_request['data']['image']['original']['url']
@@ -345,9 +337,23 @@ def save_image():
     return flaskredirect('/pinterest_boards')
 
 
+# 13
+@app.route('/save_boardimage', methods=['POST'])
+def save_boardimage():
+    """Create record in boards_images for image with the board the image is being saved on"""
+    board_id = request.form.get('board')
+    pin_id = request.form.get('pin_id')
+
+    new_boardimage = BoardImage(board_id=board_id,
+                                image_id=new_image.image_id)
+
+    db.session.add(new_boardimage)
+    db.session.commit()
+
+
 # FIX EM
 # maybe: # @app.route('/delete_image/<int:image_id>/<int:board_id>')
-# # 13
+# # 14
 # @app.route('/delete_image/<image_id>')
 # def delete_image(image_id):
 #     """Deletes user image from blines db"""
@@ -363,7 +369,7 @@ def save_image():
 
 
 # FIX EM - Need to create form for user to enter new board name on home page to create new board
-# # 14
+# # 15
 # @app.route('/create_board')
 # def create_board():
 #     """Create new board in blines db"""
@@ -378,14 +384,14 @@ def save_image():
 
 
 
-
+# # 16
 # @app.route('/search')
 # def show_search():
 #     """Search Pinterest(?) and display pins related to user search terms"""
 
 #     return render_template('search.html')
 
-
+# # 17
 # @app.route('/study')
 # def study_mode():
 #     """Displays pins from board chosen by user to set time intervals to study"""
