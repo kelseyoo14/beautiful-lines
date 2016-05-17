@@ -189,12 +189,15 @@ def show_pinterest_boards(url):
 
     # Sending boards in blines db to display in modal if user wants to save image
     boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
+    print '-----------------------------------------------------------------'
+    print boards_in_blines
+    print '-----------------------------------------------------------------'
 
     return render_template('pinterest_board.html',
                             pins=pins_request,
                             boards=boards_in_blines)
 
-# FIX ME
+
 # 9
 @app.route('/save_board/<board>/')
 def save_board(board):
@@ -270,32 +273,29 @@ def save_images_on_board():
     return flaskredirect('/pinterest_boards')
 
 
-# FIX ME - able to delete board, but also need to delete board from association
-# table and images associated with board
 # 11
 @app.route('/delete_board/<board_id>')
 def delete_board(board_id):
     """Deletes user board from blines db"""
+
     images = Board.query.get(board_id).images
     images_ids = []
-    # This is working
-    BoardImage.query.filter(BoardImage.board_id == board_id).delete()
-    print '----------------------------------------------------------------'
-    print 'board_image deleted'
-    # Deleting images is not working!
+
     for image in images:
         print '----------------------------------------------------------------'
         print image
         print image.image_id
         images_ids.append(image.image_id)
-    print images_ids
+
+    # Delete association table (foreign keys)
+    BoardImage.query.filter(BoardImage.board_id == board_id).delete()
+
+    # Delete images now that they are no longer foreign keys
     for next_image_id in images_ids:
         Image.query.filter(Image.image_id == next_image_id).delete()
-        db.session.commit()
-    # This is working
+
+    # Finally, delete actual boards images are on
     Board.query.filter(Board.board_id == board_id).delete()
-    print '----------------------------------------------------------------'
-    print 'board deleted'
 
     db.session.commit()
 
@@ -304,14 +304,24 @@ def delete_board(board_id):
 
 # FIX ME - Which board is this image being saved to? Need to integrate with modal
 # 12
-@app.route('/save_image/<pin_id>')
-def save_image(pin_id):
+@app.route('/save_image', methods=['POST'])
+def save_image():
     """Saves image to Beautiful Lines"""
+
+    board_id = request.form.get('board')
+    pin_id = request.form.get('pin_id')
+
+    print '----------------------------------------------------------------'
+    print pin_id
+    print '----------------------------------------------------------------'
 
     headers = {'Authorization': 'Bearer %s' % session['access_token']}
     payload = {'fields': 'id,url,board,image,note'}
     new_request = requests.get('https://api.pinterest.com/v1/pins/%s' % (pin_id), headers=headers, params=payload)
     pin_request = new_request.json()
+    print '----------------------------------------------------------------'
+    print pin_request
+    print '----------------------------------------------------------------'
 
     # pinterest_image_id = pin_request['data']['id']
     original_url = pin_request['data']['image']['original']['url']
@@ -326,14 +336,25 @@ def save_image(pin_id):
     db.session.add(new_image)
     db.session.commit()
 
+    new_boardimage = BoardImage(board_id=board_id,
+                                image_id=new_image.image_id)
+
+    db.session.add(new_boardimage)
+    db.session.commit()
+
     return flaskredirect('/pinterest_boards')
 
 
 # FIX EM
+# maybe: # @app.route('/delete_image/<int:image_id>/<int:board_id>')
 # # 13
 # @app.route('/delete_image/<image_id>')
 # def delete_image(image_id):
 #     """Deletes user image from blines db"""
+
+    # Need to delete from association table also. Need to delete the specific board_image
+    # with this specific image_id on this specific board (board_id)
+    # BoardImage.query.filter(BoardImage.image_id=image_id, BoardImage.board_id=board_id).delete()
 
 #     Board.query.filter(Board.board_id == board_id).delete()
 #     db.session.commit()

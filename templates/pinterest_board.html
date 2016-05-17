@@ -5,11 +5,6 @@
 
 {% block content %}
 
-<!-- {{ pins }}
- -->
-<!-- {{ pins['data'] }}
- -->
-
 
  <div class="modal fade" id="saveImageModal" tabindex="-1" role="dialog">
   <div class="modal-dialog">
@@ -19,23 +14,30 @@
         <h4 class="modal-title">Save Image</h4>
       </div>
       <div class="modal-body">
-        <p>One fine body&hellip;
+        <p>
              <!-- A list of the boards in blines that image can be saved to -->
-            {% for board in boards %}
-                <div>
-                    <h4>{{ board.board_name}}</h4>
-                    <img src="{{ image_url }}">
-            {% endfor %}
+            {% if boards %}
+              <form action="/save_image" id="save-image-to-board" method='POST'>
+                {% for board in boards %}
+                        <h4>{{ board.board_name }}</h4>
+                        <img src="{{ board.image_url }}">
+                        <input type="radio" name="board-to-save-image" value="{{ board.board_id }}">
+                {% endfor %}
+                  <input type='hidden' id='save-image-hidden-input'>
+                  <br><br>
+                  <input type="submit" value="Submit">
+              </form>
+            {% else %}
+              <p>You don't have any boards saved on Beautiful Lines</p>
+            {% endif %}
 
                     <!-- FIX ME
                     <!-- Need to send board id to route to save in BoardImage association table,
                     and need to send image id to save in Image table -->
-                </div>
         </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save Image</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -50,7 +52,7 @@
             <img class="pin-image" src="{{ pin['image']['original']['url'] }}">
             <p>{{ pin['note'] }}</p>
 
-            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveImageModal">Save</button>
+            <button type="button" class="btn btn-primary btn-lg save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ pin['id'] }}">Save</button>
             <!-- <a class="image-save" href="/save_image/{{ pin['id'] }}">Save</a> -->
         </div>
     {% endfor %}
