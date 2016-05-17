@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<!-- {{ boards_request }} -->
+
+<div>
+    <h3>User Name</h3>
+</div>
+
+<br>
+<div class="user-pins-search">
+    <form class="navbar-form navbar-left" role="search">
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Search Your Pins">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+</div>
+
+<br><br>
+
+<div class='boards-container'>
+    <ul>
+        {% for board in user_boards %}
+            <div class='board'>
+                <!-- need to be able to click board -->
+                <h6>{{ board.board_name }}</h6>
+
+                <!-- Need to pass specific board! -->
+                <a href="/show_pinterest_boards/{{ board.url_name }}"><img src="{{ board.image_url }}"></a>
+                {% if board['description'] %}
+                    <h6>Description</h6>
+                    <li>{{ board['description'] }}</li>
+                {% endif %}
+                <br><br>
+                <a href="/delete_board/{{ board.board_id }}">Delete Board</a>
+            </div>
+        {% endfor %}
+    </ul>
+</div>
+
+
+
+{% endblock %}
+
+

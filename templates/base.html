@@ -1,3 +1,5 @@
+<!-- Base template -->
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,8 +22,8 @@
                 </div>
                 <button type="submit" class="btn btn-default">Submit</button>
               </form>
-              <li><a href="/dashboard">Dashboard</a></li>
-              <li><a href="/user_pinterest">Pinterest</a></li>
+              <li><a href="/home">Home</a></li>
+              <li><a href="/pinterest_boards">Your Pinterest</a></li>
               <li><a href="/study">Study</a></li>
               <li><a href="/logout">Log out</a></li> 
             </ul>
@@ -30,24 +32,6 @@
 
         {% block content %} Put some content here {% endblock %}
 
-
-        <!-- Pinterest Javascript SDK -->
-        <script>
-          window.pAsyncInit = function() {
-              PDK.init({
-                  appId: "<your app-id>", // Change this. How do I pass from server.py to this script??
-                  cookie: true
-              });
-          };
-
-          (function(d, s, id){
-              var js, pjs = d.getElementsByTagName(s)[0];
-              if (d.getElementById(id)) {return;}
-              js = d.createElement(s); js.id = id;
-              js.src = "//assets.pinterest.com/sdk/sdk.js";
-              pjs.parentNode.insertBefore(js, pjs);
-          }(document, 'script', 'pinterest-jssdk'));
-      </script>
         <script src="../static/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/main.js"></script>
     </body>

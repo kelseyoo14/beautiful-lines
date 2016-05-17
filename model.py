@@ -39,6 +39,7 @@ class Board(db.Model):
     board_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     pinterest_board_id = db.Column(db.String(100), nullable=False)
     url_name = db.Column(db.String(100), nullable=False)
+    # Board name needs to be: unique=True (do next time I drop and create db)
     board_name = db.Column(db.String(100), nullable=False)
     board_description = db.Column(db.String(1000), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
@@ -62,13 +63,13 @@ class BoardImage(db.Model):
     board_id = db.Column(db.Integer, db.ForeignKey('boards.board_id'), nullable=False)
     image_id = db.Column(db.Integer, db.ForeignKey('images.image_id'), nullable=False)
 
-    board = db.relationship('Board', backref=db.backref('boards_images'))
-    image = db.relationship('Image', backref=db.backref('boards_images'))
+    board = db.relationship('Board', backref=db.backref('boards_images'), single_parent=True, cascade="all, delete-orphan")
+    image = db.relationship('Image', backref=db.backref('boards_images'), single_parent=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         """Provide helpful representation when printed to console"""
 
-        return "<BoardImage board_image_id=%s board_id=%s image_id=%s>" % (
+        return "\n<BoardImage board_image_id=%s board_id=%s image_id=%s>" % (
             self.board_image_id, self.board_id, self.image_id)
 
 
@@ -82,10 +83,14 @@ class Image(db.Model):
     pinterest_url = db.Column(db.String(300), nullable=False)
     description = db.Column(db.String(1000), nullable=True)
 
+    boards = db.relationship('Board',
+                              secondary="boards_images",
+                              backref=db.backref('images'))
+
     def __repr__(self):
         """Provide helpful representation when printed to console"""
 
-        return "<Image image_id=%s pinterest_image_id=%s>" % (self.image_id, self.pinterest_image_id)
+        return "<%s image_id=%s pinterest_image_id=%s>" % (type(self).__name__, self.image_id, self.pinterest_image_id)
 
 
 class ImageTag(db.Model):
@@ -128,6 +133,7 @@ def connect_to_db(app):
 
     # Configure to use our PstgreSQL database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blines'
+    app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
     db.init_app(app)
 

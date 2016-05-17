@@ -1,39 +1,36 @@
-<!-- Display User Board in db -->
-
-
-<!-- FIX ME WHOLE PAGE TO MAKE FOR BOARD QUERIED FROM DB NOT BOARD REQUESTED FROM PINTEREST -->
+<!-- Displays Images(Pins) from user's chosen pinterest board -->
 
 
 {% extends 'base.html' %}
 
 {% block content %}
 
+<!-- {{ pins }}
+ -->
+<!-- {{ pins['data'] }}
+ -->
 
-<!--  <div class="modal fade" id="saveImageModal" tabindex="-1" role="dialog">
+
+ <div class="modal fade" id="saveImageModal" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-<!--         <h4 class="modal-title">Save Image</h4> -->
+        <h4 class="modal-title">Save Image</h4>
       </div>
       <div class="modal-body">
         <p>One fine body&hellip;
-            <!-- A list of the boards in blines that image can be saved to -->
+             <!-- A list of the boards in blines that image can be saved to -->
             {% for board in boards %}
                 <div>
-                    <!-- Display board name, image-->
                     <h4>{{ board.board_name}}</h4>
                     <img src="{{ image_url }}">
             {% endfor %}
 
-                    <!-- FIX ME -->
+                    <!-- FIX ME
                     <!-- Need to send board id to route to save in BoardImage association table,
                     and need to send image id to save in Image table -->
                 </div>
-
-
-
-
         </p>
       </div>
       <div class="modal-footer">
@@ -44,16 +41,17 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-
+ <h2>{{ pins['data'][0]['board']['name'] }}</h2>
 
 
  <ul>
-    {% for image in images %}
+    {% for pin in pins['data'] %}
         <div class='pin-container'>
-            <img class="pin-image" src="{{ image.original_url }}">
-            <p>{{ image.description }}</p>
+            <img class="pin-image" src="{{ pin['image']['original']['url'] }}">
+            <p>{{ pin['note'] }}</p>
 
             <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveImageModal">Save</button>
+            <!-- <a class="image-save" href="/save_image/{{ pin['id'] }}">Save</a> -->
         </div>
     {% endfor %}
 </ul>
