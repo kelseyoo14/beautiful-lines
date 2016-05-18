@@ -17,23 +17,20 @@
         <p>
              <!-- A list of the boards in blines that image can be saved to -->
             {% if boards %}
-              <form action="/save_image" id="save-image-to-board" method='POST'>
+              <form id="save-image-to-board">
                 {% for board in boards %}
                         <h4>{{ board.board_name }}</h4>
                         <img src="{{ board.image_url }}">
                         <input type="radio" name="board-to-save-image" value="{{ board.board_id }}">
                 {% endfor %}
-                  <input type='hidden' id='save-image-hidden-input'>
+                  <input type='hidden' id='hidden-pinid'>
+                  <input type='hidden' id='hidden-imageid'>
                   <br><br>
                   <input type="submit" value="Submit">
               </form>
             {% else %}
               <p>You don't have any boards saved on Beautiful Lines</p>
             {% endif %}
-
-                    <!-- FIX ME
-                    <!-- Need to send board id to route to save in BoardImage association table,
-                    and need to send image id to save in Image table -->
         </p>
       </div>
       <div class="modal-footer">
@@ -43,18 +40,43 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
- <h2>{{ pins['data'][0]['board']['name'] }}</h2>
 
 
- <ul>
-    {% for pin in pins['data'] %}
-        <div class='pin-container'>
-            <img class="pin-image" src="{{ pin['image']['original']['url'] }}">
-            <p>{{ pin['note'] }}</p>
+{% if pins %}
+   <h2>{{ pins['data'][0]['board']['name'] }}</h2>
 
-            <button type="button" class="btn btn-primary btn-lg save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ pin['id'] }}">Save</button>
-        </div>
-    {% endfor %}
-</ul>
+   <ul>
+      {% for pin in pins['data'] %}
+          <div class='pin-container'>
+              <img class="pin-image" src="{{ pin['image']['original']['url'] }}">
+              <p>{{ pin['note'] }}</p>
+
+              <button type="button" class="btn btn-primary btn-lg save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ pin['id'] }}" data-imageid="No-ID">Save</button>
+          </div>
+      {% endfor %}
+  </ul>
+{% endif %}
+
+{% if images %}
+  <h2>{{ current_board.board_name }}</h2>
+
+  <ul>
+      {% for image in images %}
+          <div class='pin-container'>
+              <img class="pin-image" src="{{ image.original_url }}">
+              <p>{{ image.description }}</p>
+
+              <button type="button" class="btn btn-primary btn-lg save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ image.pinterest_image_id }}" data-imageid="{{ image.image_id }}">Save</button>
+              <form id="delete-image-from-board">
+                <input type='hidden' id='image_id' value='{{ image.image_id }}'>
+                Image ID: {{ image.image_id }}
+                <input type='hidden' id='board_id' value='{{ current_board.board_id }}'>
+                Board ID: {{ current_board.board_id }}
+                <input type='submit' value='Delete'>
+              </form
+          </div>
+      {% endfor %}
+  </ul>
+{% endif %}
 
 {% endblock %}

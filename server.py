@@ -147,10 +147,12 @@ def images_in_blines(board_id):
 
     images = Board.query.get(board_id).images
     boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
+    current_board = Board.query.filter(Board.board_id == board_id).first()
 
-    return render_template('user_board.html',
+    return render_template('pinterest_board.html',
                             images=images,
-                            boards=boards_in_blines)
+                            boards=boards_in_blines,
+                            current_board=current_board)
 
 
 # 7
@@ -201,8 +203,6 @@ def show_pinterest_boards(url):
 @app.route('/save_board/<board>/')
 def save_board(board):
     """Saves board to Beautiful Lines"""
-
-    # import pdb; pdb.set_trace()
 
     username = session['username']
     headers = {'Authorization': 'Bearer %s' % session['access_token']}
@@ -301,75 +301,91 @@ def delete_board(board_id):
     return flaskredirect('/home')
 
 
-# FIX ME - Which board is this image being saved to? Need to integrate with modal
 # 12
 @app.route('/save_image', methods=['POST'])
 def save_image():
-    """Saves image to Beautiful Lines"""
+    """Saves image to Beautiful Lines Board"""
 
     board_id = request.form.get('board')
     pin_id = request.form.get('pin_id')
+    image_id = request.form.get('image_id')
 
-    headers = {'Authorization': 'Bearer %s' % session['access_token']}
-    payload = {'fields': 'id,url,board,image,note'}
-    new_request = requests.get('https://api.pinterest.com/v1/pins/%s' % (pin_id), headers=headers, params=payload)
-    pin_request = new_request.json()
+    # If image not already in db
+    if image_id == "No-ID":
 
-    # pinterest_image_id = pin_request['data']['id']
-    original_url = pin_request['data']['image']['original']['url']
-    pinterest_url = pin_request['data']['url']
-    description = pin_request['data']['note']
+        headers = {'Authorization': 'Bearer %s' % session['access_token']}
+        payload = {'fields': 'id,url,board,image,note'}
+        new_request = requests.get('https://api.pinterest.com/v1/pins/%s' % (pin_id), headers=headers, params=payload)
+        pin_request = new_request.json()
 
-    new_image = Image(pinterest_image_id=pin_id,
-                      original_url=original_url,
-                      pinterest_url=pinterest_url,
-                      description=description)
+        # pinterest_image_id = pin_request['data']['id']
+        original_url = pin_request['data']['image']['original']['url']
+        pinterest_url = pin_request['data']['url']
+        description = pin_request['data']['note']
 
-    db.session.add(new_image)
-    db.session.commit()
+        new_image = Image(pinterest_image_id=pin_id,
+                          original_url=original_url,
+                          pinterest_url=pinterest_url,
+                          description=description)
+
+        db.session.add(new_image)
+        db.session.commit()
+
+        image_id = new_image.image_id
 
     new_boardimage = BoardImage(board_id=board_id,
-                                image_id=new_image.image_id)
+                                image_id=image_id)
+
+    print "New BoardImage:"
+    print new_boardimage
 
     db.session.add(new_boardimage)
     db.session.commit()
 
-    return flaskredirect('/pinterest_boards')
-
-
-# 13
-@app.route('/save_boardimage', methods=['POST'])
-def save_boardimage():
-    """Create record in boards_images for image with the board the image is being saved on"""
-    board_id = request.form.get('board')
-    pin_id = request.form.get('pin_id')
-
-    new_boardimage = BoardImage(board_id=board_id,
-                                image_id=new_image.image_id)
-
-    db.session.add(new_boardimage)
-    db.session.commit()
+    return ('Saved')
 
 
 # FIX EM
-# maybe: # @app.route('/delete_image/<int:image_id>/<int:board_id>')
-# # 14
-# @app.route('/delete_image/<image_id>')
-# def delete_image(image_id):
-#     """Deletes user image from blines db"""
+# 13
+@app.route('/delete_image', methods=['POST'])
+def delete_image():
+    """Deletes user image from blines association table, and from images table if no instances of it exist in association table"""
 
-    # Need to delete from association table also. Need to delete the specific board_image
-    # with this specific image_id on this specific board (board_id)
-    # BoardImage.query.filter(BoardImage.image_id=image_id, BoardImage.board_id=board_id).delete()
+    # import pdb; pdb.set_trace()
 
-#     Board.query.filter(Board.board_id == board_id).delete()
-#     db.session.commit()
+    board_id = request.form.get('board_id')
+    image_id = request.form.get('image_id')
 
-#     return flaskredirect('/home')
+    print '----------------------------------------------------------------'
+    print "BOARD ID %s" % board_id
+    print "IMAGE ID %s" % image_id
+    print '----------------------------------------------------------------'
+
+    test_board = BoardImage.query.filter(BoardImage.image_id == image_id, BoardImage.board_id == board_id).first()
+
+    print '----------------------------------------------------------------'
+    print test_board
+    print '----------------------------------------------------------------'
+
+    BoardImage.query.filter(BoardImage.image_id == image_id, BoardImage.board_id == board_id).delete()
+
+    db.session.commit()
+
+    images = BoardImage.query.filter(BoardImage.image_id == image_id).all()
+    print images
+
+    if images == []:
+        pass
+    else:
+        Board.query.filter(Board.board_id == board_id).delete()
+
+        db.session.commit()
+
+    return ('Deleted')
 
 
 # FIX EM - Need to create form for user to enter new board name on home page to create new board
-# # 15
+# # 14
 # @app.route('/create_board')
 # def create_board():
 #     """Create new board in blines db"""
@@ -384,14 +400,14 @@ def save_boardimage():
 
 
 
-# # 16
+# # 15
 # @app.route('/search')
 # def show_search():
 #     """Search Pinterest(?) and display pins related to user search terms"""
 
 #     return render_template('search.html')
 
-# # 17
+# # 16
 # @app.route('/study')
 # def study_mode():
 #     """Displays pins from board chosen by user to set time intervals to study"""
