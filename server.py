@@ -377,28 +377,7 @@ def delete_image():
     return ('Deleted')
 
 
-# FIX EM - Need to create form for user to enter new board name on home page to create new board
 # # 14
-# @app.route('/create_board')
-# def create_board():
-#     """Create new board in blines db"""
-
-    # board_name = request.args.get('name')
-    # Do the same for all form variables for creating a new board
-    # need to strip space from name to create url name
-    # url_name=board_name.strip()
-
-
-
-
-# # 15
-# @app.route('/search')
-# def show_search():
-#     """Search Pinterest(?) and display pins related to user search terms"""
-
-#     return render_template('search.html')
-
-# 16
 @app.route('/create_board')
 def create_board():
     """Creates new board in blines db"""
@@ -421,7 +400,31 @@ def create_board():
     return flaskredirect('/home')
 
 
-# 17
+# 15
+@app.route('/create_image/<int:board_id>')
+def create_image(board_id):
+    """Creates new image in blines db"""
+
+    image_url = request.args.get('image_url')
+    description = request.args.get('image_description')
+
+    # Create new_image for db
+    new_image = Image(original_url=image_url,
+                      description=description)
+
+    db.session.add(new_image)
+    db.session.commit()
+
+    new_boardimage = BoardImage(board_id=board_id,
+                                image_id=new_image.image_id)
+
+    db.session.add(new_boardimage)
+    db.session.commit()
+
+    return flaskredirect('/user_board_images/%s' % board_id)
+
+
+# 16
 @app.route('/study_boards')
 def study_boards():
     """Displays pins from board chosen by user at set time intervals to study"""
@@ -429,10 +432,17 @@ def study_boards():
     return render_template('study.html')
 
 
-# 18
+# 17
 # @app.route('/study/<int:board_id>')
 # def study(board_id):
 #     """Runs Study Session"""
+
+# # 18
+# @app.route('/search')
+# def show_search():
+#     """Search Pinterest(?) and display pins related to user search terms"""
+
+#     return render_template('search.html')
 
 
 

@@ -38,7 +38,6 @@
 </div><!-- /.modal -->
 
 
-
 {% if pins %}
    <h2>{{ pins['data'][0]['board']['name'] }}</h2>
 
@@ -56,6 +55,13 @@
 
 {% if images %}
   <h2>{{ current_board.board_name }}</h2>
+
+  <form action="/create_image/{{ current_board.board_id }}" id="create-image-form">
+    Image Url: <input type="text" name='image_url'>
+    Image Description: <input type="text" name='image_description'>
+    <input type="submit" value="Create">
+    <!-- What else? -->
+  </form>
 
   <ul>
       {% for image in images %}

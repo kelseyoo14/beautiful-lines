@@ -79,9 +79,9 @@ class Image(db.Model):
     __tablename__ = 'images'
 
     image_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    pinterest_image_id = db.Column(db.String(100), nullable=False)
+    pinterest_image_id = db.Column(db.String(100), nullable=True)
     original_url = db.Column(db.String(300), nullable=False)
-    pinterest_url = db.Column(db.String(300), nullable=False)
+    pinterest_url = db.Column(db.String(300), nullable=True)
     description = db.Column(db.String(1000), nullable=True)
 
     boards = db.relationship('Board',
