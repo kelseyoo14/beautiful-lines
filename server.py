@@ -432,10 +432,11 @@ def study_board(board_id):
     """Displays pins from board chosen by user at set time intervals to study"""
 
     images = Board.query.get(board_id).images
-    # current_board = Board.query.filter(Board.board_id == board_id).first()
+    current_board = Board.query.filter(Board.board_id == board_id).first()
 
     return render_template('study.html',
-                            images=images)
+                            images=images,
+                            current_board=current_board)
 
 
 # 17

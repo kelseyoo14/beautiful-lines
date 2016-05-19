@@ -38,8 +38,8 @@ class Board(db.Model):
 
     board_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     pinterest_board_id = db.Column(db.String(100), nullable=True)
+    # Don't need Url name for boards created on beautiful lines - should be nullable=True
     url_name = db.Column(db.String(100), nullable=False)
-    # Board name needs to be: unique=True (do next time I drop and create db)
     board_name = db.Column(db.String(100), nullable=False)
     board_description = db.Column(db.String(1000), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
