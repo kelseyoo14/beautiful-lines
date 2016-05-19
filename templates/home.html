@@ -46,7 +46,8 @@
                     <li>{{ board['description'] }}</li>
                 {% endif %}
                 <br><br>
-                <a class="btn btn-primary" href="/delete_board/{{ board.board_id }}">Delete Board</a>
+                <a class="btn btn-primary" href="/study_board/{{ board.board_id }}">Study</a>
+                <a class="btn btn-primary" href="/delete_board/{{ board.board_id }}">Delete</a>
             </div>
         {% endfor %}
     </ul>
