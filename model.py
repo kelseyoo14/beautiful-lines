@@ -37,7 +37,7 @@ class Board(db.Model):
     __tablename__ = 'boards'
 
     board_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    pinterest_board_id = db.Column(db.String(100), nullable=False)
+    pinterest_board_id = db.Column(db.String(100), nullable=True)
     url_name = db.Column(db.String(100), nullable=False)
     # Board name needs to be: unique=True (do next time I drop and create db)
     board_name = db.Column(db.String(100), nullable=False)
@@ -74,6 +74,7 @@ class BoardImage(db.Model):
 
 
 class Image(db.Model):
+    """Table for User Saved Images"""
 
     __tablename__ = 'images'
 
@@ -113,6 +114,7 @@ class ImageTag(db.Model):
 
 
 class Tag(db.Model):
+    """Table for tags"""
 
     __tablename__ = 'tags'
 
@@ -125,14 +127,67 @@ class Tag(db.Model):
         return "<Tag tag_id=%s tag_name=%s>" % (self.tag_id, self.tag_name)
 
 
+# class StudyBoard(db.Model):
+#     """Table for Study Boards"""
+
+#     __tablename__ = 'study_boards'
+
+#     study_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+#     study_name = db.Column(db.String(64), nullable=False)
+
+
+# class StudyImage(db.Model):
+#     """Association table for images in study boards"""
+
+#     __tablename__ = 'study_images'
+
+#     study_image_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+#     study_id = db.Column(db.Integer, db.ForeignKey('study_boards.study_id'), nullable=False)
+#     image_id = db.Column(db.Integer, db.ForeignKey('images.image_id'), nullable=False)
+
+#     image = db.relationship('Image', backref=db.backref('study_images'))
+#     study = db.relationship('StudyBoard', backref=db.backref('study_images'))
+
+
+# End Classes -------------------------------------------------------------------------------
+
+
+# def example_data():
+#     User.query.delete()
+#     Board.query.delete()
+#     BoardImage.query.delete()
+#     Image.query.delete()
+#     ImageTag.query.delete()
+#     Tag.query.delete()
+
+#     kelsey = User(pinterest_user_id='testPinterestID,
+#                   username='kelseyoo14',
+#                   first_name='Kelsey',
+#                   last_name='Onstenk',
+#                   bio='testBio',
+#                   access_token='testToken')
+
+#     test_board = Board(url_name=,
+#                        board_name=,
+#                        board_description=,
+#                        user_id='kelseyoo14',
+#                        image_url='https://s-media-cache-ak0.pinimg.com/60x60/dc/0d/2a/dc0d2aac9b6afa3958b3225fa3e84c93.jpg')
+
+#     image1 = Image(pinterest_image_id='testPinterestImageID',
+#                    original_url='https://s-media-cache-ak0.pinimg.com/474x/db/1c/39/db1c39edaa7bc14ba24d23eceee4e5c6.jpg',
+#                    pinterest_url='',
+#                    description='test image description')
+
+
 ##############################################################################
 # Helper functions
 
-def connect_to_db(app):
+def connect_to_db(app, database='postgresql:///blines'):
     """Connect the database to our Flask app."""
 
     # Configure to use our PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blines'
+    app.config['SQLALCHEMY_DATABASE_URI'] = database
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
     db.init_app(app)

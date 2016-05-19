@@ -14,8 +14,8 @@
         <h4 class="modal-title">Save Image</h4>
       </div>
       <div class="modal-body">
-        <p>
-             <!-- A list of the boards in blines that image can be saved to -->
+        <div id="save-image-to-board">
+            <!-- A list of the boards in blines that image can be saved to -->
             {% if boards %}
               <form id="save-image-to-board">
                 {% for board in boards %}
@@ -31,10 +31,7 @@
             {% else %}
               <p>You don't have any boards saved on Beautiful Lines</p>
             {% endif %}
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -67,13 +64,13 @@
               <p>{{ image.description }}</p>
 
               <button type="button" class="btn btn-primary btn-lg save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ image.pinterest_image_id }}" data-imageid="{{ image.image_id }}">Save</button>
-              <form id="delete-image-from-board">
-                <input type='hidden' id='image_id' value='{{ image.image_id }}'>
-                Image ID: {{ image.image_id }}
-                <input type='hidden' id='board_id' value='{{ current_board.board_id }}'>
-                Board ID: {{ current_board.board_id }}
-                <input type='submit' value='Delete'>
-              </form
+              <form class="delete-image-from-board">
+                <input type='hidden' class='image_id' value='{{ image.image_id }}'>
+<!--                 <p>Image ID: {{ image.image_id }}<p> -->
+                <input type='hidden' class='board_id' value='{{ current_board.board_id }}'>
+<!--                 <p>Board ID: {{ current_board.board_id }}</p> -->
+                <input type='submit' value='Delete' class="btn btn-primary btn-lg">
+              </form>
           </div>
       {% endfor %}
   </ul>

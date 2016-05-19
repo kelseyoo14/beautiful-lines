@@ -9,7 +9,7 @@
 <!-- {{ boards_request }} -->
 
 <div>
-    <h3>User Name</h3>
+    <h3>{{ username }}</h3>
 </div>
 
 <br>
@@ -24,10 +24,13 @@
 
 <br><br>
 
-<form action="/create_board">
-    Board Name: <input type="text">
-    Board Description: 
+<form action="/create_board" id="create-board-form">
+    Board Name: <input type="text" name='board_name'>
+    Board Description: <input type="text" name='board_description'>
+    Image Url: <input type="text" name='image_url'>
+    <input type="submit" value="Create">
     <!-- What else? -->
+</form>
 
 <div class='boards-container'>
     <ul>
@@ -43,7 +46,7 @@
                     <li>{{ board['description'] }}</li>
                 {% endif %}
                 <br><br>
-                <a href="/delete_board/{{ board.board_id }}">Delete Board</a>
+                <a class="btn btn-primary" href="/delete_board/{{ board.board_id }}">Delete Board</a>
             </div>
         {% endfor %}
     </ul>

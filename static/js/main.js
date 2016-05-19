@@ -34,18 +34,21 @@ function saveToBoard(evt) {
 $("#save-image-to-board").on('submit', saveToBoard);
 
 // End Save image to db ------------------------------------------------------------
-
-function consoleResults(result) {
-    console.log(result);
+function reloadPage(result) {
+    location.reload(true);
 }
+
+// function consoleResults(result) {
+//     console.log(result);
+// }
 
 
 function deleteFromBoard(evt) {
     evt.preventDefault();
 
     var formInputs = {
-        'board_id': $('#board_id').val(),
-        'image_id': $('#image_id').val()
+        'board_id': $(this).find('.board_id').val(),
+        'image_id': $(this).find('.image_id').val()
     };
 
     console.log(formInputs);
@@ -53,8 +56,8 @@ function deleteFromBoard(evt) {
 
     $.post('/delete_image',
             formInputs,
-            consoleResults
+            reloadPage
             );
 }
 
-$("#delete-image-from-board").on('submit', deleteFromBoard);
+$(".delete-image-from-board").on('submit', deleteFromBoard);

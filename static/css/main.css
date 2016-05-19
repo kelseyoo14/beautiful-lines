@@ -1,6 +1,14 @@
+body {
+    background-color: #fbfbfb;
+}
+
+.navbar {
+    background-color: white;
+}
+
 .user-pins-search {
     display: block;
-    margin: 30px;
+    /*margin: 30px;*/
 }
 
 .boards-container {
@@ -14,6 +22,11 @@
     display: inline-block;
     border: 1px solid black;
     padding: 20px 30px 60px 30px;
+    margin: 50px;
+}
+
+.board img {
+    max-height: 200px;
 }
 
 .pin-container {
@@ -24,6 +37,15 @@
 
 .pin-image {
     max-width: 200px;
+}
+
+
+.delete-image-from-board {
+    display: inline-block;
+}
+
+#create-board-form {
+    margin: 50px;
 }
 
 /*#saveImageModal {
