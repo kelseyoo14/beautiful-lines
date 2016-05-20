@@ -41,9 +41,9 @@ class Board(db.Model):
     # Don't need Url name for boards created on beautiful lines - should be nullable=True
     url_name = db.Column(db.String(100), nullable=False)
     board_name = db.Column(db.String(100), nullable=False)
-    board_description = db.Column(db.String(1000), nullable=False)
+    board_description = db.Column(db.String(1000), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    image_url = db.Column(db.String(300), nullable=False)
+    image_url = db.Column(db.String(300), nullable=True)
 
     user = db.relationship('User', backref=db.backref('boards'))
 

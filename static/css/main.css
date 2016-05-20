@@ -48,6 +48,11 @@ body {
     margin: 50px;
 }
 
+#time-intervals,
+#num-of-images {
+    margin: 10px;
+}
+
 /*#saveImageModal {
     width: 500px;
     height: 500px;

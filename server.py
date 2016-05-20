@@ -2,6 +2,8 @@ from model import User, Board, BoardImage, Image, ImageTag, Tag, connect_to_db, 
 import requests
 import os
 from urllib import urlencode, quote_plus
+from random import choice
+import json
 from flask import Flask, request, render_template, session, jsonify
 # redirect was getting overwritten somehow - solution for now
 from flask import redirect as flaskredirect
@@ -440,9 +442,26 @@ def study_board(board_id):
 
 
 # 17
-# @app.route('/study/<int:board_id>')
-# def study(board_id):
-#     """Runs Study Session"""
+@app.route('/study_images', methods=['POST'])
+def study():
+    """Sends json of images to js for Study Session"""
+
+    board_id = request.form.get('board_id')
+
+    # print '--------------------------------------------------------'
+    # print board_id
+
+    images = Board.query.get(board_id).images
+
+    list_of_image_urls = []
+    for image in images:
+        list_of_image_urls.append(image.original_url)
+
+    # print '--------------------------------------------------------'
+    # print list_of_image_urls
+
+    # return choice(list_of_image_urls)
+    return json.dumps(list_of_image_urls)
 
 # # 18
 # @app.route('/search')
