@@ -59,8 +59,8 @@ body {
 }
 
 #study-modal-image {
+    height: 80vh;
     max-width: 90%;
-    max-height: 700px;
 }
 
 /*#saveImageModal {

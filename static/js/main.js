@@ -96,20 +96,22 @@ function startStudy(evt) {
             parse_results);
 
         function parse_results(result) {
-            images = JSON.parse(result);
+            original_images = JSON.parse(result);
+            var images = original_images.slice();
 
             shuffled_images = shuffle_images(images);
 
+            // if user wants to study more images than exist in board, 
+            // reshuffle images and add to shuffled_images list
+            while (num_of_images > shuffled_images.length) {
+                var more_shuffled_images = shuffle_images(original_images);
+                shuffled_images.push.apply(shuffled_images, more_shuffled_images);
+            }
+
             var image_index = 0;
             var count_images = 0;
-            function displayImages(images, image_index, count_images) {
-                // if user wants to study more images than exist in board, reshuffle image and reset index
-                if (image_index > images.length) {
-                    image_index = 0;
-                    images = shuffle_images(images);
-                }
-
-                $('#study-modal-image').attr('src', images[image_index]);
+            function displayImages(shuffled_images, image_index, count_images) {
+                $('#study-modal-image').attr('src', shuffled_images[image_index]);
                 $('#study-modal').modal('show');
 
                 if (count_images < num_of_images) {
