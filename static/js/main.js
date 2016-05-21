@@ -61,17 +61,11 @@ function deleteFromBoard(evt) {
 
 $(".delete-image-from-board").on('submit', deleteFromBoard);
 
-// ***************************************************************************
 
-// Start and run study session
-
-// in a loop
-// go through list of shuffled images and add <img src> tag to html page in a modal
-// then with timeout switch images after specified seconds
+// Start and run study session ------------------------------------------------------
 
 function startStudy(evt) {
     evt.preventDefault();
-    console.log('Start');
 
     var time_intervals = $('#time-intervals').val();
     var num_of_images = $('#num-of-images').val();
@@ -79,8 +73,8 @@ function startStudy(evt) {
         'board_id': $('#board_id').val()
     };
 
+    // shuffle list of image urls
     function shuffle_images(images) {
-        console.log('shuffled_images');
         var i = 0;
         var j = 0;
         var temp = null;
@@ -95,78 +89,47 @@ function startStudy(evt) {
         return images;
     }
 
-    // function closeModal() {
-    //     $('#study-modal').modal('hide');
-    // }
-
-    // function display_image(images, index) {
-    //     console.log("display_image");
-    //     $('#study-modal').modal('hide');
-
-    //     $('#study-modal-image').attr('src', images[index]);
-    //     $('#study-modal').modal('show');
-    //     index++;
-
-    //     console.log(index);
-    //     // if (index > num_of_images) {
-    //     //     cleartInterval(displayTimer);
-    //     // }
-    // }
-
+    // get images from database through /study_images route
     function get_images() {
-        console.log('get_images');
         $.post('/study_images',
             formInputs,
             parse_results);
 
         function parse_results(result) {
-            console.log('parse_results');
             images = JSON.parse(result);
 
             shuffled_images = shuffle_images(images);
-            console.log('images have been shuffled');
-
-            // index = 1;
-
-            // var displayTimer = setInterval(
-            //     function() {
-            //         display_image(shuffled_images, index);
-            //         }, 3000);
-
 
             var image_index = 0;
-            function displayImages(images, image_index) {
+            var count_images = 0;
+            function displayImages(images, image_index, count_images) {
+                // if user wants to study more images than exist in board, reshuffle image and reset index
+                if (image_index > images.length) {
+                    image_index = 0;
+                    images = shuffle_images(images);
+                }
+
                 $('#study-modal-image').attr('src', images[image_index]);
                 $('#study-modal').modal('show');
-                // image_index++;
-                if (image_index < num_of_images) {
+
+                if (count_images < num_of_images) {
                     setTimeout(function() {
-                        console.log(image_index);
-                        displayImages(images, image_index + 1);
-                    }, 3000);
-                }
-                else{
+                        // recursively call displayImages to loop through images in shuffled list
+                        displayImages(images, image_index+1, count_images+1);
+                    }, 1000);
+                } else {
                     $('#study-modal').modal('hide');
                 }
             }
-
-
-            displayImages(shuffled_images, image_index);
+            // Start displaying images
+            displayImages(shuffled_images, image_index, count_images);
         }
     }
     get_images();
 }
 
-var index=1;
-
+// When user clicks on 'Start Drawing' button, start displaying 'studying' (displaying images)
 $('#study-form').on('submit', startStudy);
-
-
-
-
-
-
-
 
 
 
