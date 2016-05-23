@@ -31,6 +31,15 @@ def welcome():
     else:
         return render_template('homepage.html')
 
+    # try:
+    #     if session['user_id']:
+    #         return flaskredirect('/home')
+    #     else:
+    #         return render_template('homepage.html')
+    # except KeyError:
+    #     return render_template('homepage.html')
+
+
 
 # OAuth and Log In Start ------------------------------------------------------------
 # 2
@@ -192,20 +201,32 @@ def pinterest_boards():
 def show_pinterest_boards(url):
     """Displays pins from user chosen board that is on pinterest"""
 
+    # import pdb; pdb.set_trace()
+
     user = User.query.filter(User.user_id == session['user_id']).first()
     username = user.username
     headers = {'Authorization': 'Bearer %s' % session['access_token']}
-    payload = {'fields': 'id,url,board,image,note'}
+    payload = {'fields': 'id,url,board,image,note', 'limit': 100}
     # apiRequest = ApiRequest(access_token)
     # apiRequest.getPins(username, url, params)
     new_request = requests.get('https://api.pinterest.com/v1/boards/%s/%s/pins' % (username, url), headers=headers, params=payload)
     pins_request = new_request.json()
 
+    # Make multiple requests to pinterest since the pin request limit is 100
+    next_request = pins_request['page']['next']
+    all_pins = pins_request['data']
+
+    while next_request is not None:
+        new_request = requests.get(next_request, headers=headers, params=payload)
+        pins_request = new_request.json()
+        all_pins.extend(pins_request['data'])
+        next_request = pins_request['page']['next']
+
     # Sending boards in blines db to display in modal if user wants to save image
     boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
 
     return render_template('pinterest_board.html',
-                            pins=pins_request,
+                            pins=all_pins,
                             boards=boards_in_blines)
 
 
@@ -254,10 +275,20 @@ def save_images_on_board():
     new_request = requests.get('https://api.pinterest.com/v1/boards/%s/%s/pins' % (username, session['board_url']), headers=headers, params=payload)
     pins_request = new_request.json()
 
+    # Make multiple requests to pinterest since the pin request limit is 100
+    next_request = pins_request['page']['next']
+    all_pins = pins_request['data']
+
+    while next_request is not None:
+        new_request = requests.get(next_request, headers=headers, params=payload)
+        pins_request = new_request.json()
+        all_pins.extend(pins_request['data'])
+        next_request = pins_request['page']['next']
+
     board = Board.query.filter(Board.board_id == session['board_id']).first()
 
     # Save each image in pins_request['data'] to images table
-    for pin in pins_request['data']:
+    for pin in all_pins:
         pinterest_image_id = pin['id']
         original_url = pin['image']['original']['url']
         pinterest_url = pin['url']
@@ -448,17 +479,11 @@ def study():
 
     board_id = request.form.get('board_id')
 
-    # print '--------------------------------------------------------'
-    # print board_id
-
     images = Board.query.get(board_id).images
 
     list_of_image_urls = []
     for image in images:
         list_of_image_urls.append(image.original_url)
-
-    # print '--------------------------------------------------------'
-    # print list_of_image_urls
 
     # return choice(list_of_image_urls)
     return json.dumps(list_of_image_urls)

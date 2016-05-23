@@ -48,6 +48,10 @@ body {
     margin: 50px;
 }
 
+#create-image-form {
+    margin: 20px;
+}
+
 #time-intervals,
 #num-of-images {
     margin: 10px;
@@ -63,6 +67,20 @@ body {
     max-width: 90%;
 }
 
+.study-board {
+    display: inline-block;
+    margin: 10px 30px;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.study-board a {
+    margin-left: 20px;
+}
+
+.all-images {
+    margin: 0 5%;
+}
 /*#saveImageModal {
     width: 500px;
     height: 500px;

@@ -108,23 +108,28 @@ function startStudy(evt) {
                 shuffled_images.push.apply(shuffled_images, more_shuffled_images);
             }
 
-            var image_index = 0;
+            $('.stop-study').on('click', function() {
+                clearTimeout(study_timeout);
+                $('#study-modal').modal('hide');
+            });
+
             var count_images = 0;
-            function displayImages(shuffled_images, image_index, count_images) {
-                $('#study-modal-image').attr('src', shuffled_images[image_index]);
-                $('#study-modal').modal('show');
+            var study_timeout;
+            $('#study-modal').modal('show');
+            function displayImages(shuffled_images, count_images) {
+                $('#study-modal-image').attr('src', shuffled_images[count_images]);
 
                 if (count_images < num_of_images) {
-                    setTimeout(function() {
+                    study_timeout = setTimeout(function() {
                         // recursively call displayImages to loop through images in shuffled list
-                        displayImages(images, image_index+1, count_images+1);
-                    }, 1000);
+                        displayImages(images, count_images+1);
+                    }, 2000);
                 } else {
                     $('#study-modal').modal('hide');
                 }
             }
             // Start displaying images
-            displayImages(shuffled_images, image_index, count_images);
+            displayImages(shuffled_images, count_images);
         }
     }
     get_images();
@@ -132,6 +137,13 @@ function startStudy(evt) {
 
 // When user clicks on 'Start Drawing' button, start displaying 'studying' (displaying images)
 $('#study-form').on('submit', startStudy);
+
+// $('.stop-study').on('click', function() {
+//                     count_images = num_of_images + 1;
+//                     console.log('Stop Study Click Working');
+//                     console.log(count_images);
+//                     // $('#study-modal').modal('hide');
+//                 });
 
 
 

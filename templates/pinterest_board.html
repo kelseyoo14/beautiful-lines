@@ -39,10 +39,10 @@
 
 
 {% if pins %}
-   <h2>{{ pins['data'][0]['board']['name'] }}</h2>
+   <h2>{{ pins[0]['board']['name'] }}</h2>
 
    <ul>
-      {% for pin in pins['data'] %}
+      {% for pin in pins %}
           <div class='pin-container'>
               <img class="pin-image" src="{{ pin['image']['original']['url'] }}">
               <p>{{ pin['note'] }}</p>
@@ -54,8 +54,10 @@
 {% endif %}
 
 {% if images %}
-  <h2>{{ current_board.board_name }}</h2>
-
+  <p class="study-board">
+    {{ current_board.board_name }}
+    <a href="/study_board/{{ current_board.board_id }}" class="btn btn-primary btn-lg">Study</a>
+  </p>
   <form action="/create_image/{{ current_board.board_id }}" id="create-image-form">
     Image Url: <input type="text" name='image_url'>
     Image Description: <input type="text" name='image_description'>
@@ -63,7 +65,7 @@
     <!-- What else? -->
   </form>
 
-  <ul>
+  <div class="all-images">
       {% for image in images %}
           <div class='pin-container'>
               <img class="pin-image" src="{{ image.original_url }}">
@@ -79,7 +81,7 @@
               </form>
           </div>
       {% endfor %}
-  </ul>
+  </div>
 {% endif %}
 
 {% endblock %}
