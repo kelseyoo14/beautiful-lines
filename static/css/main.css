@@ -6,6 +6,16 @@ body {
     background-color: white;
 }
 
+.navbar-nav {
+    float: right;
+}
+
+.navbar-form .form-control {
+    width: 30vw;
+    min-width: 250px;
+}
+
+
 .user-pins-search {
     display: block;
     /*margin: 30px;*/
@@ -57,14 +67,26 @@ body {
     margin: 10px;
 }
 
-#study-modal .modal-dialog {
-    width: 80%;
-    max-height: 500px;
+#study-modal .modal-dialog,
+#zoom-modal .modal-dialog {
+    width: 70vw;
+    /*max-height: 500px;*/
+    height: 90vh;
 }
 
-#study-modal-image {
+#study-modal-image,
+#zoomed-image {
+    position: fixed;
+    /* center the element */
+    right: 0;
+    left: 0;
+    margin-right: auto;
+    margin-left: auto;
+    /* give it dimensions */
+/*    min-height: 10em;
+    width: 90%;*/
     height: 80vh;
-    max-width: 90%;
+    /*max-width: 90%;*/
 }
 
 .study-board {
@@ -80,6 +102,10 @@ body {
 
 .all-images {
     margin: 0 5%;
+}
+
+.page-title {
+    margin: 30px;
 }
 /*#saveImageModal {
     width: 500px;

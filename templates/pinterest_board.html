@@ -37,11 +37,26 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+ <div class="modal fade" id="zoom-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <div>
+              <img src='' id='zoomed-image'>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 {% if pins %}
-   <h2>{{ pins[0]['board']['name'] }}</h2>
+   <h2 class='page-title'>{{ pins[0]['board']['name'] }}</h2>
 
-   <ul>
+   <div class="all-images">
       {% for pin in pins %}
           <div class='pin-container'>
               <img class="pin-image" src="{{ pin['image']['original']['url'] }}">
@@ -50,7 +65,7 @@
               <button type="button" class="btn btn-primary btn-lg save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ pin['id'] }}" data-imageid="No-ID">Save</button>
           </div>
       {% endfor %}
-  </ul>
+  </div>
 {% endif %}
 
 {% if images %}
@@ -64,6 +79,9 @@
     <input type="submit" value="Create">
     <!-- What else? -->
   </form>
+
+  <div id="color-palette">
+  </div>
 
   <div class="all-images">
       {% for image in images %}

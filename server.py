@@ -151,11 +151,10 @@ def logout():
 def home():
     """Lists user's boards that are saved to blines db"""
     user_boards = Board.query.filter(Board.user_id == session['user_id']).all()
-    username = session['username']
 
     return render_template('home.html',
                             user_boards=user_boards,
-                            username=username)
+                            username=session['username'])
 
 
 # 6
@@ -189,11 +188,9 @@ def pinterest_boards():
         board_name = url[-2]
         board['url'] = board_name
 
-    # print boards_request
-        # boards_request['data'][index]['url'] = board_name
-
     return render_template('user_pinterest.html',
-                            boards=boards_request)
+                            boards=boards_request,
+                            username=session['username'])
 
 
 # 8

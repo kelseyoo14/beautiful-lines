@@ -75,11 +75,11 @@ function startStudy(evt) {
 
     // shuffle list of image urls
     function shuffle_images(images) {
-        var i = 0;
+        // var i = 0;
         var j = 0;
-        var temp = null;
+        var temp;
 
-        for (i = images.length - 1; i > 0; i -= 1) {
+        for (var i = images.length - 1; i > 0; i--) {
             j = Math.floor(Math.random() * (i + 1));
             temp = images[i];
             images[i] = images[j];
@@ -96,7 +96,7 @@ function startStudy(evt) {
             parse_results);
 
         function parse_results(result) {
-            original_images = JSON.parse(result);
+            var original_images = JSON.parse(result);
             var images = original_images.slice();
 
             shuffled_images = shuffle_images(images);
@@ -138,12 +138,18 @@ function startStudy(evt) {
 // When user clicks on 'Start Drawing' button, start displaying 'studying' (displaying images)
 $('#study-form').on('submit', startStudy);
 
-// $('.stop-study').on('click', function() {
-//                     count_images = num_of_images + 1;
-//                     console.log('Stop Study Click Working');
-//                     console.log(count_images);
-//                     // $('#study-modal').modal('hide');
-//                 });
+$('#study-modal .modal-body').height($('#study-modal-image').height());
+
+// Start Zoom Image -------------------------------------------------------------------------
+
+$('body').on('click', 'img', function() {
+    var pinsrc = $(this).attr('src');
+    $('#zoomed-image').attr('src', pinsrc);
+    $('#zoom-modal').modal('show');
+});
+
+$('#zoom-modal .modal-body').height($('#zoomed-image').height());
+
 
 
 
