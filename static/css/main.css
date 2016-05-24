@@ -2,6 +2,10 @@ body {
     background-color: #fbfbfb;
 }
 
+.pin-image {
+    cursor: zoom-in;
+}
+
 .navbar {
     background-color: white;
 }
@@ -75,7 +79,7 @@ body {
 }
 
 #study-modal-image,
-#zoomed-image {
+#zoom-modal-body canvas {
     position: fixed;
     /* center the element */
     right: 0;
@@ -83,11 +87,12 @@ body {
     margin-right: auto;
     margin-left: auto;
     /* give it dimensions */
-/*    min-height: 10em;
-    width: 90%;*/
+    min-height: 10em;
+    max-width: 90%;
     height: 80vh;
     /*max-width: 90%;*/
 }
+
 
 .study-board {
     display: inline-block;

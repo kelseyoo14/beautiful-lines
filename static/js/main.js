@@ -144,11 +144,36 @@ $('#study-modal .modal-body').height($('#study-modal-image').height());
 
 $('body').on('click', 'img', function() {
     var pinsrc = $(this).attr('src');
-    $('#zoomed-image').attr('src', pinsrc);
+    // $('#zoomed-image').attr('src', pinsrc);
+
+    var canvas = document.createElement("canvas"),
+        context = canvas.getContext("2d"),
+        image = new Image();
+
+    image.onload = function () {
+        var img = this,
+            width = img.width,
+            height = img.height;
+
+        canvas.width = width;
+        canvas.height = height;
+        context.drawImage(img, 0, 0, width, height);
+
+        document.getElementById('zoom-modal-body').appendChild(canvas);
+        $('#zoom-modal-body canvas').attr('id', 'image-canvas');
+        $('#zoom-modal-body').height($('#image-canvas').height());
+    };
+
+    image.src = pinsrc;
+    console.log($('#zoom-modal-body canvas').height());
     $('#zoom-modal').modal('show');
 });
 
-$('#zoom-modal .modal-body').height($('#zoomed-image').height());
+// $('body').on('click', 'img', function() {
+//     var pinsrc = $(this).attr('src');
+//     $('#zoomed-image').attr('src', pinsrc);
+//     $('#zoom-modal').modal('show');
+// });
 
 
 

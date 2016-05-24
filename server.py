@@ -2,7 +2,6 @@ from model import User, Board, BoardImage, Image, ImageTag, Tag, connect_to_db, 
 import requests
 import os
 from urllib import urlencode, quote_plus
-from random import choice
 import json
 from flask import Flask, request, render_template, session, jsonify
 # redirect was getting overwritten somehow - solution for now
@@ -26,18 +25,18 @@ app.secret_key = "ABC"
 def welcome():
     """Website Welcome Page"""
 
-    if session['user_id']:
-        return flaskredirect('/home')
-    else:
-        return render_template('homepage.html')
-
-    # try:
-    #     if session['user_id']:
-    #         return flaskredirect('/home')
-    #     else:
-    #         return render_template('homepage.html')
-    # except KeyError:
+    # if session['user_id']:
+    #     return flaskredirect('/home')
+    # else:
     #     return render_template('homepage.html')
+
+    try:
+        if session['user_id']:
+            return flaskredirect('/home')
+        else:
+            return render_template('homepage.html')
+    except KeyError:
+        return render_template('homepage.html')
 
 
 
@@ -482,7 +481,6 @@ def study():
     for image in images:
         list_of_image_urls.append(image.original_url)
 
-    # return choice(list_of_image_urls)
     return json.dumps(list_of_image_urls)
 
 # # 18
