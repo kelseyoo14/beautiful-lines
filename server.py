@@ -484,11 +484,21 @@ def study():
     return json.dumps(list_of_image_urls)
 
 # # 18
-# @app.route('/search')
-# def show_search():
-#     """Search Pinterest(?) and display pins related to user search terms"""
+@app.route('/search')
+def show_search():
+    """Search user's images and display images related to user search terms"""
 
-#     return render_template('search.html')
+    search_word = request.args.get('images-search')
+    search = '%' + search_word + '%'
+
+    print search
+    print search_word
+    print '*****************************************'
+
+    images = Image.query.filter(Image.description.like(search)).all()
+
+    return render_template('search.html',
+                            images=images)
 
 
 

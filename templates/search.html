@@ -2,11 +2,14 @@
 
 {% block content %}
 
-<div class="toolbar">
-    <p>Side toolbar with preselect options for searching, a search form, and other options for searching</p>
-</div>
-<div>
-    <p>Are to scroll through and view images that are pulled from search</p>
+{{ results }}
+
+<div class='all-images'>
+{% for image in images %}
+    <div class='pin-container'>
+        <img class="pin-image" src="{{ image.original_url }}">
+    </div>
+{% endfor %}
 </div>
 
 

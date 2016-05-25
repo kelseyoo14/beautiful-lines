@@ -79,7 +79,7 @@ body {
 }
 
 #study-modal-image,
-#zoom-modal-body canvas {
+#zoomed-image {
     position: fixed;
     /* center the element */
     right: 0;
@@ -92,7 +92,6 @@ body {
     height: 80vh;
     /*max-width: 90%;*/
 }
-
 
 .study-board {
     display: inline-block;
