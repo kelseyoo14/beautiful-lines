@@ -1,4 +1,4 @@
-from model import User, Board, BoardImage, Image, ImageTag, Tag, connect_to_db, db
+from model import User, Board, BoardImage, Image, ImageTag, BoardTag, Tag, connect_to_db, db
 import requests
 import os
 from urllib import urlencode, quote_plus
@@ -246,11 +246,28 @@ def save_board(board):
     new_board = Board(pinterest_board_id=pinterest_board_id,
                       url_name=board,
                       board_name=board_name,
-                      board_description=board_description,
+                      board_description=board_description.lower(),
                       image_url=image_url,
                       user_id=session['user_id'])
 
     db.session.add(new_board)
+    db.session.commit()
+
+    new_tag = Tag(tag_content=new_board.board_description.lower())
+    new_tag2 = Tag(tag_content=new_board.board_name.lower())
+
+    db.session.add(new_tag)
+    db.session.add(new_tag2)
+    db.session.commit()
+
+    new_boardtag = BoardTag(board_id=new_board.board_id,
+                            tag_id=new_tag.tag_id)
+
+    new_boardtag2 = BoardTag(board_id=new_board.board_id,
+                             tag_id=new_tag2.tag_id)
+
+    db.session.add(new_boardtag)
+    db.session.add(new_boardtag2)
     db.session.commit()
 
     session['board_id'] = new_board.board_id
@@ -304,6 +321,17 @@ def save_images_on_board():
                                     image_id=new_image.image_id)
 
         db.session.add(new_boardimage)
+        db.session.commit()
+
+        new_tag = Tag(tag_content=new_image.description.lower())
+
+        db.session.add(new_tag)
+        db.session.commit()
+
+        new_imagetag = ImageTag(image_id=new_image.image_id,
+                                tag_id=new_tag.tag_id)
+
+        db.session.add(new_imagetag)
         db.session.commit()
 
     return flaskredirect('/pinterest_boards')
@@ -368,6 +396,17 @@ def save_image():
                           description=description)
 
         db.session.add(new_image)
+        db.session.commit()
+
+        new_tag = Tag(tag=new_image.description.lower())
+
+        db.session.add(new_tag)
+        db.session.commit()
+
+        new_imagetag = ImageTag(image_id=new_image.image_id,
+                                tag_id=new_tag.tag_id)
+
+        db.session.add(new_imagetag)
         db.session.commit()
 
         image_id = new_image.image_id
@@ -449,6 +488,7 @@ def create_image(board_id):
     new_boardimage = BoardImage(board_id=board_id,
                                 image_id=new_image.image_id)
 
+
     db.session.add(new_boardimage)
     db.session.commit()
 
@@ -487,18 +527,26 @@ def study():
 @app.route('/search')
 def show_search():
     """Search user's images and display images related to user search terms"""
+    images = []
+    user_search = request.args.get('images-search')
+    search_words = user_search.split()
 
-    search_word = request.args.get('images-search')
-    search = '%' + search_word + '%'
+    for search_word in search_words:
+        tag_search = Tag.query.filter(Tag.tag_content.like('%' + search_word + '%')).all()
 
-    print search
-    print search_word
-    print '*****************************************'
+        for tag in tag_search:
+            images.extend(tag.images)
+            boards = tag.boards
 
-    images = Image.query.filter(Image.description.like(search)).all()
+            if boards:
+                for board in boards:
+                    images.extend(board.images)
 
-    return render_template('search.html',
-                            images=images)
+    boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
+
+    return render_template('pinterest_board.html',
+                            images=images,
+                            boards=boards_in_blines)
 
 
 

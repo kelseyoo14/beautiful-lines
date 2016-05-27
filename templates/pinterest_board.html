@@ -72,18 +72,24 @@
 
 {% if images %}
   <p class="study-board">
-    {{ current_board.board_name }}
-    <a href="/study_board/{{ current_board.board_id }}" class="btn btn-primary btn-lg">Study</a>
+    {% if current_board %}
+      {{ current_board.board_name }}
+      <a href="/study_board/{{ current_board.board_id }}" class="btn btn-primary btn-lg">Study</a>
+    {% else %}
+      Search Results
+    {% endif %}
   </p>
-  <form action="/create_image/{{ current_board.board_id }}" id="create-image-form">
-    Image Url: <input type="text" name='image_url'>
-    Image Description: <input type="text" name='image_description'>
-    <input type="submit" value="Create">
-    <!-- What else? -->
-  </form>
+  {% if current_board %}
+    <form action="/create_image/{{ current_board.board_id }}" id="create-image-form">
+      Image Url: <input type="text" name='image_url'>
+      Image Description: <input type="text" name='image_description'>
+      <input type="submit" value="Create">
+      <!-- What else? -->
+    </form>
+  {% endif %}
 
-  <div id="color-palette">
-  </div>
+  <!-- <div id="color-palette">
+  </div> -->
 
   <div class="all-images">
       {% for image in images %}
@@ -92,13 +98,24 @@
               <p>{{ image.description }}</p>
 
               <button type="button" class="btn btn-primary btn-lg save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ image.pinterest_image_id }}" data-imageid="{{ image.image_id }}">Save</button>
-              <form class="delete-image-from-board">
-                <input type='hidden' class='image_id' value='{{ image.image_id }}'>
-<!--                 <p>Image ID: {{ image.image_id }}<p> -->
-                <input type='hidden' class='board_id' value='{{ current_board.board_id }}'>
-<!--                 <p>Board ID: {{ current_board.board_id }}</p> -->
-                <input type='submit' value='Delete' class="btn btn-primary btn-lg">
-              </form>
+              {% if current_board %}
+                <button class='btn btn-primary edit-button'>Edit</button>
+                <form class="delete-image-from-board">
+                  <input type='hidden' class='image_id' value='{{ image.image_id }}'>
+  <!--                 <p>Image ID: {{ image.image_id }}<p> -->
+                  <input type='hidden' class='board_id' value='{{ current_board.board_id }}'>
+  <!--                 <p>Board ID: {{ current_board.board_id }}</p> -->
+                  <input type='submit' value='Delete' class="btn btn-primary btn-lg">
+                </form>
+                <form class='edit-image-form'>
+                      <br><br>
+                      New Title: <input type='text' name='new-image-title'>
+                      <br><br>
+                      New Description: <textarea name='new-image-description'></textarea>
+                      <br><br>
+                      <input type='submit' value='Submit'>
+                  </form>
+                {% endif %}
           </div>
       {% endfor %}
   </div>

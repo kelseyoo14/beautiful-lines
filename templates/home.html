@@ -37,7 +37,7 @@
         {% for board in user_boards %}
             <div class='board'>
                 <!-- need to be able to click board -->
-                <h6>{{ board.board_name }}</h6>
+                <h5>{{ board.board_name }}</h5>
 
                 <!-- Need to pass specific board! -->
                 <a href="/user_board_images/{{ board.board_id }}"><img src="{{ board.image_url }}"></a>
@@ -46,8 +46,17 @@
                     <li>{{ board['description'] }}</li>
                 {% endif %}
                 <br><br>
-                <a class="btn btn-primary" href="/study_board/{{ board.board_id }}">Study</a>
-                <a class="btn btn-primary" href="/delete_board/{{ board.board_id }}">Delete</a>
+                <a class='btn btn-primary' href='/study_board/{{ board.board_id }}'>Study</a>
+                <button class='btn btn-primary edit-button'>Edit</button>
+                <a class='btn btn-primary' href='/delete_board/{{ board.board_id }}'>Delete</a>
+                <form class='edit-board-form'>
+                    <br><br>
+                    New Title: <input type='text' name='new-board-title'>
+                    <br><br>
+                    New Description: <textarea name='new-board-description'></textarea>
+                    <br><br>
+                    <input type='submit' value='Submit'>
+                </form>
             </div>
         {% endfor %}
     </ul>

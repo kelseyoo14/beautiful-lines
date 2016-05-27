@@ -15,14 +15,14 @@ class User(db.Model):
     __tablename__ = 'users'
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    pinterest_user_id = db.Column(db.String(100), nullable=False)
+    pinterest_user_id = db.Column(db.String(200), nullable=False)
     # pinterest_user_id = db.Column(db.String(100), nullable=False, unique=True)
     username = db.Column(db.String(64), nullable=False)
     first_name = db.Column(db.String(64), nullable=True)
     last_name = db.Column(db.String(64), nullable=True)
-    bio = db.Column(db.String(64), nullable=True)
+    bio = db.Column(db.String(2000), nullable=True)
     # pinterest_url = db.Column(db.String(300), nullable=False)
-    access_token = db.Column(db.String(100), nullable=False)
+    access_token = db.Column(db.String(200), nullable=False)
 
     def __repr__(self):
         """Provide helpful representation when printed to console"""
@@ -41,11 +41,15 @@ class Board(db.Model):
     # Don't need Url name for boards created on beautiful lines - should be nullable=True
     url_name = db.Column(db.String(100), nullable=False)
     board_name = db.Column(db.String(100), nullable=False)
-    board_description = db.Column(db.String(1000), nullable=True)
+    board_description = db.Column(db.String(2000), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    image_url = db.Column(db.String(300), nullable=True)
+    image_url = db.Column(db.String(1000), nullable=True)
 
     user = db.relationship('User', backref=db.backref('boards'))
+
+    tags = db.relationship('Tag',
+                           secondary="boards_tags",
+                           backref=db.backref('boards'))
 
     def __repr__(self):
         """Provide helpful representation when printed to console"""
@@ -80,13 +84,17 @@ class Image(db.Model):
 
     image_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     pinterest_image_id = db.Column(db.String(100), nullable=True)
-    original_url = db.Column(db.String(300), nullable=False)
-    pinterest_url = db.Column(db.String(300), nullable=True)
-    description = db.Column(db.String(1000), nullable=True)
+    original_url = db.Column(db.String(1000), nullable=False)
+    pinterest_url = db.Column(db.String(1000), nullable=True)
+    description = db.Column(db.String(2000), nullable=True)
 
     boards = db.relationship('Board',
-                              secondary="boards_images",
-                              backref=db.backref('images'))
+                             secondary="boards_images",
+                             backref=db.backref('images'))
+
+    tags = db.relationship('Tag',
+                           secondary="images_tags",
+                           backref=db.backref('images'))
 
     def __repr__(self):
         """Provide helpful representation when printed to console"""
@@ -113,13 +121,32 @@ class ImageTag(db.Model):
             self.image_tag_id, self.image_id, self.tag_id)
 
 
+class BoardTag(db.Model):
+    """Association table for images and tags"""
+
+    __tablename__ = 'boards_tags'
+
+    board_tag_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    board_id = db.Column(db.Integer, db.ForeignKey('boards.board_id'), nullable=False)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.tag_id'), nullable=False)
+
+    board = db.relationship('Board', backref=db.backref('boards_tags'))
+    tag = db.relationship('Tag', backref=db.backref('boards_tags'))
+
+    def __repr__(self):
+        """Provide helpful representation when printed to console"""
+
+        return "<ImageTag image_tag_id=%s image_id=%s tag_id=%s>" % (
+            self.image_tag_id, self.image_id, self.tag_id)
+
+
 class Tag(db.Model):
     """Table for tags"""
 
     __tablename__ = 'tags'
 
     tag_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    tag_name = db.Column(db.String(64), nullable=False)
+    tag_content = db.Column(db.String(2000), nullable=False)
 
     def __repr__(self):
         """Provide helpful representation when printed to console"""
@@ -127,56 +154,70 @@ class Tag(db.Model):
         return "<Tag tag_id=%s tag_name=%s>" % (self.tag_id, self.tag_name)
 
 
-# class StudyBoard(db.Model):
-#     """Table for Study Boards"""
-
-#     __tablename__ = 'study_boards'
-
-#     study_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     study_name = db.Column(db.String(64), nullable=False)
-
-
-# class StudyImage(db.Model):
-#     """Association table for images in study boards"""
-
-#     __tablename__ = 'study_images'
-
-#     study_image_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     study_id = db.Column(db.Integer, db.ForeignKey('study_boards.study_id'), nullable=False)
-#     image_id = db.Column(db.Integer, db.ForeignKey('images.image_id'), nullable=False)
-
-#     image = db.relationship('Image', backref=db.backref('study_images'))
-#     study = db.relationship('StudyBoard', backref=db.backref('study_images'))
-
 
 # End Classes -------------------------------------------------------------------------------
+def test_example_data():
+    # User.query.delete()
+    # Board.query.delete()
+    # BoardImage.query.delete()
+    # Image.query.delete()
+    # ImageTag.query.delete()
+    # Tag.query.delete()
 
+    kelsey = User(pinterest_user_id='testPinterestID',
+                  username='kelseyoo14',
+                  first_name='Kelsey',
+                  last_name='Onstenk',
+                  bio='testBio',
+                  access_token='testToken')
 
-# def example_data():
-#     User.query.delete()
-#     Board.query.delete()
-#     BoardImage.query.delete()
-#     Image.query.delete()
-#     ImageTag.query.delete()
-#     Tag.query.delete()
+    db.session.add(kelsey)
+    db.session.commit()
 
-#     kelsey = User(pinterest_user_id='testPinterestID,
-#                   username='kelseyoo14',
-#                   first_name='Kelsey',
-#                   last_name='Onstenk',
-#                   bio='testBio',
-#                   access_token='testToken')
+    test_board = Board(url_name='testboard',
+                       board_name='Test Board',
+                       board_description='test board description',
+                       user_id=kelsey.user_id,
+                       image_url='https://s-media-cache-ak0.pinimg.com/60x60/dc/0d/2a/dc0d2aac9b6afa3958b3225fa3e84c93.jpg')
 
-#     test_board = Board(url_name=,
-#                        board_name=,
-#                        board_description=,
-#                        user_id='kelseyoo14',
-#                        image_url='https://s-media-cache-ak0.pinimg.com/60x60/dc/0d/2a/dc0d2aac9b6afa3958b3225fa3e84c93.jpg')
+    image1 = Image(pinterest_image_id='testPinterestImageID',
+                   original_url='https://s-media-cache-ak0.pinimg.com/originals/af/de/11/afde1166effd46c7acf87d2d33d617fb.jpg',
+                   pinterest_url='',
+                   description='test image description 1')
 
-#     image1 = Image(pinterest_image_id='testPinterestImageID',
-#                    original_url='https://s-media-cache-ak0.pinimg.com/474x/db/1c/39/db1c39edaa7bc14ba24d23eceee4e5c6.jpg',
-#                    pinterest_url='',
-#                    description='test image description')
+    image2 = Image(pinterest_image_id='testPinterestImageID',
+                   original_url='https://s-media-cache-ak0.pinimg.com/originals/19/f5/02/19f50221e774267bee10d32a5bc278d6.jpg',
+                   pinterest_url='',
+                   description='test image description 2')
+
+    tag1 = Tag(tag_content='test tag content 1')
+
+    tag2 = Tag(tag_content='test tag content 2')
+
+    db.session.add(test_board)
+    db.session.add(image1)
+    db.session.add(image2)
+    db.session.add(tag1)
+    db.session.add(tag2)
+    db.session.commit()
+
+    board_image1 = BoardImage(board_id=test_board.board_id,
+                              image_id=image1.image_id)
+
+    board_image2 = BoardImage(board_id=test_board.board_id,
+                              image_id=image2.image_id)
+
+    image_tag1 = ImageTag(image_id=image1.image_id,
+                          tag_id=tag1.tag_id)
+
+    image_tag2 = ImageTag(image_id=image2.image_id,
+                          tag_id=tag2.tag_id)
+
+    db.session.add(board_image1)
+    db.session.add(board_image2)
+    db.session.add(image_tag1)
+    db.session.add(image_tag2)
+    db.session.commit()
 
 
 ##############################################################################

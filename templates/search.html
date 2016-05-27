@@ -8,6 +8,7 @@
 {% for image in images %}
     <div class='pin-container'>
         <img class="pin-image" src="{{ image.original_url }}">
+        <p>{{ image.description }}</p>
     </div>
 {% endfor %}
 </div>

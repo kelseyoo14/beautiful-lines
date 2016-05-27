@@ -111,6 +111,13 @@ body {
 .page-title {
     margin: 30px;
 }
+
+.edit-board-form,
+.edit-image-form {
+    display: none;
+}
+
+
 /*#saveImageModal {
     width: 500px;
     height: 500px;

@@ -140,7 +140,7 @@ $('#study-form').on('submit', startStudy);
 
 $('#study-modal .modal-body').height($('#study-modal-image').height());
 
-// Start Zoom Image and Image Canvas ------------------------------------------------------
+// Start Image Zoom Modal -------------------------------------------------------------
 
 $('body').on('click', 'img', function() {
     var pinsrc = $(this).attr('src');
@@ -151,3 +151,16 @@ $('body').on('click', 'img', function() {
 $('#zoom-modal .modal-body').height($('#zoomed-image').height());
 
 
+
+// Start Edit Board -------------------------------------------------------------------
+
+$('.edit-button').on('click', function() {
+    $(this).siblings('.edit-board-form').toggle();
+});
+
+
+// Start Edit Board -------------------------------------------------------------------
+
+$('.edit-button').on('click', function() {
+    $(this).siblings('.edit-image-form').toggle();
+});
