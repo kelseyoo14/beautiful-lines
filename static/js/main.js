@@ -158,9 +158,60 @@ $('.edit-button').on('click', function() {
     $(this).siblings('.edit-board-form').toggle();
 });
 
+function editBoard(evt) {
+    evt.preventDefault();
 
-// Start Edit Board -------------------------------------------------------------------
+    function reloadHomePage() {
+        location.reload(true);
+    }
+
+    var formInputs = {'new_board_title': $(this).find('.new-board-title').val(),
+                      'new_board_description': $(this).find('.new-board-description').val(),
+                      'board_id':$(this).find('.board-id').val()};
+
+    $.post('/edit_board',
+            formInputs,
+            reloadHomePage);
+}
+
+$('.edit-board-form').on('submit', editBoard);
+
+
+// Start Edit Image -------------------------------------------------------------------
 
 $('.edit-button').on('click', function() {
     $(this).siblings('.edit-image-form').toggle();
 });
+
+function editImage(evt) {
+    evt.preventDefault();
+
+    function reloadBoardPage() {
+        location.reload(true);
+    }
+
+    var formInputs = {'new_image_description': $(this).find('.new-image-description').val(),
+                      'image_id':$(this).find('.image-id').val()};
+    console.log(formInputs);
+    
+    $.post('/edit_image',
+            formInputs,
+            reloadBoardPage);
+}
+
+$('.edit-image-form').on('submit', editImage);
+
+
+
+// Display Form for Creating a New Board
+$('#new-board-button').on('click', function() {
+    $('#create-board-form').toggle();
+});
+
+// Display Form for Creating a New Image
+$('#new-image-button').on('click', function() {
+    $('#create-image-form').toggle();
+});
+
+
+

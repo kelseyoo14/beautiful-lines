@@ -151,6 +151,7 @@ def home():
     """Lists user's boards that are saved to blines db"""
     user_boards = Board.query.filter(Board.user_id == session['user_id']).all()
 
+    print user_boards
     return render_template('home.html',
                             user_boards=user_boards,
                             username=session['username'])
@@ -336,8 +337,33 @@ def save_images_on_board():
 
     return flaskredirect('/pinterest_boards')
 
+#11
+@app.route('/edit_board', methods=['POST'])
+def edit_board():
+    """Edits user board"""
 
-# 11
+    new_title = request.form.get('new_board_title')
+    new_description = request.form.get('new_board_description')
+    board_id = request.form.get('board_id')
+
+    print new_title
+    print new_description
+    print '************************************************************'
+
+    board = Board.query.get(board_id)
+
+    if new_title != '':
+        board.board_name = new_title
+    if new_description != '':
+        board.board_description = new_description
+
+    db.session.commit()
+
+    return ('Board Edited')
+
+
+
+# 12
 @app.route('/delete_board/<board_id>')
 def delete_board(board_id):
     """Deletes user board from blines db"""
@@ -368,7 +394,7 @@ def delete_board(board_id):
 
 # FIX ME - Can't save a specific image to a board more than once
 # (shows ups more than once in boards_images table, but doesn't appear on page twice) why??
-# 12
+# 13
 @app.route('/save_image', methods=['POST'])
 def save_image():
     """Saves image to Beautiful Lines Board"""
@@ -420,7 +446,28 @@ def save_image():
     return ('Saved')
 
 
-# 13
+# 14
+@app.route('/edit_image', methods=['POST'])
+def edit_image():
+    """Edit user image"""
+
+    new_description = request.form.get('new_image_description')
+    image_id = request.form.get('image_id')
+
+    print new_description
+    print '************************************************************'
+
+    image = Image.query.get(image_id)
+
+    if new_description != '':
+        image.description = new_description
+
+    db.session.commit()
+
+    return ('Image Edited')
+
+
+# 15
 @app.route('/delete_image', methods=['POST'])
 def delete_image():
     """Deletes user image from blines association table, and from images table if no instances of it exist in association table"""
@@ -447,7 +494,7 @@ def delete_image():
     return ('Deleted')
 
 
-# # 14
+# 16
 @app.route('/create_board')
 def create_board():
     """Creates new board in blines db"""
@@ -470,7 +517,7 @@ def create_board():
     return flaskredirect('/home')
 
 
-# 15
+# 17
 @app.route('/create_image/<int:board_id>')
 def create_image(board_id):
     """Creates new image in blines db"""
@@ -495,7 +542,7 @@ def create_image(board_id):
     return flaskredirect('/user_board_images/%s' % board_id)
 
 
-# 16
+# 18
 @app.route('/study_board/<int:board_id>')
 def study_board(board_id):
     """Displays pins from board chosen by user at set time intervals to study"""
@@ -508,7 +555,7 @@ def study_board(board_id):
                             current_board=current_board)
 
 
-# 17
+# 19
 @app.route('/study_images', methods=['POST'])
 def study():
     """Sends json of images to js for Study Session"""
@@ -523,7 +570,7 @@ def study():
 
     return json.dumps(list_of_image_urls)
 
-# # 18
+# 20
 @app.route('/search')
 def show_search():
     """Search user's images and display images related to user search terms"""
@@ -543,6 +590,9 @@ def show_search():
                     images.extend(board.images)
 
     boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
+
+    print images
+    print '*************************************'
 
     return render_template('pinterest_board.html',
                             images=images,

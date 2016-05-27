@@ -49,10 +49,23 @@ body {
     margin: 50px;
 }
 
-.pin-image {
-    max-width: 200px;
+.pin-image,
+.btn {
+    width: 200px;
 }
 
+.btn {
+    background-color: rgba(7, 12, 16, 0.22);
+    border-color: rgba(10, 4, 4, 0.11);
+    margin-top: 5px;
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active,
+.btn:active:focus {
+    background-color: rgba(7, 12, 16, 0.61);
+}
 
 .delete-image-from-board {
     display: inline-block;
@@ -113,7 +126,9 @@ body {
 }
 
 .edit-board-form,
-.edit-image-form {
+.edit-image-form,
+#create-board-form,
+#create-image-form {
     display: none;
 }
 

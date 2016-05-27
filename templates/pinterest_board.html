@@ -64,7 +64,7 @@
               <img class="pin-image" src="{{ pin['image']['original']['url'] }}">
               <p>{{ pin['note'] }}</p>
 
-              <button type="button" class="btn btn-primary btn-lg save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ pin['id'] }}" data-imageid="No-ID">Save</button>
+              <button type="button" class="btn btn-primary save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ pin['id'] }}" data-imageid="No-ID">Save</button>
           </div>
       {% endfor %}
   </div>
@@ -74,12 +74,13 @@
   <p class="study-board">
     {% if current_board %}
       {{ current_board.board_name }}
-      <a href="/study_board/{{ current_board.board_id }}" class="btn btn-primary btn-lg">Study</a>
+      <a href="/study_board/{{ current_board.board_id }}" class="btn btn-primary">Study</a>
     {% else %}
       Search Results
     {% endif %}
   </p>
   {% if current_board %}
+    <button id='new-image-button' class='btn btn-primary'>Create New Image</button>
     <form action="/create_image/{{ current_board.board_id }}" id="create-image-form">
       Image Url: <input type="text" name='image_url'>
       Image Description: <input type="text" name='image_description'>
@@ -97,7 +98,7 @@
               <img class="pin-image" src="{{ image.original_url }}">
               <p>{{ image.description }}</p>
 
-              <button type="button" class="btn btn-primary btn-lg save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ image.pinterest_image_id }}" data-imageid="{{ image.image_id }}">Save</button>
+              <button type="button" class="btn btn-primary save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ image.pinterest_image_id }}" data-imageid="{{ image.image_id }}">Save</button>
               {% if current_board %}
                 <button class='btn btn-primary edit-button'>Edit</button>
                 <form class="delete-image-from-board">
@@ -105,20 +106,27 @@
   <!--                 <p>Image ID: {{ image.image_id }}<p> -->
                   <input type='hidden' class='board_id' value='{{ current_board.board_id }}'>
   <!--                 <p>Board ID: {{ current_board.board_id }}</p> -->
-                  <input type='submit' value='Delete' class="btn btn-primary btn-lg">
+                  <input type='submit' value='Delete' class="btn btn-primary">
                 </form>
                 <form class='edit-image-form'>
                       <br><br>
-                      New Title: <input type='text' name='new-image-title'>
+                      New Description: <textarea class='new-image-description' placeholder='{{ image.description }}'></textarea>
                       <br><br>
-                      New Description: <textarea name='new-image-description'></textarea>
-                      <br><br>
-                      <input type='submit' value='Submit'>
+                      <input type='hidden' class='image-id' value='{{ image.image_id }}'>
+                      <input type='submit' value='Submit' class='btn btn-primary'>
                   </form>
                 {% endif %}
           </div>
+          <!-- Not Appearing on Page -->
+          {% if images == [] %}
+            <p>No Images</p>
+          {% endif %}
       {% endfor %}
   </div>
 {% endif %}
 
 {% endblock %}
+
+
+
+
