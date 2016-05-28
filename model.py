@@ -151,7 +151,7 @@ class Tag(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed to console"""
 
-        return "<Tag tag_id=%s tag_name=%s>" % (self.tag_id, self.tag_name)
+        return "<Tag tag_id=%s tag_content=%s>" % (self.tag_id, self.tag_content)
 
 
 

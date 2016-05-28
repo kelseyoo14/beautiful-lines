@@ -369,21 +369,38 @@ def delete_board(board_id):
 
     images = Board.query.get(board_id).images
     images_ids = []
+    images_tags = []
+    tags = []
 
     for image in images:
         print '----------------------------------------------------------------'
         print image
         print image.image_id
         images_ids.append(image.image_id)
+        images_tags.append(ImageTag.query.filter(ImageTag.image_id == image.image_id).first())
 
-    # Delete association table (foreign keys)
+    for image_tag in images_tags:
+        tags.append(Tag.query.get(image_tag.tag_id))
+
+    board_tags = BoardTag.query.filter(BoardTag.board_id == board_id).all()
+    for board_tag in board_tags:
+        tags.append(Tag.query.filter(Tag.tag_id == board_tag.tag_id).first())
+
+    # Delete from association tables (foreign keys)
     BoardImage.query.filter(BoardImage.board_id == board_id).delete()
+    BoardTag.query.filter(BoardTag.board_id == board_id).delete()
+    for image_tag in images_tags:
+        ImageTag.query.filter(ImageTag.image_tag_id == image_tag.image_tag_id).delete()
 
     # Delete images now that they are no longer foreign keys
     for next_image_id in images_ids:
         Image.query.filter(Image.image_id == next_image_id).delete()
 
-    # Finally, delete actual boards images are on
+    # Delete tags now that they are no longer associated with images
+    for tag in tags:
+        Tag.query.filter(Tag.tag_id == tag.tag_id).delete()
+
+    # Finally, delete actual board
     Board.query.filter(Board.board_id == board_id).delete()
 
     db.session.commit()
@@ -466,6 +483,9 @@ def edit_image():
     return ('Image Edited')
 
 
+# FIX ME If I've saved an image from one board(saved on db) to another board(saved on db)
+# can't successfully delete image, though if I delete another image that image does disappear from board
+# Check tables in postico, check what happens when the button is clicked
 # 15
 @app.route('/delete_image', methods=['POST'])
 def delete_image():
@@ -474,23 +494,36 @@ def delete_image():
     board_id = request.form.get('board_id')
     image_id = request.form.get('image_id')
 
-    test_board = BoardImage.query.filter(BoardImage.image_id == image_id, BoardImage.board_id == board_id).first()
+    print board_id
+    print image_id
+    print '************************************************************************'
+
+    # Can I delete this?
+    # test_board = BoardImage.query.filter(BoardImage.image_id == image_id, BoardImage.board_id == board_id).first()
 
     BoardImage.query.filter(BoardImage.image_id == image_id, BoardImage.board_id == board_id).delete()
-
     db.session.commit()
 
-    images = BoardImage.query.filter(BoardImage.image_id == image_id).all()
-    print images
+    # Check if image exists on any boards
+    # If there are no more instance of that image in the association table,
+    # then that means this image is not on any board, and should be deleted from db
+    # along with the tag associated with it.
+    image_in_boards_images = BoardImage.query.filter(BoardImage.image_id == image_id).all()
 
-    if images == []:
-        pass
-    else:
-        Board.query.filter(Board.board_id == board_id).delete()
+    print image_in_boards_images
+    print '************************************************************************'
 
+    if not image_in_boards_images:
+        image_tag = ImageTag.query.filter(ImageTag.image_id == image_id).first()
+        tag = Tag.query.get(image_tag.tag_id)
+        ImageTag.query.filter(ImageTag.image_id == image_id).delete()
         db.session.commit()
 
-    return ('Deleted')
+        Tag.query.filter(Tag.tag_id == tag.tag_id).delete()
+        Image.query.filter(Image.image_id == image_id).delete()
+        db.session.commit()
+
+    return ('Image Deleted')
 
 
 # 16
