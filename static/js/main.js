@@ -1,5 +1,7 @@
+// Save Board to db
 
-// Save image to db ------------------------------------------------------------
+
+// Save Image to db ------------------------------------------------------------
 
 // Pass pinid and imageid to #saveImageModal form hidden inputs,
 // to pass to '/save_image' route when form is submitted
@@ -13,10 +15,12 @@ $(".save-button").click(function() {
 
 function closeModal(result) {
     $("#saveImageModal").modal("hide");
+    $('body').css('cursor', 'default');
 }
 
 function saveToBoard(evt) {
     evt.preventDefault();
+    $('body').css('cursor', 'wait');
 
     var formInputs = {
         "board": $('input[name="board-to-save-image"]:checked').val(),
@@ -193,7 +197,7 @@ function editImage(evt) {
     var formInputs = {'new_image_description': $(this).find('.new-image-description').val(),
                       'image_id':$(this).find('.image-id').val()};
     console.log(formInputs);
-    
+
     $.post('/edit_image',
             formInputs,
             reloadBoardPage);

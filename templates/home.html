@@ -24,12 +24,13 @@
 
 <br><br>
  -->
-<h4>My Saved Boards</h4>
+<h2 class="page-title">My Saved Boards</h2>
+<br>
 <button id='new-board-button' class='btn btn-primary'>Create New Board</button>
 <form action="/create_board" id="create-board-form">
-    Board Name: <input type="text" name='board_name'>
-    Board Description: <input type="text" name='board_description'>
-    Image Url: <input type="text" name='image_url'>
+    Board Name: <input type="text" name='board_name' class='form-control'>
+    Board Description: <input type="text" name='board_description' class='form-control'>
+    Image Url: <input type="text" name='image_url' >
     <input type="submit" value="Create" class='btn btn-primary'>
     <!-- What else? -->
 </form>
@@ -44,9 +45,9 @@
 
                     <!-- Need to pass specific board! -->
                     <a href="/user_board_images/{{ board.board_id }}"><img src="{{ board.image_url }}"></a>
-                    {% if board['description'] %}
+                    {% if board.board_description %}
                         <h6>Description</h6>
-                        <li>{{ board['description'] }}</li>
+                        <li>{{ board.board_description }}</li>
                     {% endif %}
                     <br><br>
                     <a class='btn btn-primary' href='/study_board/{{ board.board_id }}'>Study</a>
@@ -56,9 +57,9 @@
                     <a class='btn btn-primary' href='/delete_board/{{ board.board_id }}'>Delete</a>
                     <form class='edit-board-form'>
                         <br><br>
-                        New Title: <input type='text' class='new-board-title'>
+                        New Title: <input type='text' class='new-board-title form-control' value='{{ board.board_name }}'>
                         <br><br>
-                        New Description: <textarea class='new-board-description' placeholder='{{ board.board_description }}'></textarea>
+                        New Description: <textarea class='new-board-description form-control'>{{ board.board_description }}</textarea>
                         <br><br>
                         <input type='hidden' class='board-id' value='{{ board.board_id }}'>
                         <input type='submit' value='Submit' class='btn btn-primary'>

@@ -57,6 +57,10 @@ body {
 .btn {
     background-color: rgba(7, 12, 16, 0.22);
     border-color: rgba(10, 4, 4, 0.11);
+}
+
+.pin-container .btn,
+.board .btn {
     margin-top: 5px;
 }
 
@@ -106,7 +110,7 @@ body {
     /*max-width: 90%;*/
 }
 
-.study-board {
+.page-title {
     display: inline-block;
     margin: 10px 30px;
     font-size: 2em;
@@ -121,15 +125,18 @@ body {
     margin: 0 5%;
 }
 
-.page-title {
-    margin: 30px;
-}
 
 .edit-board-form,
 .edit-image-form,
 #create-board-form,
 #create-image-form {
     display: none;
+}
+
+#create-board-form input,
+#create-image-form input {
+    width: 200px;
+    display: inline-block;
 }
 
 

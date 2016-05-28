@@ -354,8 +354,7 @@ def edit_board():
 
     if new_title != '':
         board.board_name = new_title
-    if new_description != '':
-        board.board_description = new_description
+    board.board_description = new_description
 
     db.session.commit()
 
@@ -424,7 +423,7 @@ def save_image():
         db.session.add(new_image)
         db.session.commit()
 
-        new_tag = Tag(tag=new_image.description.lower())
+        new_tag = Tag(tag_content=new_image.description.lower())
 
         db.session.add(new_tag)
         db.session.commit()
