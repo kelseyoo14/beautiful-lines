@@ -79,16 +79,16 @@
     {% else %}
       Search Results
     {% endif %}
+    {% if current_board %}
+      <button id='new-image-button' class='btn btn-primary'>Create New Image</button>
+      <form action="/create_image/{{ current_board.board_id }}" id="create-image-form">
+        Image Url: <input type="text" name='image_url' class='form-control'>
+        Image Description: <input type="text" name='image_description' class='form-control'>
+        <input type="submit" value="Create" class='btn btn-primary'>
+        <!-- What else? -->
+      </form>
+    {% endif %}
   </p>
-  {% if current_board %}
-    <button id='new-image-button' class='btn btn-primary'>Create New Image</button>
-    <form action="/create_image/{{ current_board.board_id }}" id="create-image-form">
-      Image Url: <input type="text" name='image_url' class='form-control'>
-      Image Description: <input type="text" name='image_description' class='form-control'>
-      <input type="submit" value="Create" class='btn btn-primary'>
-      <!-- What else? -->
-    </form>
-  {% endif %}
 
   <!-- <div id="color-palette">
   </div> -->

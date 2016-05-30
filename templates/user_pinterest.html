@@ -6,22 +6,19 @@
 
 
 <!-- {{ boards }} -->
+<h3 class='page-title'>Your Boards From Pinterest</h3>
 
-<div>
-<!--     <h2 class='page-title'>{{ username }}</h2>
-</div>
-
-<br>
-<div class="user-pins-search">
-    <form class="navbar-form navbar-left" role="search">
-    <div class="form-group">
-      <input type="text" class="form-control" placeholder="Search Your Pins">
-    </div>
-    <button type="submit" class="btn btn-default">Submit</button>
-    </form>
-</div>
-
-<br><br> -->
+<div class="modal fade" id="pause-user-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div>
+            <p>Please wait while we save your board to Beautiful Lines.</p>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div class='boards-container'>
     <ul>
@@ -37,7 +34,11 @@
                     <li>{{ board['description'] }}</li>
                 {% endif %}
                 <br><br>
-                <a href="/save_board/{{ board['url'] }}">Save Board</a>
+                <form class='save-pinterest-board'>
+                    <input type='hidden' value="{{ board['url'] }}" class='board-url'>
+                    <input type='submit' value='Save Board' class='btn btn-primary'>
+                </form>
+                <!-- <a href="/save_board/{{ board['url'] }}" class='save-pinterest-board'>Save Board</a> -->
             </div>
         {% endfor %}
     </ul>

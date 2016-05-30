@@ -1,4 +1,26 @@
-// Save Board to db
+// Save Pinterest Board to db -----------------------------------------------------------
+
+function saveBoard(evt) {
+    evt.preventDefault();
+    $('#pause-user-modal').modal('show');
+
+    formInputs = {
+        'board_url': $(this).find('.board-url').val()
+    };
+
+    $.post('/save_board',
+            formInputs,
+            reloadPage);
+
+    function reloadPage() {
+        location.reload(true);
+    }
+}
+
+
+$(".save-pinterest-board").on('submit', saveBoard);
+
+
 
 
 // Save Image to db ------------------------------------------------------------
@@ -23,12 +45,10 @@ function saveToBoard(evt) {
     $('body').css('cursor', 'wait');
 
     var formInputs = {
-        "board": $('input[name="board-to-save-image"]:checked').val(),
+        'board': $('input[name="board-to-save-image"]:checked').val(),
         'pin_id': $('#hidden-pinid').val(),
         'image_id': $('#hidden-imageid').val()
     };
-
-    console.log(formInputs);
 
     $.post('/save_image',
             formInputs,
@@ -53,9 +73,6 @@ function deleteFromBoard(evt) {
         'board_id': $(this).find('.board_id').val(),
         'image_id': $(this).find('.image_id').val()
     };
-
-    console.log(formInputs);
-    console.log("TEST");
 
     $.post('/delete_image',
             formInputs,
@@ -139,7 +156,7 @@ function startStudy(evt) {
     get_images();
 }
 
-// When user clicks on 'Start Drawing' button, start displaying 'studying' (displaying images)
+// When user clicks on 'Start Drawing' button, start displaying images
 $('#study-form').on('submit', startStudy);
 
 $('#study-modal .modal-body').height($('#study-modal-image').height());
@@ -196,7 +213,6 @@ function editImage(evt) {
 
     var formInputs = {'new_image_description': $(this).find('.new-image-description').val(),
                       'image_id':$(this).find('.image-id').val()};
-    console.log(formInputs);
 
     $.post('/edit_image',
             formInputs,
@@ -216,6 +232,4 @@ $('#new-board-button').on('click', function() {
 $('#new-image-button').on('click', function() {
     $('#create-image-form').toggle();
 });
-
-
 

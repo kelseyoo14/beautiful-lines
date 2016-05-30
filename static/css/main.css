@@ -26,9 +26,7 @@ body {
 }
 
 .boards-container {
-    display: block;
-    padding: 10px;
-    margin: 40px;
+    margin: 0 9%;
 }
 
 
@@ -37,6 +35,7 @@ body {
     border: 1px solid black;
     padding: 20px 30px 60px 30px;
     margin: 50px;
+    text-align: center;
 }
 
 .board img {
@@ -131,6 +130,10 @@ body {
 #create-board-form,
 #create-image-form {
     display: none;
+}
+
+#new-board-button {
+    margin: 10px;
 }
 
 #create-board-form input,

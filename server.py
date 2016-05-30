@@ -95,9 +95,6 @@ def redirect():
     user_info_request = requests.get('https://api.pinterest.com/v1/me', headers=headers, params=payload)
     user_info = user_info_request.json()
 
-    # print '--------------------USER INFO RESPONSE-----------------------'
-    # print user_info
-
     # Query to check if user exists in the db
     user_exists = User.query.filter(User.pinterest_user_id == user_info['data']['id']).first()
 
@@ -121,7 +118,6 @@ def redirect():
 
         db.session.add(new_user)
         db.session.commit()
-        # print new_user
 
         # Add user_id and access_token to session for global use
         session['user_id'] = new_user.user_id
@@ -228,9 +224,11 @@ def show_pinterest_boards(url):
 
 
 # 9
-@app.route('/save_board/<board>/')
-def save_board(board):
+@app.route('/save_board', methods=['POST'])
+def save_board():
     """Saves board to Beautiful Lines"""
+
+    board = request.form.get('board_url')
 
     username = session['username']
     headers = {'Authorization': 'Bearer %s' % session['access_token']}
@@ -302,37 +300,48 @@ def save_images_on_board():
     board = Board.query.filter(Board.board_id == session['board_id']).first()
 
     # Save each image in pins_request['data'] to images table
+
+
     for pin in all_pins:
-        pinterest_image_id = pin['id']
-        original_url = pin['image']['original']['url']
-        pinterest_url = pin['url']
-        description = pin['note']
+        # Check if image exists in db
+        check_image = Image.query.filter(Image.pinterest_image_id == pin['id']).first()
+        print check_image
+        print '**************************************************'
 
-        # Create new_board for db
-        new_image = Image(pinterest_image_id=pinterest_image_id,
-                          original_url=original_url,
-                          pinterest_url=pinterest_url,
-                          description=description)
+        if check_image is None:
+            pinterest_image_id = pin['id']
+            original_url = pin['image']['original']['url']
+            pinterest_url = pin['url']
+            description = pin['note']
 
-        db.session.add(new_image)
-        db.session.commit()
+            # Create new_image for db
+            new_image = Image(pinterest_image_id=pinterest_image_id,
+                              original_url=original_url,
+                              pinterest_url=pinterest_url,
+                              description=description)
+
+            db.session.add(new_image)
+            db.session.commit()
+
+            new_tag = Tag(tag_content=new_image.description.lower())
+
+            db.session.add(new_tag)
+            db.session.commit()
+
+            new_imagetag = ImageTag(image_id=new_image.image_id,
+                                    tag_id=new_tag.tag_id)
+
+            db.session.add(new_imagetag)
+            db.session.commit()
+
+        else:
+            new_image = check_image
 
         # Create new record for boards_images association table to save each image_id with board_id
         new_boardimage = BoardImage(board_id=board.board_id,
                                     image_id=new_image.image_id)
 
         db.session.add(new_boardimage)
-        db.session.commit()
-
-        new_tag = Tag(tag_content=new_image.description.lower())
-
-        db.session.add(new_tag)
-        db.session.commit()
-
-        new_imagetag = ImageTag(image_id=new_image.image_id,
-                                tag_id=new_tag.tag_id)
-
-        db.session.add(new_imagetag)
         db.session.commit()
 
     return flaskredirect('/pinterest_boards')
@@ -361,40 +370,40 @@ def edit_board():
     return ('Board Edited')
 
 
-
 # 12
 @app.route('/delete_board/<board_id>')
 def delete_board(board_id):
-    """Deletes user board from blines db"""
+    """Deletes user board from blines db and associated images and tags that don't exist in other boards"""
 
-    images = Board.query.get(board_id).images
     images_ids = []
-    images_tags = []
+    ok_to_delete_images = []
     tags = []
 
+    images = Board.query.get(board_id).images
     for image in images:
-        print '----------------------------------------------------------------'
-        print image
-        print image.image_id
         images_ids.append(image.image_id)
-        images_tags.append(ImageTag.query.filter(ImageTag.image_id == image.image_id).first())
 
-    for image_tag in images_tags:
-        tags.append(Tag.query.get(image_tag.tag_id))
-
-    board_tags = BoardTag.query.filter(BoardTag.board_id == board_id).all()
-    for board_tag in board_tags:
-        tags.append(Tag.query.filter(Tag.tag_id == board_tag.tag_id).first())
-
-    # Delete from association tables (foreign keys)
+    # Delete from board association tables(foreign keys)
     BoardImage.query.filter(BoardImage.board_id == board_id).delete()
+    boardtags = BoardTag.query.filter(BoardTag.board_id == board_id).all()
+    for boardtag in boardtags:
+        tags.append(Tag.query.filter(Tag.tag_id == boardtag.tag_id).first())
     BoardTag.query.filter(BoardTag.board_id == board_id).delete()
-    for image_tag in images_tags:
-        ImageTag.query.filter(ImageTag.image_tag_id == image_tag.image_tag_id).delete()
 
-    # Delete images now that they are no longer foreign keys
+    db.session.commit()
+
+    # Find out which images are still needed in db for other boards
     for next_image_id in images_ids:
-        Image.query.filter(Image.image_id == next_image_id).delete()
+        check_board_image = BoardImage.query.filter(BoardImage.image_id == next_image_id).first()
+
+        if check_board_image is None:
+            ok_to_delete_images.append(Image.query.filter(Image.image_id == next_image_id).first())
+            image_tag = ImageTag.query.filter(ImageTag.image_id == next_image_id).first()
+            tags.append(Tag.query.filter(Tag.tag_id == image_tag.tag_id).first())
+            ImageTag.query.filter(ImageTag.image_id == next_image_id).delete()
+
+    for image in ok_to_delete_images:
+        Image.query.filter(Image.image_id == image.image_id).delete()
 
     # Delete tags now that they are no longer associated with images
     for tag in tags:
@@ -494,24 +503,12 @@ def delete_image():
     board_id = request.form.get('board_id')
     image_id = request.form.get('image_id')
 
-    print board_id
-    print image_id
-    print '************************************************************************'
-
-    # Can I delete this?
-    # test_board = BoardImage.query.filter(BoardImage.image_id == image_id, BoardImage.board_id == board_id).first()
-
     BoardImage.query.filter(BoardImage.image_id == image_id, BoardImage.board_id == board_id).delete()
     db.session.commit()
 
-    # Check if image exists on any boards
-    # If there are no more instance of that image in the association table,
-    # then that means this image is not on any board, and should be deleted from db
-    # along with the tag associated with it.
+    # Check if image exists on any boards, if there are no more instances of that image in the association table,
+    # Then image and associated tags should be deleted from db
     image_in_boards_images = BoardImage.query.filter(BoardImage.image_id == image_id).all()
-
-    print image_in_boards_images
-    print '************************************************************************'
 
     if not image_in_boards_images:
         image_tag = ImageTag.query.filter(ImageTag.image_id == image_id).first()
