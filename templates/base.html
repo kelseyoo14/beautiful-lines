@@ -17,9 +17,15 @@
               <a class="navbar-brand" href="#">Beautiful Lines</a>
             </div>
             <ul class="nav navbar-nav">
-              <form action='/search' class="navbar-form navbar-left search-images-form" role="search">
+              <form action='/search_bl' class="navbar-form navbar-left" id='search-bl-form' role="search">
                 <div class="form-group">
-                  <input type="text" class="form-control" name='images-search' placeholder="Search Saved Images">
+                  <input type="text" class="form-control" name='images-search' placeholder="Search Beautiful Lines">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+              </form>
+              <form action='/search_user' class="navbar-form navbar-left" id='search-user-form' role="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" name='images-search' placeholder="Search Your Saved Images">
                 </div>
                 <button type="submit" class="btn btn-default">Submit</button>
               </form>

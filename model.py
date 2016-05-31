@@ -147,11 +147,12 @@ class Tag(db.Model):
 
     tag_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     tag_content = db.Column(db.String(2000), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
 
     def __repr__(self):
         """Provide helpful representation when printed to console"""
 
-        return "<Tag tag_id=%s tag_content=%s>" % (self.tag_id, self.tag_content)
+        return "<Tag tag_id=%s tag_content=%s user_id=%s>" % (self.tag_id, self.tag_content, self.user_id)
 
 
 

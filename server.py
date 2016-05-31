@@ -252,8 +252,10 @@ def save_board():
     db.session.add(new_board)
     db.session.commit()
 
-    new_tag = Tag(tag_content=new_board.board_description.lower())
-    new_tag2 = Tag(tag_content=new_board.board_name.lower())
+    new_tag = Tag(tag_content=new_board.board_description.lower(),
+                  user_id=session['user_id'])
+    new_tag2 = Tag(tag_content=new_board.board_name.lower(),
+                   user_id=session['user_id'])
 
     db.session.add(new_tag)
     db.session.add(new_tag2)
@@ -323,7 +325,8 @@ def save_images_on_board():
             db.session.add(new_image)
             db.session.commit()
 
-            new_tag = Tag(tag_content=new_image.description.lower())
+            new_tag = Tag(tag_content=new_image.description.lower(),
+                          user_id=user.user_id)
 
             db.session.add(new_tag)
             db.session.commit()
@@ -344,7 +347,7 @@ def save_images_on_board():
         db.session.add(new_boardimage)
         db.session.commit()
 
-    return flaskredirect('/pinterest_boards')
+    return ('Board Saved')
 
 #11
 @app.route('/edit_board', methods=['POST'])
@@ -456,7 +459,8 @@ def save_image():
         db.session.add(new_image)
         db.session.commit()
 
-        new_tag = Tag(tag_content=new_image.description.lower())
+        new_tag = Tag(tag_content=new_image.description.lower(),
+                      user_id=session['user_id'])
 
         db.session.add(new_tag)
         db.session.commit()
@@ -472,8 +476,31 @@ def save_image():
     new_boardimage = BoardImage(board_id=board_id,
                                 image_id=image_id)
 
+    # check if user id on tag is current user, otherwise add tag for image with current user id
+    image = Image.query.filter(Image.image_id == image_id).first()
+    tag = image.tags[0]
+
+    if tag.user_id != session['user_id']:
+        new_tag = Tag(tag_content=image.description.lower(),
+                      user_id=session['user_id'])
+
+        db.session.add(new_tag)
+        db.session.commit()
+
+        new_imagetag = ImageTag(image_id=image.image_id,
+                                tag_id=new_tag.tag_id)
+
+        db.session.add(new_imagetag)
+        db.session.commit()
+
     db.session.add(new_boardimage)
     db.session.commit()
+
+    print "******************************************"
+    print 'USER ID'
+    print session['user_id']
+    print "New Tag: %s" % new_tag
+    print "******************************************"
 
     return ('Saved')
 
@@ -602,11 +629,13 @@ def study():
     return json.dumps(list_of_image_urls)
 
 # 20
-@app.route('/search')
-def show_search():
+@app.route('/search_bl')
+def show_bl_search():
     """Search user's images and display images related to user search terms"""
 
     images = []
+    image_urls = set()
+    unique_images = []
     user_search = request.args.get('images-search')
 
     print user_search
@@ -625,11 +654,59 @@ def show_search():
                 for board in boards:
                     images.extend(board.images)
 
+    for image in images:
+        image_urls.add(image.original_url)
+
+    for image_url in image_urls:
+        unique_images.append(Image.query.filter(Image.original_url == image_url).first())
+
     boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
 
     return render_template('pinterest_board.html',
-                            images=images,
-                            boards=boards_in_blines)
+                           images=unique_images,
+                           boards=boards_in_blines)
+
+
+@app.route('/search_user')
+def show_user_search():
+    """Search user's images and display images related to user search terms"""
+
+    images = []
+    image_urls = set()
+    unique_images = []
+    user_search = request.args.get('images-search')
+
+    print user_search
+    print session['user_id']
+    print '**********************************************'
+
+    search_words = user_search.split()
+
+    for search_word in search_words:
+        tag_search = Tag.query.filter(Tag.tag_content.like('%' + search_word + '%'), Tag.user_id == session['user_id']).all()
+
+        print tag_search
+        print '**********************************************'
+
+        for tag in tag_search:
+            images.extend(tag.images)
+            boards = tag.boards
+
+            if boards:
+                for board in boards:
+                    images.extend(board.images)
+
+    for image in images:
+        image_urls.add(image.original_url)
+
+    for image_url in image_urls:
+        unique_images.append(Image.query.filter(Image.original_url == image_url).first())
+
+    boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
+
+    return render_template('pinterest_board.html',
+                           images=unique_images,
+                           boards=boards_in_blines)
 
 
 

@@ -7,10 +7,6 @@ a:hover {
     color: #CFA374
 }
 
-.search-images-form {
-    margin-right: 1em;
-}
-
 .pin-image {
     cursor: zoom-in;
 }
@@ -24,8 +20,14 @@ a:hover {
 }
 
 .navbar-form .form-control {
-    width: 30vw;
-    min-width: 250px;
+    width: 15vw;
+    min-width: 200px;
+}
+
+.navbar-form .btn {
+    width: 10vw;
+    min-width: 100px;
+    margin-right: 3vw;
 }
 
 
