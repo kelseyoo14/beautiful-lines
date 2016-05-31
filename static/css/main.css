@@ -1,5 +1,14 @@
 body {
     background-color: #fbfbfb;
+    font-family: 'Raleway', sans-serif;
+}
+
+a:hover {
+    color: #CFA374
+}
+
+.search-images-form {
+    margin-right: 1em;
 }
 
 .pin-image {
@@ -26,20 +35,32 @@ body {
 }
 
 .boards-container {
-    margin: 0 9%;
+    margin: 0 5%;
 }
 
 
 .board {
     display: inline-block;
     border: 1px solid black;
-    padding: 20px 30px 60px 30px;
-    margin: 50px;
+    border-radius: 12px;
+    max-width: 250px;
+    padding: 25px;
+    margin: 25px;
     text-align: center;
 }
 
 .board img {
-    max-height: 200px;
+    /*height: 100px;*/
+    margin: 10px auto;
+}
+
+.board > a:first-child {
+    color: black;
+    font-size: 1.5em;
+}
+
+.board a:nth-child(-n+2) {
+    display: block;
 }
 
 .pin-container {
@@ -68,6 +89,10 @@ body {
 .btn:active,
 .btn:active:focus {
     background-color: rgba(7, 12, 16, 0.61);
+}
+
+.delete-board-from-db {
+    margin-left: -2px;
 }
 
 .delete-image-from-board {

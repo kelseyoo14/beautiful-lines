@@ -2,7 +2,7 @@
 
 function saveBoard(evt) {
     evt.preventDefault();
-    $('#pause-user-modal').modal('show');
+    $('#pause-user-modal-save').modal('show');
 
     formInputs = {
         'board_url': $(this).find('.board-url').val()
@@ -21,7 +21,27 @@ function saveBoard(evt) {
 $(".save-pinterest-board").on('submit', saveBoard);
 
 
+// Delete Board from db -----------------------------------------------------------
 
+function deleteBoard(evt) {
+    evt.preventDefault();
+    $('#pause-user-modal-delete').modal('show');
+
+    formInputs = {
+        'board_id': $(this).find('.delete-board-id').val()
+    };
+
+    $.post('/delete_board',
+            formInputs,
+            reloadPage);
+
+    function reloadPage() {
+        location.reload(true);
+    }
+}
+
+
+$(".delete-board-from-db").on('submit', deleteBoard);
 
 // Save Image to db ------------------------------------------------------------
 
@@ -207,7 +227,8 @@ $('.edit-button').on('click', function() {
 function editImage(evt) {
     evt.preventDefault();
 
-    function reloadBoardPage() {
+    function reloadBoardPage(result) {
+        console.log(result);
         location.reload(true);
     }
 

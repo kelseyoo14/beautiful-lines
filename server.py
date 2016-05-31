@@ -355,14 +355,19 @@ def edit_board():
     new_description = request.form.get('new_board_description')
     board_id = request.form.get('board_id')
 
-    print new_title
-    print new_description
-    print '************************************************************'
-
     board = Board.query.get(board_id)
 
-    if new_title != '':
-        board.board_name = new_title
+    tags = board.tags
+    print '**********************************************************************'
+    print 'Tags: %s' % tags
+
+    for tag in tags:
+        if tag.tag_content == board.board_name.lower():
+            tag.tag_content = new_title.lower()
+        if tag.tag_content == board.board_description.lower():
+            tag.tag_content = new_description.lower()
+
+    board.board_name = new_title
     board.board_description = new_description
 
     db.session.commit()
@@ -371,9 +376,11 @@ def edit_board():
 
 
 # 12
-@app.route('/delete_board/<board_id>')
-def delete_board(board_id):
+@app.route('/delete_board', methods=['POST'])
+def delete_board():
     """Deletes user board from blines db and associated images and tags that don't exist in other boards"""
+
+    board_id = request.form.get('board_id')
 
     images_ids = []
     ok_to_delete_images = []
@@ -414,7 +421,7 @@ def delete_board(board_id):
 
     db.session.commit()
 
-    return flaskredirect('/home')
+    return ('Board Deleted')
 
 
 # FIX ME - Can't save a specific image to a board more than once
@@ -479,22 +486,17 @@ def edit_image():
     new_description = request.form.get('new_image_description')
     image_id = request.form.get('image_id')
 
-    print new_description
-    print '************************************************************'
-
     image = Image.query.get(image_id)
+    tags = image.tags
+    tag = tags[0]
 
-    if new_description != '':
-        image.description = new_description
-
+    image.description = new_description
+    tag.tag_content = new_description.lower()
     db.session.commit()
 
     return ('Image Edited')
 
 
-# FIX ME If I've saved an image from one board(saved on db) to another board(saved on db)
-# can't successfully delete image, though if I delete another image that image does disappear from board
-# Check tables in postico, check what happens when the button is clicked
 # 15
 @app.route('/delete_image', methods=['POST'])
 def delete_image():
@@ -574,7 +576,7 @@ def create_image(board_id):
 # 18
 @app.route('/study_board/<int:board_id>')
 def study_board(board_id):
-    """Displays pins from board chosen by user at set time intervals to study"""
+    """Displays pins from board chosen by user to study"""
 
     images = Board.query.get(board_id).images
     current_board = Board.query.filter(Board.board_id == board_id).first()
@@ -603,8 +605,13 @@ def study():
 @app.route('/search')
 def show_search():
     """Search user's images and display images related to user search terms"""
+
     images = []
     user_search = request.args.get('images-search')
+
+    print user_search
+    print '**********************************************'
+
     search_words = user_search.split()
 
     for search_word in search_words:
@@ -619,9 +626,6 @@ def show_search():
                     images.extend(board.images)
 
     boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
-
-    print images
-    print '*************************************'
 
     return render_template('pinterest_board.html',
                             images=images,

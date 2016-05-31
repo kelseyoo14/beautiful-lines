@@ -194,11 +194,14 @@ def test_example_data():
 
     tag2 = Tag(tag_content='test tag content 2')
 
+    tag3 = Tag(tag_content='test board tag content')
+
     db.session.add(test_board)
     db.session.add(image1)
     db.session.add(image2)
     db.session.add(tag1)
     db.session.add(tag2)
+    db.session.add(tag3)
     db.session.commit()
 
     board_image1 = BoardImage(board_id=test_board.board_id,
@@ -213,10 +216,14 @@ def test_example_data():
     image_tag2 = ImageTag(image_id=image2.image_id,
                           tag_id=tag2.tag_id)
 
+    board_tag = BoardTag(board_id=test_board.board_id,
+                         tag_id=tag3.tag_id)
+
     db.session.add(board_image1)
     db.session.add(board_image2)
     db.session.add(image_tag1)
     db.session.add(image_tag2)
+    db.session.add(board_tag)
     db.session.commit()
 
 
