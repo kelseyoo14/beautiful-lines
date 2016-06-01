@@ -1,5 +1,5 @@
 from model import User, Board, BoardImage, Image, ImageTag, BoardTag, Tag, connect_to_db, db
-import server_functions
+import route_functions
 import requests
 import os
 from urllib import urlencode, quote_plus
@@ -230,7 +230,7 @@ def save_board():
     new_request = requests.get('https://api.pinterest.com/v1/boards/%s/%s' % (username, board), headers=headers, params=payload)
     board_request = new_request.json()
 
-    new_board = server_functions.save_board_from_pinterest(board, board_request, user_id)
+    new_board = route_functions.save_board_from_pinterest(board, board_request, user_id)
 
     session['board_id'] = new_board.board_id
     session['board_url'] = new_board.url_name
@@ -250,7 +250,7 @@ def save_images_on_board():
     new_request = requests.get('https://api.pinterest.com/v1/boards/%s/%s/pins' % (session['username'], session['board_url']), headers=headers, params=payload)
     pins_request = new_request.json()
 
-    server_functions.save_images_from_pinterest_board(headers, payload, pins_request, user, board_id)
+    route_functions.save_images_from_pinterest_board(headers, payload, pins_request, user, board_id)
 
     return ('Board Saved')
 
@@ -264,7 +264,7 @@ def edit_board():
     new_description = request.form.get('new_board_description')
     board_id = request.form.get('board_id')
 
-    server_functions.edit_board_info(new_title, new_description, board_id)
+    route_functions.edit_board_info(new_title, new_description, board_id)
 
     # board = Board.query.get(board_id)
 
@@ -291,7 +291,7 @@ def delete_board():
 
     board_id = request.form.get('board_id')
 
-    server_functions.delete_board_from_database(board_id)
+    route_functions.delete_board_from_database(board_id)
 
     return ('Board Deleted')
 
@@ -305,7 +305,7 @@ def save_image():
     pin_id = request.form.get('pin_id')
     image_id = request.form.get('image_id')
 
-    server_functions.save_individual_images(board_id, pin_id, image_id)
+    route_functions.save_individual_images(board_id, pin_id, image_id)
 
     return ('Image Saved')
 
@@ -318,7 +318,7 @@ def edit_image():
     new_description = request.form.get('new_image_description')
     image_id = request.form.get('image_id')
 
-    server_functions.edit_image_info(new_description, image_id)
+    route_functions.edit_image_info(new_description, image_id)
 
     return ('Image Edited')
 
@@ -331,7 +331,7 @@ def delete_image():
     board_id = request.form.get('board_id')
     image_id = request.form.get('image_id')
 
-    server_functions.delete_image_from_db(board_id, image_id)
+    route_functions.delete_image_from_db(board_id, image_id)
 
     return ('Image Deleted')
 
@@ -346,7 +346,7 @@ def create_board():
     image_url = request.args.get('image_url')
     url_name = quote_plus('board_name')
 
-    server_functions.create_board(board_name, board_description, image_url, url_name)
+    route_functions.create_board(board_name, board_description, image_url, url_name)
 
     return flaskredirect('/home')
 
@@ -359,7 +359,7 @@ def create_image(board_id):
     image_url = request.args.get('image_url')
     description = request.args.get('image_description')
 
-    server_functions.create_image(image_url, description)
+    route_functions.create_image(image_url, description)
 
     return flaskredirect('/user_board_images/%s' % board_id)
 
@@ -399,7 +399,7 @@ def show_bl_search():
 
     user_search = request.args.get('images-search')
 
-    images, boards = server_functions.search(user_search, 'all')
+    images, boards = route_functions.search(user_search, 'all')
 
     return render_template('pinterest_board.html',
                            images=images,
@@ -413,7 +413,7 @@ def show_user_search():
 
     user_search = request.args.get('images-search')
 
-    images, boards = server_functions.search(user_search, 'user')
+    images, boards = route_functions.search(user_search, 'user')
 
     return render_template('pinterest_board.html',
                            images=images,
