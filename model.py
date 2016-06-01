@@ -191,11 +191,14 @@ def test_example_data():
                    pinterest_url='',
                    description='test image description 2')
 
-    tag1 = Tag(tag_content='test tag content 1')
+    tag1 = Tag(tag_content='test tag content 1',
+               user_id=1)
 
-    tag2 = Tag(tag_content='test tag content 2')
+    tag2 = Tag(tag_content='test tag content 2',
+               user_id=1)
 
-    tag3 = Tag(tag_content='test board tag content')
+    tag3 = Tag(tag_content='test board tag content',
+               user_id=1)
 
     db.session.add(test_board)
     db.session.add(image1)
