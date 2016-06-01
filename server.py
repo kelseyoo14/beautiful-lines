@@ -307,64 +307,6 @@ def save_image():
 
     server_functions.save_individual_images(board_id, pin_id, image_id)
 
-    # # If image not already in db
-    # if image_id == "No-ID":
-
-    #     headers = {'Authorization': 'Bearer %s' % session['access_token']}
-    #     payload = {'fields': 'id,url,board,image,note'}
-    #     new_request = requests.get('https://api.pinterest.com/v1/pins/%s' % (pin_id), headers=headers, params=payload)
-    #     pin_request = new_request.json()
-
-    #     # pinterest_image_id = pin_request['data']['id']
-    #     original_url = pin_request['data']['image']['original']['url']
-    #     pinterest_url = pin_request['data']['url']
-    #     description = pin_request['data']['note']
-
-    #     new_image = Image(pinterest_image_id=pin_id,
-    #                       original_url=original_url,
-    #                       pinterest_url=pinterest_url,
-    #                       description=description)
-
-    #     db.session.add(new_image)
-    #     db.session.commit()
-
-    #     new_tag = Tag(tag_content=new_image.description.lower(),
-    #                   user_id=session['user_id'])
-
-    #     db.session.add(new_tag)
-    #     db.session.commit()
-
-    #     new_imagetag = ImageTag(image_id=new_image.image_id,
-    #                             tag_id=new_tag.tag_id)
-
-    #     db.session.add(new_imagetag)
-    #     db.session.commit()
-
-    #     image_id = new_image.image_id
-
-    # new_boardimage = BoardImage(board_id=board_id,
-    #                             image_id=image_id)
-
-    # # check if user id on tag is current user, otherwise add tag for image with current user id
-    # image = Image.query.filter(Image.image_id == image_id).first()
-    # tag = image.tags[0]
-
-    # if tag.user_id != session['user_id']:
-    #     new_tag = Tag(tag_content=image.description.lower(),
-    #                   user_id=session['user_id'])
-
-    #     db.session.add(new_tag)
-    #     db.session.commit()
-
-    #     new_imagetag = ImageTag(image_id=image.image_id,
-    #                             tag_id=new_tag.tag_id)
-
-    #     db.session.add(new_imagetag)
-    #     db.session.commit()
-
-    # db.session.add(new_boardimage)
-    # db.session.commit()
-
     return ('Image Saved')
 
 
@@ -378,14 +320,6 @@ def edit_image():
 
     server_functions.edit_image_info(new_description, image_id)
 
-    # image = Image.query.get(image_id)
-    # tags = image.tags
-    # tag = tags[0]
-
-    # image.description = new_description
-    # tag.tag_content = new_description.lower()
-    # db.session.commit()
-
     return ('Image Edited')
 
 
@@ -398,23 +332,6 @@ def delete_image():
     image_id = request.form.get('image_id')
 
     server_functions.delete_image_from_db(board_id, image_id)
-
-    # BoardImage.query.filter(BoardImage.image_id == image_id, BoardImage.board_id == board_id).delete()
-    # db.session.commit()
-
-    # # Check if image exists on any boards, if there are no more instances of that image in the association table,
-    # # Then image and associated tags should be deleted from db
-    # image_in_boards_images = BoardImage.query.filter(BoardImage.image_id == image_id).all()
-
-    # if not image_in_boards_images:
-    #     image_tag = ImageTag.query.filter(ImageTag.image_id == image_id).first()
-    #     tag = Tag.query.get(image_tag.tag_id)
-    #     ImageTag.query.filter(ImageTag.image_id == image_id).delete()
-    #     db.session.commit()
-
-    #     Tag.query.filter(Tag.tag_id == tag.tag_id).delete()
-    #     Image.query.filter(Image.image_id == image_id).delete()
-    #     db.session.commit()
 
     return ('Image Deleted')
 
@@ -431,16 +348,6 @@ def create_board():
 
     server_functions.create_board(board_name, board_description, image_url, url_name)
 
-    # Create new_board for db
-    # new_board = Board(url_name=url_name,
-    #                   board_name=board_name,
-    #                   board_description=board_description,
-    #                   image_url=image_url,
-    #                   user_id=session['user_id'])
-
-    # db.session.add(new_board)
-    # db.session.commit()
-
     return flaskredirect('/home')
 
 
@@ -453,19 +360,6 @@ def create_image(board_id):
     description = request.args.get('image_description')
 
     server_functions.create_image(image_url, description)
-
-    # Create new_image for db
-    # new_image = Image(original_url=image_url,
-    #                   description=description)
-
-    # db.session.add(new_image)
-    # db.session.commit()
-
-    # new_boardimage = BoardImage(board_id=board_id,
-    #                             image_id=new_image.image_id)
-
-    # db.session.add(new_boardimage)
-    # db.session.commit()
 
     return flaskredirect('/user_board_images/%s' % board_id)
 
@@ -494,8 +388,6 @@ def study():
 
     for image in images:
         list_of_image_urls.append(image.original_url)
-    # can't I just extend list_of_image_urls?
-    # list_of_image_urls.extend(images)
 
     return json.dumps(list_of_image_urls)
 
@@ -508,33 +400,6 @@ def show_bl_search():
     user_search = request.args.get('images-search')
 
     images, boards = server_functions.search(user_search, 'all')
-
-
-    # images = []
-    # image_urls = set()
-    # unique_images = []
-    # user_search = request.args.get('images-search')
-
-    # search_words = user_search.split()
-
-    # for search_word in search_words:
-    #     tag_search = Tag.query.filter(Tag.tag_content.like('%' + search_word + '%')).all()
-
-    #     for tag in tag_search:
-    #         images.extend(tag.images)
-    #         boards = tag.boards
-
-    #         if boards:
-    #             for board in boards:
-    #                 images.extend(board.images)
-
-    # for image in images:
-    #     image_urls.add(image.original_url)
-
-    # for image_url in image_urls:
-    #     unique_images.append(Image.query.filter(Image.original_url == image_url).first())
-
-    # boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
 
     return render_template('pinterest_board.html',
                            images=images,
@@ -549,31 +414,6 @@ def show_user_search():
     user_search = request.args.get('images-search')
 
     images, boards = server_functions.search(user_search, 'user')
-
-    # images = []
-    # image_urls = set()
-    # unique_images = []
-
-    # search_words = user_search.split()
-
-    # for search_word in search_words:
-    #     tag_search = Tag.query.filter(Tag.tag_content.like('%' + search_word + '%'), Tag.user_id == session['user_id']).all()
-
-    #     for tag in tag_search:
-    #         images.extend(tag.images)
-    #         boards = tag.boards
-
-    #         if boards:
-    #             for board in boards:
-    #                 images.extend(board.images)
-
-    # for image in images:
-    #     image_urls.add(image.original_url)
-
-    # for image_url in image_urls:
-    #     unique_images.append(Image.query.filter(Image.original_url == image_url).first())
-
-    # boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
 
     return render_template('pinterest_board.html',
                            images=images,
