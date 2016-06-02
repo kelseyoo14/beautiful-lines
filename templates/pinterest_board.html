@@ -36,9 +36,9 @@
         <div>
             {% if current_board %}
             <form action="/create_image/{{ current_board.board_id }}" id="create-image-form">
-              <input type="text" name='image_url' class='form-control' placeholder='Board Description'>
-              <input type="text" name='image_description' class='form-control' placeholder='Image Url'>
-              <input type="submit" value="Create" class='btn btn-primary'>
+              <input type="text" name='image_url' class='form-control create-form' placeholder='Board Description'>
+              <input type="text" name='image_description' class='form-control create-form' placeholder='Image Url'>
+              <input type="submit" value="Create" class='btn btn-primary create-form'>
             </form>
             {% endif %}
         </div>

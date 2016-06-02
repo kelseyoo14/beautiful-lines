@@ -163,12 +163,17 @@ a:hover {
 
 #create-board-modal .modal-content,
 #create-image-modal .modal-content {
+    margin: auto;
     width: 333px;
 }
 
 #create-board-form,
 #create-image-form {
     text-align: center;
+}
+
+.create-form {
+    margin: 10px;
 }
 
 #no-search-results {
@@ -183,10 +188,6 @@ a:hover {
 .nav-dropdown-item {
     margin: 10px 15px;
     display: block;
-}
-
-#board-saved-message {
-    display: none;
 }
 
 .alert-container {
