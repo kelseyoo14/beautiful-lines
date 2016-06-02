@@ -100,7 +100,7 @@ def redirect():
     if user_exists:
         session['user_id'] = user_exists.user_id
         session['username'] = user_exists.username
-        # Eventually remove access token from sesison and grab it through db query
+        session['first_name'] = user_exists.first_name
         session['access_token'] = user_exists.access_token
     else:
         pinterest_user_id = user_info['data']['id']
@@ -119,7 +119,7 @@ def redirect():
         # Add user_id and access_token to session for global use
         session['user_id'] = new_user.user_id
         session['username'] = new_user.username
-        # Eventually remove access token from sesison and grab it through db query
+        session['first_name'] = new_user.first_name
         session['access_token'] = new_user.access_token
 
     return flaskredirect('/home')
@@ -143,7 +143,7 @@ def home():
 
     return render_template('home.html',
                            user_boards=user_boards,
-                           username=session['username'])
+                           first_name=session['first_name'])
 
 
 # 6
@@ -181,7 +181,7 @@ def pinterest_boards():
 
     return render_template('user_pinterest.html',
                            boards=boards_request,
-                           username=session['username'])
+                           first_name=session['first_name'])
 
 
 # 8
@@ -403,7 +403,8 @@ def show_bl_search():
 
     return render_template('pinterest_board.html',
                            images=images,
-                           boards=boards)
+                           boards=boards,
+                           search=user_search)
 
 
 # 21
@@ -417,7 +418,8 @@ def show_user_search():
 
     return render_template('pinterest_board.html',
                            images=images,
-                           boards=boards)
+                           boards=boards,
+                           search=user_search)
 
 
 # End Routes ---------------------------------------------------------------------------

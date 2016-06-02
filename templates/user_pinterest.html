@@ -2,24 +2,46 @@
 
 {% extends 'base.html' %}
 
+{% block page_title %}
+    <h3 class='page-title'>{{ first_name }}'s Boards From Pinterest</h3>
+{% endblock %}
+
 {% block content %}
-
-
-<!-- {{ boards }} -->
-<h3 class='page-title'>Your Boards From Pinterest</h3>
 
 <div class="modal fade" id="pause-user-modal-save" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
-        <div>
-            <p>Please wait while we save your board to Beautiful Lines.</p>
+        <h4 id='board-saved-message'>Board Successfully Saved!</h4>
+        <div id='board-saving-message'>
+            <p><h4>Please wait while we save your board to Beautiful Lines, it may take a few seconds.</h4></p>
+            <div class="cssload-wrap">
+                <div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div>Loading...</div>
+            </div>
         </div>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div class="modal fade" id="board-saved-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h4 id='board-saved-message'>Board Successfully Saved!</h4>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!-- {{ boards }} -->
 <div class='boards-container'>
     <ul>
         {% for board in boards['data'] %}

@@ -3,31 +3,36 @@
 
 {% extends 'base.html' %}
 
+{% block page_title %}
+    <div class="page-title">
+        {{ first_name }}'s Saved Boards
+        <br>
+        <button id='new-board-button' class='btn btn-primary'>Create New Board</button>
+    </div>
+{% endblock %}
+
 {% block content %}
 
-<div class="modal fade" id="pause-user-modal-delete" tabindex="-1" role="dialog">
+<div class="modal fade" id="create-board-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Create New Board</h4>
+        </div>
       <div class="modal-body">
         <div>
-            <p>Please wait while we delete your board from Beautiful Lines.</p>
+            <form action="/create_board" id="create-board-form">
+                <input type="text" name='board_name' class='form-control' placeholder='Board Name'>
+                <input type="text" name='board_description' class='form-control' placeholder='Board Description'>
+                <input type="text" name='image_url' class='form-control' placeholder='Image Url'>
+                <input type="submit" value="Create" class='btn btn-primary'>
+            </form>
         </div>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-
-<h2 class="page-title">My Saved Boards</h2>
-<br>
-<button id='new-board-button' class='btn btn-primary'>Create New Board</button>
-<form action="/create_board" id="create-board-form">
-    Board Name: <input type="text" name='board_name' class='form-control'>
-    Board Description: <input type="text" name='board_description' class='form-control'>
-    Image Url: <input type="text" name='image_url' >
-    <input type="submit" value="Create" class='btn btn-primary'>
-    <!-- What else? -->
-</form>
 
 <div class='boards-container'>
     <ul>

@@ -2,6 +2,7 @@
 
 function saveBoard(evt) {
     evt.preventDefault();
+    $('body').css('cursor', 'wait');
     $('#pause-user-modal-save').modal('show');
 
     formInputs = {
@@ -10,10 +11,14 @@ function saveBoard(evt) {
 
     $.post('/save_board',
             formInputs,
-            reloadPage);
+            successMessage);
 
-    function reloadPage() {
-        location.reload(true);
+    function successMessage(result) {
+        console.log(result);
+        $('#success-message').text('Your board has been successfully saved.');
+        $('.alert-container').css('display', 'block');
+        $('body').css('cursor', 'default');
+        $('#pause-user-modal-save').modal('hide');
     }
 }
 
@@ -25,6 +30,7 @@ $(".save-pinterest-board").on('submit', saveBoard);
 
 function deleteBoard(evt) {
     evt.preventDefault();
+    $('body').css('cursor', 'wait');
     $('#pause-user-modal-delete').modal('show');
 
     formInputs = {
@@ -36,7 +42,12 @@ function deleteBoard(evt) {
             reloadPage);
 
     function reloadPage() {
+        $('body').css('cursor', 'default');
         location.reload(true);
+        // $(document).ready(function () {
+        //     $('#success-message').text('Your board has been successfully deleted.');
+        //     $('.alert-container').css('display', 'block');
+        // });
     }
 }
 
@@ -55,10 +66,6 @@ $(".save-button").click(function() {
     $("#hidden-imageid").val(imageid);
 });
 
-function closeModal(result) {
-    $("#saveImageModal").modal("hide");
-    $('body').css('cursor', 'default');
-}
 
 function saveToBoard(evt) {
     evt.preventDefault();
@@ -72,8 +79,14 @@ function saveToBoard(evt) {
 
     $.post('/save_image',
             formInputs,
-            closeModal
-            );
+            successMessage);
+
+    function successMessage(result) {
+        $('#success-message').text('Your image has been successfully saved.');
+        $('.alert-container').css('display', 'block');
+        $("#saveImageModal").modal("hide");
+        $('body').css('cursor', 'default');
+}
 }
 
 $("#save-image-to-board").on('submit', saveToBoard);
@@ -82,12 +95,16 @@ $("#save-image-to-board").on('submit', saveToBoard);
 // Delete image from db ------------------------------------------------------------
 
 function reloadPage(result) {
+    $('body').css('cursor', 'default');
     location.reload(true);
+    // $('#success-message').text('Your image has been successfully deleted.');
+    // $('.alert-container').css('display', 'block');
 }
 
 
 function deleteFromBoard(evt) {
     evt.preventDefault();
+    $('body').css('cursor', 'wait');
 
     var formInputs = {
         'board_id': $(this).find('.board_id').val(),
@@ -201,8 +218,10 @@ $('.edit-button').on('click', function() {
 
 function editBoard(evt) {
     evt.preventDefault();
+    $('body').css('cursor', 'wait');
 
     function reloadHomePage() {
+        $('body').css('cursor', 'default');
         location.reload(true);
     }
 
@@ -226,9 +245,10 @@ $('.edit-button').on('click', function() {
 
 function editImage(evt) {
     evt.preventDefault();
+    $('body').css('cursor', 'wait');
 
     function reloadBoardPage(result) {
-        console.log(result);
+        $('body').css('cursor', 'default');
         location.reload(true);
     }
 
@@ -246,11 +266,29 @@ $('.edit-image-form').on('submit', editImage);
 
 // Display Form for Creating a New Board
 $('#new-board-button').on('click', function() {
-    $('#create-board-form').toggle();
+    $('#create-board-modal').modal("show");
 });
 
 // Display Form for Creating a New Image
 $('#new-image-button').on('click', function() {
-    $('#create-image-form').toggle();
+    $('#create-image-modal').modal("show");
 });
+
+
+
+// Change Search 
+
+$('#search-bl-form').on('click', function() {
+    $('#search-form').attr('action', '/search_bl');
+    $('#search-form-input').attr('placeholder', 'Search Beautiful Lines');
+});
+
+$('#search-user-form').on('click', function() {
+    $('#search-form').attr('action', '/search_user');
+    $('#search-form-input').attr('placeholder', 'Search Your Images');
+
+});
+
+
+
 

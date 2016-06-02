@@ -50,6 +50,8 @@ def save_images_from_pinterest_board(headers, payload, pins_request, user, board
     next_request = pins_request['page']['next']
     all_pins = pins_request['data']
 
+
+    # Do this async so user can still use page. js await
     while next_request is not None:
         new_request = requests.get(next_request, headers=headers, params=payload)
         pins_request = new_request.json()

@@ -3,10 +3,52 @@
 
 {% extends 'base.html' %}
 
+{% block page_title %}
+  {% if pins %}
+     <h2 class='page-title'>{{ pins[0]['board']['name'] }}</h2>
+  {% elif images %}
+    <div class="page-title">
+      {% if current_board %}
+        {{ current_board.board_name }}
+        <br>
+        <a href="/study_board/{{ current_board.board_id }}" class="btn btn-primary">Study</a>
+      {% else %}
+        Search Results<br>
+        "{{ search }}"
+      {% endif %}
+      {% if current_board %}
+        <button id='new-image-button' class='btn btn-primary'>Create New Image</button>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}
+
 {% block content %}
 
+<div class="modal fade" id="create-image-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Create New Image</h4>
+      </div>
+      <div class="modal-body">
+        <div>
+            {% if current_board %}
+            <form action="/create_image/{{ current_board.board_id }}" id="create-image-form">
+              <input type="text" name='image_url' class='form-control' placeholder='Board Description'>
+              <input type="text" name='image_description' class='form-control' placeholder='Image Url'>
+              <input type="submit" value="Create" class='btn btn-primary'>
+            </form>
+            {% endif %}
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
- <div class="modal fade" id="saveImageModal" tabindex="-1" role="dialog">
+
+<div class="modal fade" id="saveImageModal" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -56,8 +98,6 @@
 
 
 {% if pins %}
-   <h2 class='page-title'>{{ pins[0]['board']['name'] }}</h2>
-
    <div class="all-images">
       {% for pin in pins %}
           <div class='pin-container'>
@@ -70,29 +110,8 @@
   </div>
 {% endif %}
 
+
 {% if images %}
-  <p class="page-title">
-    {% if current_board %}
-      {{ current_board.board_name }}
-      <br>
-      <a href="/study_board/{{ current_board.board_id }}" class="btn btn-primary">Study</a>
-    {% else %}
-      Search Results
-    {% endif %}
-    {% if current_board %}
-      <button id='new-image-button' class='btn btn-primary'>Create New Image</button>
-      <form action="/create_image/{{ current_board.board_id }}" id="create-image-form">
-        Image Url: <input type="text" name='image_url' class='form-control'>
-        Image Description: <input type="text" name='image_description' class='form-control'>
-        <input type="submit" value="Create" class='btn btn-primary'>
-        <!-- What else? -->
-      </form>
-    {% endif %}
-  </p>
-
-  <!-- <div id="color-palette">
-  </div> -->
-
   <div class="all-images">
       {% for image in images %}
           <div class='pin-container'>
@@ -126,7 +145,9 @@
   </div>
 {% endif %}
 
-<p>No images found for search</p>
+{% if not images and not pins %}
+  <h3 id='no-search-results'>No images were found that match your search. Try something else!</h3>
+{% endif %}
 
 {% endblock %}
 

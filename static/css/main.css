@@ -1,6 +1,7 @@
 body {
     background-color: #fbfbfb;
     font-family: 'Raleway', sans-serif;
+    margin-top: 55px;
 }
 
 a:hover {
@@ -69,6 +70,7 @@ a:hover {
     display: inline-block;
     max-width: 200px;
     margin: 50px;
+    word-wrap:break-word
 }
 
 .pin-image,
@@ -137,7 +139,9 @@ a:hover {
 }
 
 .page-title {
+    text-align: center;
     display: inline-block;
+    width: 100%;
     margin: 10px 30px;
     font-size: 2em;
     font-weight: bold;
@@ -153,24 +157,59 @@ a:hover {
 
 
 .edit-board-form,
-.edit-image-form,
-#create-board-form,
-#create-image-form {
+.edit-image-form {
     display: none;
 }
 
-#new-board-button {
-    margin: 10px;
+#create-board-modal .modal-content,
+#create-image-modal .modal-content {
+    width: 333px;
 }
 
-#create-board-form input,
-#create-image-form input {
-    width: 200px;
-    display: inline-block;
+#create-board-form,
+#create-image-form {
+    text-align: center;
+}
+
+#no-search-results {
+    margin-left: 50px;
+    margin-top: 100px;
+}
+
+.dropdown-menu {
+    min-width: 120px;
+}
+
+.nav-dropdown-item {
+    margin: 10px 15px;
+    display: block;
+}
+
+#board-saved-message {
+    display: none;
+}
+
+.alert-container {
+    display: none;
+    width: 50%;
+    margin: auto;
+    text-align: center;
 }
 
 
-/*#saveImageModal {
-    width: 500px;
-    height: 500px;
-}*/
+
+
+@media screen and (max-width: 1230px) {
+    body {
+        margin-top: 100px;
+    }
+}
+
+
+
+
+
+
+
+
+
