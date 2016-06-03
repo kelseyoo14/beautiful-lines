@@ -14,9 +14,8 @@ function saveBoard(evt) {
             successMessage);
 
     function successMessage(result) {
-        console.log(result);
-        $('#success-message').text('Your board has been successfully saved.');
-        $('.alert-container').css('display', 'block');
+        $('#non-reload-success-message').text('Your board has been successfully saved.');
+        $('#non-reload-alert-container').css('display', 'block');
         $('body').css('cursor', 'default');
         $('#pause-user-modal-save').modal('hide');
     }
@@ -37,7 +36,7 @@ function deleteBoard(evt) {
         'board_id': $(this).find('.delete-board-id').val()
     };
 
-    $.post('/delete_board',
+    $.post('/delete_board.json',
             formInputs,
             reloadPage);
 
@@ -77,30 +76,27 @@ function saveToBoard(evt) {
         'image_id': $('#hidden-imageid').val()
     };
 
-    $.post('/save_image',
+    $.post('/save_image.json',
             formInputs,
             successMessage);
 
     function successMessage(result) {
-        $('#success-message').text('Your image has been successfully saved.');
-        $('.alert-container').css('display', 'block');
-        $("#saveImageModal").modal("hide");
+        $('#non-reload-success-message').text('Your image has been successfully saved.');
+        $('#non-reload-alert-container').css('display', 'block');
         $('body').css('cursor', 'default');
-}
+        $("#saveImageModal").modal("hide");
+    }
 }
 
 $("#save-image-to-board").on('submit', saveToBoard);
 
-
+// FIX ME
 // Delete image from db ------------------------------------------------------------
 
 function reloadPage(result) {
     $('body').css('cursor', 'default');
     location.reload(true);
-    // $('#success-message').text('Your image has been successfully deleted.');
-    // $('.alert-container').css('display', 'block');
 }
-
 
 function deleteFromBoard(evt) {
     evt.preventDefault();
@@ -111,7 +107,7 @@ function deleteFromBoard(evt) {
         'image_id': $(this).find('.image_id').val()
     };
 
-    $.post('/delete_image',
+    $.post('/delete_image.json',
             formInputs,
             reloadPage
             );
@@ -149,7 +145,7 @@ function startStudy(evt) {
 
     // get images from database through /study_images route
     function get_images() {
-        $.post('/study_images',
+        $.post('/study_images.json',
             formInputs,
             parse_results);
 
@@ -212,9 +208,27 @@ $('#zoom-modal .modal-body').height($('#zoomed-image').height());
 
 // Start Edit Board -------------------------------------------------------------------
 
-$('.edit-button').on('click', function() {
-    $(this).siblings('.edit-board-form').toggle();
-});
+// Grab form by ideas and insert value depending on valus grabbed form button?
+
+function showEditBoardForm(evt) {
+    evt.preventDefault();
+    console.log('function started');
+    var title = $(this).find('.new-board-title').val();
+    var image_url = $(this).find('.new-image-url').val();
+    var description = $(this).find('.new-board-description').val();
+    var board_id = $(this).find('.board-id').val();
+
+    $('#edit-board-title').val(title);
+    $('#edit-board-image').val(image_url);
+    $('#edit-board-description').val(description);
+    $('#board-id-to-edit').val(board_id);
+
+    $('#edit-board-modal').modal('show');
+}
+
+
+$('.edit-board-form').on('submit', showEditBoardForm);
+
 
 function editBoard(evt) {
     evt.preventDefault();
@@ -225,42 +239,54 @@ function editBoard(evt) {
         location.reload(true);
     }
 
-    var formInputs = {'new_board_title': $(this).find('.new-board-title').val(),
-                      'new_board_description': $(this).find('.new-board-description').val(),
-                      'board_id':$(this).find('.board-id').val()};
+    var formInputs = {'new_board_title': $(this).find('#edit-board-title').val(),
+                      'new_image_url': $(this).find('#edit-board-image').val(),
+                      'new_board_description': $(this).find('#edit-board-description').val(),
+                      'board_id':$(this).find('#board-id-to-edit').val()};
 
-    $.post('/edit_board',
+    $.post('/edit_board.json',
             formInputs,
             reloadHomePage);
 }
 
-$('.edit-board-form').on('submit', editBoard);
+$('#edit-board-modal-form').on('submit', editBoard);
 
 
 // Start Edit Image -------------------------------------------------------------------
 
-$('.edit-button').on('click', function() {
-    $(this).siblings('.edit-image-form').toggle();
-});
+function showEditImageForm(evt) {
+    evt.preventDefault();
+    console.log('function started');
+    var description = $(this).find('.new-image-description').val();
+    var image_id = $(this).find('.image-id').val();
+
+    $('#edit-image-description').val(description);
+    $('#image-id-to-edit').val(image_id);
+
+    $('#edit-image-modal').modal('show');
+}
+
+$('.edit-image-form').on('submit', showEditImageForm);
+
 
 function editImage(evt) {
     evt.preventDefault();
     $('body').css('cursor', 'wait');
 
-    function reloadBoardPage(result) {
+    function reloadBoardPage() {
         $('body').css('cursor', 'default');
         location.reload(true);
     }
 
-    var formInputs = {'new_image_description': $(this).find('.new-image-description').val(),
-                      'image_id':$(this).find('.image-id').val()};
+    var formInputs = {'new_image_description': $(this).find('#edit-image-description').val(),
+                      'image_id':$(this).find('#image-id-to-edit').val()};
 
-    $.post('/edit_image',
+    $.post('/edit_image.json',
             formInputs,
             reloadBoardPage);
 }
 
-$('.edit-image-form').on('submit', editImage);
+$('#edit-image-modal-form').on('submit', editImage);
 
 
 

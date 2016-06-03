@@ -6,7 +6,7 @@
 {% block page_title %}
   {% if pins %}
      <h2 class='page-title'>{{ pins[0]['board']['name'] }}</h2>
-  {% elif images %}
+  {% elif images or empty_board %}
     <div class="page-title">
       {% if current_board %}
         {{ current_board.board_name }}
@@ -35,10 +35,11 @@
       <div class="modal-body">
         <div>
             {% if current_board %}
+            <!-- FIX ME -->
             <form action="/create_image/{{ current_board.board_id }}" id="create-image-form">
-              <input type="text" name='image_url' class='form-control create-form' placeholder='Board Description'>
-              <input type="text" name='image_description' class='form-control create-form' placeholder='Image Url'>
-              <input type="submit" value="Create" class='btn btn-primary create-form'>
+              <input type="url" name='image_url' class='form-control create-form' placeholder='Image Url'>
+              <input type="text" name='image_description' class='form-control create-form' placeholder='Image Description'>
+              <input type="submit" value="Create" class='btn btn-primary create-form' id='submit-create-image'>
             </form>
             {% endif %}
         </div>
@@ -68,7 +69,7 @@
                   <input type='hidden' id='hidden-pinid'>
                   <input type='hidden' id='hidden-imageid'>
                   <br><br>
-                  <input type="submit" value="Submit" id='save-image-submit'>
+                  <input type="submit" value="Submit" id='save-image-submit' class='btn btn-primary'>
               </form>
             {% else %}
               <p>You don't have any boards saved on Beautiful Lines</p>
@@ -90,6 +91,28 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
             <div class='color-result'></div>
             <img src='' id='zoomed-image'>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="edit-image-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Create New Board</h4>
+        </div>
+      <div class="modal-body">
+        <div>
+            <form id='edit-image-modal-form'>
+                <br><br>
+                New Description: <textarea class='form-control' id='edit-image-description'></textarea>
+                <br><br>
+                <input type='hidden' id='image-id-to-edit' value=''>
+                <input type='submit' value='Submit' class='btn btn-primary'>
+            </form>
         </div>
       </div>
     </div><!-- /.modal-content -->
@@ -120,22 +143,18 @@
 
               <button type="button" class="btn btn-primary save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ image.pinterest_image_id }}" data-imageid="{{ image.image_id }}">Save</button>
               {% if current_board %}
-                <button class='btn btn-primary edit-button'>Edit</button>
+                <!-- <button class='btn btn-primary edit-button'>Edit</button> -->
+                <form class='edit-image-form'>
+                  <input type='hidden' class='new-image-description' value='{{ image.description }}'>
+                  <input type='hidden' class='image-id' value='{{ image.image_id }}'>
+                  <input type='submit' value='Edit' class='btn btn-primary'>
+                </form>
                 <form class="delete-image-from-board">
                   <input type='hidden' class='image_id' value='{{ image.image_id }}'>
-  <!--                 <p>Image ID: {{ image.image_id }}<p> -->
                   <input type='hidden' class='board_id' value='{{ current_board.board_id }}'>
-  <!--                 <p>Board ID: {{ current_board.board_id }}</p> -->
                   <input type='submit' value='Delete' class="btn btn-primary">
                 </form>
-                <form class='edit-image-form'>
-                    <br><br>
-                    New Description: <textarea class='new-image-description form-control'>{{ image.description }}</textarea>
-                    <br><br>
-                    <input type='hidden' class='image-id' value='{{ image.image_id }}'>
-                    <input type='submit' value='Submit' class='btn btn-primary'>
-                  </form>
-                {% endif %}
+              {% endif %}
           </div>
           <!-- Not Appearing on Page -->
           {% if images == [] %}
@@ -146,7 +165,7 @@
 {% endif %}
 
 {% if not images and not pins %}
-  <h3 id='no-search-results'>No images were found that match your search. Try something else!</h3>
+  <h3 id='no-search-results'>No images were found.</h3>
 {% endif %}
 
 {% endblock %}

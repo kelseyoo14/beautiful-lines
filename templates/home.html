@@ -13,6 +13,8 @@
 
 {% block content %}
 
+<!-- Start Modals -->
+
 <div class="modal fade" id="create-board-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -25,7 +27,7 @@
             <form action="/create_board" id="create-board-form">
                 <input type="text" name='board_name' class='form-control create-form' placeholder='Board Name'>
                 <input type="text" name='board_description' class='form-control create-form' placeholder='Board Description'>
-                <input type="text" name='image_url' class='form-control create-form' placeholder='Image Url'>
+                <input type="text" name='image_url' class='form-control create-form' placeholder='Cover Image Url'>
                 <input type="submit" value="Create" class='btn btn-primary create-form'>
             </form>
         </div>
@@ -33,6 +35,34 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<div class="modal fade" id="edit-board-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Create New Board</h4>
+        </div>
+      <div class="modal-body">
+        <div>
+            <form id='edit-board-modal-form'>
+                <br><br>
+                New Title: <input type='text' class='form-control' id='edit-board-title' value=''>
+                <br><br>
+                New Cover Image Url: <input type='text' class='form-control' id='edit-board-image' value=''>
+                <br><br>
+                New Description: <textarea class='form-control' id='edit-board-description'></textarea>
+                <br><br>
+                <input type='hidden' id='board-id-to-edit' value=''>
+                <input type='submit' value='Submit' class='btn btn-primary'>
+            </form>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- End Modals -->
 
 <div class='boards-container'>
     <ul>
@@ -50,20 +80,17 @@
                     {% endif %}
                     <a class='btn btn-primary' href='/study_board/{{ board.board_id }}'>Study</a>
                     <br>
-                    <button class='btn btn-primary edit-button'>Edit</button>
-                    <br>
+                    <!-- <button class='btn btn-primary edit-button'>Edit</button> -->
+                    <form class='edit-board-form'>
+                        <input type='hidden' class='new-board-title' value='{{ board.board_name }}'>
+                        <input type='hidden' class='new-image-url' value='{{ board.image_url }}'>
+                        <input type='hidden' class='new-board-description' value='{{ board.board_description }}'>
+                        <input type='hidden' class='board-id' value='{{ board.board_id }}'>
+                        <input type='submit' value='Edit' class='btn btn-primary'>
+                    </form>
                     <form class='delete-board-from-db'>
                         <input type='hidden' value="{{ board.board_id }}" class='delete-board-id'>
-                        <input type='submit' value='Delete Board' class='btn btn-primary'>
-                    </form>
-                    <form class='edit-board-form'>
-                        <br><br>
-                        New Title: <input type='text' class='new-board-title form-control' value='{{ board.board_name }}'>
-                        <br><br>
-                        New Description: <textarea class='new-board-description form-control'>{{ board.board_description }}</textarea>
-                        <br><br>
-                        <input type='hidden' class='board-id' value='{{ board.board_id }}'>
-                        <input type='submit' value='Submit' class='btn btn-primary'>
+                        <input type='submit' value='Delete' class='btn btn-primary'>
                     </form>
                 </div>
             {% endfor %}

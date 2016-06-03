@@ -15,7 +15,7 @@
         <nav class="navbar navbar-default navbar-fixed-top">
           <div class="container-fluid">
             <div class="navbar-header">
-              <a class="navbar-brand" href="#">Beautiful Lines</a>
+              <a class="navbar-brand" href="/home">Beautiful Lines</a>
             </div>
             <ul class="nav navbar-nav">
               <li class="dropdown">
@@ -45,10 +45,23 @@
         </nav>
         {% block page_title %}Put Page Title Here{% endblock %}
 
-        <div class='alert-container'>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div id='alert-container'>
+                  <div class="alert alert-success fade in">
+                      <a href="#" class="close" data-dismiss="alert">&times;</a>
+                      <strong>Success!</strong> <span id='success-message'>{{ message }}</span>
+                  </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div id='non-reload-alert-container'>
             <div class="alert alert-success fade in">
                 <a href="#" class="close" data-dismiss="alert">&times;</a>
-                <strong>Success!</strong> <span id='success-message'>Your board has been successfully edited.</span>
+                <strong>Success!</strong> <span id='non-reload-success-message'></span>
             </div>
         </div>
 

@@ -53,7 +53,9 @@ a:hover {
 }
 
 .board img {
-    /*height: 100px;*/
+    max-height: 200px;
+    max-width: 200px;
+    min-width: 80px;
     margin: 10px auto;
 }
 
@@ -70,7 +72,7 @@ a:hover {
     display: inline-block;
     max-width: 200px;
     margin: 50px;
-    word-wrap:break-word
+    word-wrap:break-word;
 }
 
 .pin-image,
@@ -156,10 +158,10 @@ a:hover {
 }
 
 
-.edit-board-form,
+/*.edit-board-form,
 .edit-image-form {
     display: none;
-}
+}*/
 
 #create-board-modal .modal-content,
 #create-image-modal .modal-content {
@@ -190,11 +192,20 @@ a:hover {
     display: block;
 }
 
-.alert-container {
-    display: none;
+#alert-container,
+#non-reload-alert-container {
     width: 50%;
     margin: auto;
     text-align: center;
+}
+
+
+#non-reload-alert-container {
+    display: none;
+}
+
+#save-image-to-board img {
+    width: 70px;
 }
 
 

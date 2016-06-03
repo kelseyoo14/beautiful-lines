@@ -4,7 +4,7 @@ import requests
 import os
 from urllib import urlencode, quote_plus
 import json
-from flask import Flask, request, render_template, session
+from flask import Flask, request, render_template, session, flash
 # redirect was being overwritten
 from flask import redirect as flaskredirect
 
@@ -21,6 +21,7 @@ app = Flask(__name__)
 app.secret_key = "ABC"
 
 
+# O(1)
 # 1
 @app.route('/')
 def welcome():
@@ -41,6 +42,7 @@ def welcome():
 
 
 # OAuth and Log In Start ------------------------------------------------------------
+# O(1)
 # 2
 @app.route('/login')
 def login():
@@ -68,7 +70,7 @@ def login():
 
     return flaskredirect(full_url)
 
-
+# O(1)
 # 3
 @app.route('/process_login')
 def redirect():
@@ -127,6 +129,7 @@ def redirect():
 # OAuth and Log In End ---------------------------------------------------------------
 
 
+# O(1)
 # 4
 @app.route('/logout')
 def logout():
@@ -135,6 +138,7 @@ def logout():
     return render_template('homepage.html')
 
 
+# O(1)
 # 5
 @app.route('/home')
 def home():
@@ -146,6 +150,7 @@ def home():
                            first_name=session['first_name'])
 
 
+# O(1)
 # 6
 @app.route('/user_board_images/<int:board_id>')
 def images_in_blines(board_id):
@@ -155,14 +160,20 @@ def images_in_blines(board_id):
     boards_in_blines = Board.query.filter(Board.user_id == session['user_id']).all()
     current_board = Board.query.filter(Board.board_id == board_id).first()
 
+    empty_board = False
+    if not images:
+        empty_board = True
+
     return render_template('pinterest_board.html',
                            images=images,
                            boards=boards_in_blines,
-                           current_board=current_board)
+                           current_board=current_board,
+                           empty_board=empty_board)
 
 
 # FIX ME - What if user has more boards than initial request???
 # Need to loop through request just like in /pinterest_board_images
+# O(n)
 # 7
 @app.route('/pinterest_boards')
 def pinterest_boards():
@@ -183,7 +194,7 @@ def pinterest_boards():
                            boards=boards_request,
                            first_name=session['first_name'])
 
-
+# O(n)?
 # 8
 @app.route('/pinterest_board_images/<url>')
 def show_pinterest_boards(url):
@@ -216,6 +227,7 @@ def show_pinterest_boards(url):
                            boards=boards_in_blines)
 
 
+# O(1)
 # 9
 @app.route('/save_board', methods=['POST'])
 def save_board():
@@ -236,11 +248,12 @@ def save_board():
     session['board_url'] = new_board.url_name
 
     # After saving the board, need to save the images that are on the board
-    return flaskredirect('/save_images_on_board')
+    return flaskredirect('/save_images_on_board.json')
 
 
+# O(n)
 # 10
-@app.route('/save_images_on_board')
+@app.route('/save_images_on_board.json')
 def save_images_on_board():
 
     board_id = session['board_id']
@@ -255,37 +268,27 @@ def save_images_on_board():
     return ('Board Saved')
 
 
+# O(n)
 #11
-@app.route('/edit_board', methods=['POST'])
+@app.route('/edit_board.json', methods=['POST'])
 def edit_board():
     """Edits user board"""
 
     new_title = request.form.get('new_board_title')
+    new_image_url = request.form.get('new_image_url')
     new_description = request.form.get('new_board_description')
     board_id = request.form.get('board_id')
 
-    route_functions.edit_board_info(new_title, new_description, board_id)
+    route_functions.edit_board_info(new_title, new_image_url, new_description, board_id)
 
-    # board = Board.query.get(board_id)
-
-    # tags = board.tags
-
-    # for tag in tags:
-    #     if tag.tag_content == board.board_name.lower():
-    #         tag.tag_content = new_title.lower()
-    #     if tag.tag_content == board.board_description.lower():
-    #         tag.tag_content = new_description.lower()
-
-    # board.board_name = new_title
-    # board.board_description = new_description
-
-    # db.session.commit()
+    flash('Your board has been successfully edited.')
 
     return ('Board Edited')
 
 
+# O(n)
 # 12
-@app.route('/delete_board', methods=['POST'])
+@app.route('/delete_board.json', methods=['POST'])
 def delete_board():
     """Deletes user board from blines db and associated images and tags that don't exist in other boards"""
 
@@ -293,11 +296,14 @@ def delete_board():
 
     route_functions.delete_board_from_database(board_id)
 
+    flash('Your board has been successfully deleted.')
+
     return ('Board Deleted')
 
 
+# O(1)
 # 13
-@app.route('/save_image', methods=['POST'])
+@app.route('/save_image.json', methods=['POST'])
 def save_image():
     """Saves image to Beautiful Lines Board"""
 
@@ -311,7 +317,7 @@ def save_image():
 
 
 # 14
-@app.route('/edit_image', methods=['POST'])
+@app.route('/edit_image.json', methods=['POST'])
 def edit_image():
     """Edit user image"""
 
@@ -320,11 +326,13 @@ def edit_image():
 
     route_functions.edit_image_info(new_description, image_id)
 
+    flash('Your image has been successfully edited.')
+
     return ('Image Edited')
 
 
 # 15
-@app.route('/delete_image', methods=['POST'])
+@app.route('/delete_image.json', methods=['POST'])
 def delete_image():
     """Deletes user image from blines association table, and from images table if no instances of it exist in association table"""
 
@@ -332,6 +340,8 @@ def delete_image():
     image_id = request.form.get('image_id')
 
     route_functions.delete_image_from_db(board_id, image_id)
+
+    flash('Your image has been successfully deleted.')
 
     return ('Image Deleted')
 
@@ -348,8 +358,12 @@ def create_board():
 
     route_functions.create_board(board_name, board_description, image_url, url_name)
 
+    flash('Your board has been successfully created.')
+
     return flaskredirect('/home')
 
+# FIX ME Image is not deleting!!
+# Thats because a user shouldn't be able to submit an image without a url
 
 # 17
 @app.route('/create_image/<int:board_id>')
@@ -359,7 +373,9 @@ def create_image(board_id):
     image_url = request.args.get('image_url')
     description = request.args.get('image_description')
 
-    route_functions.create_image(image_url, description)
+    route_functions.create_image(image_url, description, board_id)
+
+    flash('Your image has been successfully created.')
 
     return flaskredirect('/user_board_images/%s' % board_id)
 
@@ -378,7 +394,7 @@ def study_board(board_id):
 
 
 # 19
-@app.route('/study_images', methods=['POST'])
+@app.route('/study_images.json', methods=['POST'])
 def study():
     """Sends json of images to js for Study Session"""
 
@@ -425,13 +441,9 @@ def show_user_search():
 # End Routes ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    # We have to set debug=True here, since it has to be True at the point
-    # that we invoke the DebugToolbarExtension
     app.debug = True
 
     connect_to_db(app)
 
-    # Use the DebugToolbar
-    # DebugToolbarExtension(app)
     context = ('server-files/yourserver.crt', 'server-files/yourserver.key')
     app.run(ssl_context=context)

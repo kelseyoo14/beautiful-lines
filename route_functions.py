@@ -64,8 +64,6 @@ def save_images_from_pinterest_board(headers, payload, pins_request, user, board
     for pin in all_pins:
         # Check if image exists in db
         check_image = Image.query.filter(Image.pinterest_image_id == pin['id']).first()
-        print check_image
-        print '**************************************************'
 
         if check_image is None:
             pinterest_image_id = pin['id']
@@ -230,8 +228,13 @@ def delete_image_from_db(board_id, image_id):
 
 
 # Edit board info in db
-def edit_board_info(new_title, new_description, board_id):
+def edit_board_info(new_title, new_image_url, new_description, board_id):
     board = Board.query.get(board_id)
+
+    if new_title is None:
+        new_title = ''
+    if new_description is None:
+        new_description = ''
 
     tags = board.tags
 
@@ -243,6 +246,7 @@ def edit_board_info(new_title, new_description, board_id):
 
     board.board_name = new_title
     board.board_description = new_description
+    board.image_url = new_image_url
 
     db.session.commit()
 
@@ -264,7 +268,7 @@ def search(user_search, kind_of_search):
     image_urls = set()
     unique_images = []
 
-    search_words = user_search.split()
+    search_words = user_search.lower().split()
 
     for search_word in search_words:
         if kind_of_search == 'all':
@@ -304,7 +308,7 @@ def create_board(board_name, board_description, image_url, url_name):
 
 
 # Create new_image for db
-def create_image(image_url, description):
+def create_image(image_url, description, board_id):
     new_image = Image(original_url=image_url,
                       description=description)
 
