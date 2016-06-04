@@ -27,11 +27,6 @@ app.secret_key = "ABC"
 def welcome():
     """Website Welcome Page"""
 
-    # if session['user_id']:
-    #     return flaskredirect('/home')
-    # else:
-    #     return render_template('homepage.html')
-
     try:
         if session['user_id']:
             return flaskredirect('/home')

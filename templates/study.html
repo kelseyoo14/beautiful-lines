@@ -2,13 +2,19 @@
 
 {% extends 'base.html' %}
 
-{% block content %}
-
 
 <!-- Need a modal that pops up when user clicks 'Study' submit button -->
 <!-- With javascript and/or jquery time function, modal will switch through and display each photo 
     one by one for however much time is specified by user-->
 
+{% block title %}
+
+<a href="/user_board_images/{{ current_board.board_id }}"><h2>{{ current_board.board_name }}</h2></a>
+
+{% endblock %}
+
+
+{% block content %}
 
 <div class="modal fade" id='study-modal'>
   <div class="modal-dialog modal-lg" role="document">
@@ -39,9 +45,6 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-
-
-<a href="/user_board_images/{{ current_board.board_id }}"><h2>{{ current_board.board_name }}</h2></a>
 
 
 <form id='study-form'>

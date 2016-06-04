@@ -4,8 +4,16 @@ body {
     margin-top: 55px;
 }
 
-a:hover {
-    color: #CFA374
+a h2 {
+    color: #777;
+}
+
+.navbar-default .navbar-nav>li>a:focus, 
+.navbar-default .navbar-nav>li>a:hover,
+a h2:hover {
+    color: #656565;
+    text-decoration: underline;
+    font-weight: bold;
 }
 
 .pin-image {
@@ -44,7 +52,8 @@ a:hover {
 
 .board {
     display: inline-block;
-    border: 1px solid black;
+    background-color: white;
+    border: 1px solid #656565;
     border-radius: 12px;
     max-width: 250px;
     padding: 25px;
@@ -153,9 +162,6 @@ a:hover {
     margin-left: 20px;
 }
 
-.all-images {
-    margin: 0 5%;
-}
 
 
 /*.edit-board-form,
@@ -208,6 +214,15 @@ a:hover {
     width: 70px;
 }
 
+.full-page-container {
+    width: 100%;
+    padding-left: 4%;
+}
+
+.all-images {
+    width: 90%;
+    margin: 0 auto;
+}
 
 
 
