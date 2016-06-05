@@ -158,6 +158,10 @@ a h2:hover {
     font-weight: bold;
 }
 
+#study-header {
+    text-align: center;
+}
+
 .study-board a {
     margin-left: 20px;
 }

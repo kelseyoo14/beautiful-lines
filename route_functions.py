@@ -296,19 +296,37 @@ def search(user_search, kind_of_search):
 
 
 # Create new_board for db
-def create_board(board_name, board_description, image_url, url_name):
+def create_board(board_name, board_description, image_url, url_name, user_id):
     new_board = Board(url_name=url_name,
                       board_name=board_name,
                       board_description=board_description,
                       image_url=image_url,
                       user_id=session['user_id'])
 
+    new_tag1 = Tag(tag_content=new_board.board_name.lower(),
+                  user_id=user_id)
+
+    new_tag2 = Tag(tag_content=new_board.board_description.lower(),
+                  user_id=user_id)
+
     db.session.add(new_board)
+    db.session.add(new_tag1)
+    db.session.add(new_tag2)
+    db.session.commit()
+
+    new_boardtag1 = BoardTag(board_id=new_board.board_id,
+                            tag_id=new_tag1.tag_id)
+
+    new_boardtag2 = BoardTag(board_id=new_board.board_id,
+                            tag_id=new_tag2.tag_id)
+
+    db.session.add(new_boardtag1)
+    db.session.add(new_boardtag2)
     db.session.commit()
 
 
 # Create new_image for db
-def create_image(image_url, description, board_id):
+def create_image(image_url, description, board_id, user_id):
     new_image = Image(original_url=image_url,
                       description=description)
 
@@ -318,5 +336,15 @@ def create_image(image_url, description, board_id):
     new_boardimage = BoardImage(board_id=board_id,
                                 image_id=new_image.image_id)
 
+    new_tag = Tag(tag_content=new_image.description.lower(),
+                  user_id=user_id)
+
     db.session.add(new_boardimage)
+    db.session.add(new_tag)
+    db.session.commit()
+
+    new_imagetag = ImageTag(image_id=new_image.image_id,
+                            tag_id=new_tag.tag_id)
+
+    db.session.add(new_imagetag)
     db.session.commit()

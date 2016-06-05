@@ -351,7 +351,7 @@ def create_board():
     image_url = request.args.get('image_url')
     url_name = quote_plus('board_name')
 
-    route_functions.create_board(board_name, board_description, image_url, url_name)
+    route_functions.create_board(board_name, board_description, image_url, url_name, session['user_id'])
 
     flash('Your board has been successfully created.')
 
@@ -368,7 +368,7 @@ def create_image(board_id):
     image_url = request.args.get('image_url')
     description = request.args.get('image_description')
 
-    route_functions.create_image(image_url, description, board_id)
+    route_functions.create_image(image_url, description, board_id, session['user_id'])
 
     flash('Your image has been successfully created.')
 
@@ -382,6 +382,10 @@ def study_board(board_id):
 
     images = Board.query.get(board_id).images
     current_board = Board.query.filter(Board.board_id == board_id).first()
+
+    print current_board
+    print current_board.board_name
+    print '****************************************************'
 
     return render_template('study.html',
                            images=images,

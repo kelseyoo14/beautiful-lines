@@ -3,100 +3,88 @@
 {% extends 'base.html' %}
 
 
-<!-- Need a modal that pops up when user clicks 'Study' submit button -->
-<!-- With javascript and/or jquery time function, modal will switch through and display each photo 
-    one by one for however much time is specified by user-->
-
-{% block title %}
-
-<a href="/user_board_images/{{ current_board.board_id }}"><h2>{{ current_board.board_name }}</h2></a>
+{% block page_title %}
+  
+  <div id='study-header'>
+    <a href="/user_board_images/{{ current_board.board_id }}"><h2 class='page-title'>{{ current_board.board_name }}</h2></a>
+    <form id='study-form'>
+        Time Intervals:
+        <select name="time_intervals" id="time-intervals">
+            <option value="30">30 Seconds</option>
+            <option value="60">60 Seconds</option>
+            <option value="120">2 Minutes</option>
+            <option value="300">5 Minutes</option>
+            <option value="600">10 Minutes</option>
+            <option value="1200">20 Minutes</option>
+            <option value="1800">30 Minutes</option>
+            <option value="2400">40 Minutes</option>
+            <option value="3600">60 Minutes</option>
+        </select>
+        How Many Images: 
+        <select name="num_of_images" id="num-of-images">
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='5'>5</option>
+            <option value='10'>10</option>
+            <option value='20'>20</option>
+            <option value='30'>30</option>
+            <option value='40'>40</option>
+            <option value='60'>60</option>
+        </select>
+        <input type='hidden' value='{{ current_board.board_id }}' id='board_id'>
+        <!-- Will this images hidden value work? -->
+        <input type='hidden' value='{{ images }}' id='image-objects'>
+        <input class="btn btn-primary" type='submit' value='Start Drawing'>
+    </form>
+  </div>
 
 {% endblock %}
 
 
+
 {% block content %}
+  {% if images %}
+    <div class="modal fade" id='study-modal'>
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close stop-study" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <!-- <h4 class="modal-title">Study</h4> -->
+          </div>
+          <div class="modal-body">
+            <img src='' id='study-modal-image'>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
-<div class="modal fade" id='study-modal'>
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close stop-study" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <!-- <h4 class="modal-title">Study</h4> -->
-      </div>
-      <div class="modal-body">
-        <img src='' id='study-modal-image'>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<div class="modal fade" id="zoom-modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      </div> -->
-      <div class="modal-body" id='zoom-modal-body'>
-            <img src='' id='zoomed-image'>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-
-
-<form id='study-form'>
-    Time Intervals:
-    <select name="time_intervals" id="time-intervals">
-        <option value="30">30 Seconds</option>
-        <option value="60">60 Seconds</option>
-        <option value="120">2 Minutes</option>
-        <option value="300">5 Minutes</option>
-        <option value="600">10 Minutes</option>
-        <option value="1200">20 Minutes</option>
-        <option value="1800">30 Minutes</option>
-        <option value="2400">40 Minutes</option>
-        <option value="3600">60 Minutes</option>
-    </select>
-    How Many Images: 
-    <select name="num_of_images" id="num-of-images">
-        <option value='1'>1</option>
-        <option value='2'>2</option>
-        <option value='5'>5</option>
-        <option value='10'>10</option>
-        <option value='20'>20</option>
-        <option value='30'>30</option>
-        <option value='40'>40</option>
-        <option value='60'>60</option>
-    </select>
-    <input type='hidden' value='{{ current_board.board_id }}' id='board_id'>
-    <!-- Will this images hidden value work? -->
-    <input type='hidden' value='{{ images }}' id='image-objects'>
-    <input class="btn btn-primary" type='submit' value='Start Drawing'>
-</form>
-
-<div class='all-images'>
-{% for image in images %}
-    <div class='pin-container'>
-        <img class="pin-image" src="{{ image.original_url }}">
-    </div>
-{% endfor %}
-</div>
+    <div class="modal fade" id="zoom-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div> -->
+          <div class="modal-body" id='zoom-modal-body'>
+                <img src='' id='zoomed-image'>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 
 
+    
 
-
-
-<!-- <form id="study-form">
+    <div class='all-images'>
     {% for image in images %}
         <div class='pin-container'>
             <img class="pin-image" src="{{ image.original_url }}">
-            Time in Seconds: <input type="number" class="image-time">
         </div>
     {% endfor %}
-    <input type='submit' value='Study' class="btn btn-primary btn-lg">
-</form> -->
+    </div>
+  {% else %}
+    <h4>You have no images on this board to study yet.</h4>
+  {% endif %}
 {% endblock %}
