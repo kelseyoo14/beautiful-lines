@@ -20,14 +20,15 @@ Beautiful Lines is a visual library and study tool for Artists. In a real life d
 
 
 ## <a name="technologies"></a>Technologies Used
-* [Javascript](https://www.javascript.com/)
 * [Python](https://www.python.org/)
 * [Flask](http://flask.pocoo.org/)
 * [Flask - SQLAlchemy](http://flask.pocoo.org/)
+* [PostgreSQL](https://www.postgresql.org/)
+* [Javascript](https://www.javascript.com/)
 * [jQuery](https://jquery.com/)
 * [Jinja2](http://jinja.pocoo.org/docs/dev/)
 * [Bootstrap](http://getbootstrap.com/2.3.2/)
-* [PostgreSQL](https://www.postgresql.org/)
+* [Pinterest API](https://developers.pinterest.com/)
 
 ## <a name="terms"></a>Terms
 ####Art Terminology
@@ -45,40 +46,35 @@ Beautiful Lines' main focus is to be a study tool for artists - for artists to p
 Pinterest uses OAuth 2.0. When clicking on the 'Login' button on the homepage, users are redirected to login with their Pinterest account. In the future users will be able to login without a Pinterest account.
 
 ## <a name="pinterest"></a>Saving from Pinterest
-####Boards
+####Saving Boards
 ![Saving Boards from Pinterest](/static/readmeimgs/pinterestboards.png)
-Beautiful Lines requests the logged in user's boards from Pinterest, which are displayed under 'Your Pinterest'. A user can save an entire board multiple times.
+Beautiful Lines requests the logged in user's boards from Pinterest, which are displayed under 'Your Pinterest'. A user can save an entire board (multiple times if they want).
 
-####Images
-![Saving Images from Pinterest](/static/readmeimgs/imagesonpinboard.png)
+####Saving Images
+![Saving Images from Pinterest](/static/readmeimgs/saveimage.png)
 A user can save individual images either from boards requested from Pinterest or from boards saved to Beautiful Lines. After clicking 'Save' on an image, a modal listing the boards a user has saved to or created on Beautiful Lines is displayed, from which they can choose a board to save the image on.
 
 
 
 ## <a name="newboardsandimages"></a>Creating Boards and Images
-####Boards
+####Creating Boards
 ![Creating Boards](/static/readmeimgs/createboard.png)
 Users can create a new board on their homepage of Beautiful Lines, meaning they do not need to save images from Pinterest in order to use the site. The form for creating a new board requires the user to enter a 'Title' and 'Cover Image URL', and has the option for entering a 'Board Description'.
 
-####Images
+####Creating Images
 ![Creating Images](/static/readmeimgs/createimage.png)
-Users can create new images on Beautiful Lines by navigating to the board they wish to save the image to, and using an image URL. The form for creating a new image requires the user to enter the 'Image URL' and has the option for entering an 'Image Description'.
+Users can create new images on Beautiful Lines by navigating to the board they wish to save the image to. The form for creating a new image requires the user to enter the 'Image URL' and has the option for entering an 'Image Description'.
 
 
-## <a name="#editboardsandimages"></a>Editing Boards and Images
+## <a name="#editboardsandimages"></a>Editing or Deleting Boards and Images
 ![Editing Boards](/static/readmeimgs/editboard.png)
 ![Editing Images](/static/readmeimgs/editimage.png)
-A user can edit a board or image by clicking the 'Edit' button under the board or image they wish to edit. For boards, the 'Title', 'Cover Image URL', and 'Description' can be edited. For images, the 'Description' can be edited.
-
-
-## <a name="#deleteboardsandimages"></a>Deleting Boards and Images
-A user can delete a board or image by clicking the 'Delete' button under the board or image they wish to delete.
+A user can edit or delete a board or image by clicking the 'Edit' or 'Delete' button under the board or image they wish to edit or delete. For boards, the 'Title', 'Cover Image URL', and 'Description' can be edited. For images, the 'Description' can be edited.
 
 
 ## <a name="#studying"></a>Studying
 ####Setting up a Study Session
 ![Studying](/static/readmeimgs/setupstudy.png)
-![Selecting Base Measurements](/static/readmeimgs/screen-shot-base.png)
 The Study feature is the main feature for beautiful lines, where a user can choose how many images they want to study, and at what time interval they want to study each image. 
 
 
@@ -89,16 +85,16 @@ This feature may have been the most difficult but also the most rewarding featur
 
 ## <a name="#searching"></a>Searching
 ####Searching User Images
-![Studying](/static/readmeimgs/usersearch.png)
+![Searching](/static/readmeimgs/usersearch.png)
 All descriptions for images and boards, and titles for boards, are saved into a 'tags' table in the database. Each tag has a user ID associated with it so that the database can be queried and searched specifically for images and boards the user has saved. 
 
 ####Searching All Images
-![Studying](/static/readmeimgs/allsearch.png)
+![Searching](/static/readmeimgs/allsearch.png)
 A user can also search all images that have been saved to Beautiful Lines! Above is an image that returned a search of all images, which includes images not saved by this user. Through this a user can save images that are on beautiful lines, that they have not searched before. 
 
 ## <a name="v2"></a>Version 2.0
 
-Next features that will be added are a login for users who don't have or want to use a Pinterest account, 
+Next features that will be added are a login for users who don't have or want to use a Pinterest account, an account and settings page, a more robust search that can find words related to a user's search words, a page for creating reference/project boards for saving images, process images, and color palettes together (possibly with an eyedropper for finding colors in an image), and an upload option so that users can upload their own images to boards.
 
 ## <a name="author"></a>Author
 Kelsey Onstenk is a software engineer from San Francisco, CA.
