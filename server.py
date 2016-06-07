@@ -440,7 +440,7 @@ def show_user_search():
 # End Routes ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    app.debug = True
+    # app.debug = True
 
     connect_to_db(app)
 

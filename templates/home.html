@@ -26,8 +26,8 @@
         <div>
             <form action="/create_board" id="create-board-form">
                 <input type="text" name='board_name' class='form-control create-form' placeholder='Board Title' required>
-                <input type="text" name='board_description' class='form-control create-form' placeholder='Board Description'>
-                <input type="text" name='image_url' class='form-control create-form' placeholder='Cover Image Url' required>
+                <input type="text" name='image_url' class='form-control create-form' placeholder='Cover Image URL' required>
+                <textarea name='board_description' class='form-control create-form' placeholder='Board Description'></textarea>
                 <input type="submit" value="Create" class='btn btn-primary create-form'>
             </form>
         </div>
@@ -41,20 +41,20 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Create New Board</h4>
+            <h4 class="modal-title">Edit Board</h4>
         </div>
       <div class="modal-body">
         <div>
             <form id='edit-board-modal-form'>
                 <br><br>
-                New Title: <input type='text' class='form-control' id='edit-board-title' value=''>
+                New Title <input type='text' class='form-control' id='edit-board-title' value=''>
                 <br><br>
-                New Cover Image Url: <input type='text' class='form-control' id='edit-board-image' value=''>
+                New Cover Image URL <input type='text' class='form-control' id='edit-board-image' value=''>
                 <br><br>
-                New Description: <textarea class='form-control' id='edit-board-description'></textarea>
+                New Description <textarea class='form-control' id='edit-board-description'></textarea>
                 <br><br>
                 <input type='hidden' id='board-id-to-edit' value=''>
-                <input type='submit' value='Submit' class='btn btn-primary'>
+                <input type='submit' value='Save Board' class='btn btn-primary'>
             </form>
         </div>
       </div>

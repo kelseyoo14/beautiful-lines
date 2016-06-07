@@ -35,10 +35,9 @@
       <div class="modal-body">
         <div>
             {% if current_board %}
-            <!-- FIX ME -->
             <form action="/create_image/{{ current_board.board_id }}" id="create-image-form">
-              <input type="url" name='image_url' class='form-control create-form' placeholder='Image Url' required>
-              <input type="text" name='image_description' class='form-control create-form' placeholder='Image Description'>
+              <input type="url" name='image_url' class='form-control create-form' placeholder='Image URL' required>
+              <textarea name='image_description' class='form-control create-form' placeholder='Image Description'></textarea>
               <input type="submit" value="Create" class='btn btn-primary create-form' id='submit-create-image'>
             </form>
             {% endif %}
@@ -69,7 +68,7 @@
                   <input type='hidden' id='hidden-pinid'>
                   <input type='hidden' id='hidden-imageid'>
                   <br><br>
-                  <input type="submit" value="Submit" id='save-image-submit' class='btn btn-primary'>
+                  <input type="submit" value="Save Image" id='save-image-submit' class='btn btn-primary'>
               </form>
             {% else %}
               <p>You don't have any boards saved on Beautiful Lines</p>
@@ -102,16 +101,16 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Create New Board</h4>
+            <h4 class="modal-title">Edit Image</h4>
         </div>
       <div class="modal-body">
         <div>
             <form id='edit-image-modal-form'>
                 <br><br>
-                New Description: <textarea class='form-control' id='edit-image-description'></textarea>
+                New Description <textarea class='form-control' id='edit-image-description'></textarea>
                 <br><br>
                 <input type='hidden' id='image-id-to-edit' value=''>
-                <input type='submit' value='Submit' class='btn btn-primary'>
+                <input type='submit' value='Save Image' class='btn btn-primary'>
             </form>
         </div>
       </div>
