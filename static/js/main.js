@@ -177,7 +177,7 @@ function startStudy(evt) {
                     study_timeout = setTimeout(function() {
                         // recursively call displayImages to loop through images in shuffled list
                         displayImages(images, count_images+1);
-                    }, 2000);
+                    }, time_intervals * 1000);
                 } else {
                     $('#study-modal').modal('hide');
                 }
@@ -314,6 +314,26 @@ $('#search-user-form').on('click', function() {
     $('#search-form-input').attr('placeholder', 'Search Your Images');
 
 });
+
+
+// Making Navbar Responsive and Aligned
+
+$(window).on('resize', function navbarUpdate () {
+    var viewportWidth = $(window).width();
+    if (viewportWidth < 752) {
+        $(".nav-list-items").removeClass('pull-right');
+    } else {
+        $(".nav-list-items").addClass('pull-right');
+    }
+});
+
+
+
+// if (window.matchMedia("(min-width: 766px)").matches) {
+//   $(".nav-list-items").each(function() {
+//     $(this).addClass('.pull-right');
+//   });
+// }
 
 
 

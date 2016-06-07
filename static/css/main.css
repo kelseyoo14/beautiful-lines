@@ -8,9 +8,10 @@ a h2 {
     color: #777;
 }
 
+a h2:hover,
 .navbar-default .navbar-nav>li>a:focus, 
 .navbar-default .navbar-nav>li>a:hover,
-a h2:hover {
+.navbar-default .navbar-nav .open .dropdown-menu>li>a:hover {
     color: #656565;
     text-decoration: underline;
     font-weight: bold;
@@ -24,19 +25,13 @@ a h2:hover {
     background-color: white;
 }
 
-.navbar-nav {
+.navbar-nav{
     float: right;
 }
 
-.navbar-form .form-control {
-    width: 15vw;
-    min-width: 200px;
-}
-
 .navbar-form .btn {
-    width: 10vw;
-    min-width: 100px;
-    margin-right: 3vw;
+    width: 40px;
+    text-align: center;
 }
 
 
@@ -59,6 +54,8 @@ a h2:hover {
     padding: 25px;
     margin: 25px;
     text-align: center;
+    word-wrap:break-word;
+    box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.2);
 }
 
 .board img {
@@ -158,20 +155,6 @@ a h2:hover {
     font-weight: bold;
 }
 
-#study-header {
-    text-align: center;
-}
-
-.study-board a {
-    margin-left: 20px;
-}
-
-
-
-/*.edit-board-form,
-.edit-image-form {
-    display: none;
-}*/
 
 #create-board-modal .modal-content,
 #create-image-modal .modal-content {
@@ -197,10 +180,6 @@ a h2:hover {
     min-width: 120px;
 }
 
-.nav-dropdown-item {
-    margin: 10px 15px;
-    display: block;
-}
 
 #alert-container,
 #non-reload-alert-container {
@@ -228,11 +207,30 @@ a h2:hover {
     margin: 0 auto;
 }
 
+#study-header {
+    text-align: center;
+}
+
+.study-board a {
+    margin-left: 20px;
+}
+
+#search-container {
+    display: inline-block;
+}
 
 
-@media screen and (max-width: 1230px) {
-    body {
-        margin-top: 100px;
+@media screen and (min-width: 870px) {
+    .navbar-form .form-control {
+        min-width: 200px;
+    }
+}
+
+@media screen and (min-width: 766px) {
+    .navbar-form .form-control {
+        width: 15vw;
+        min-width: 155px;
+        /*float: left;*/
     }
 }
 
