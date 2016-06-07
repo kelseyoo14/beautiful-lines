@@ -84,11 +84,9 @@ This feature may have been the most difficult but also the most rewarding featur
 
 ## <a name="#searching"></a>Searching
 ####Searching User Images
-![Searching](/static/readmeimgs/usersearch.png)
 All descriptions for images and boards, and titles for boards, are saved into a 'tags' table in the database. Each tag has a user ID associated with it so that the database can be queried and searched specifically for images and boards the user has saved. 
 
 ####Searching All Images
-![Searching](/static/readmeimgs/allsearch.png)
 A user can also search all images that have been saved to Beautiful Lines! Above is an image that returned a search of all images, which includes images not saved by this user. Through this a user can save images that are on beautiful lines, that they have not searched before. 
 
 ## <a name="v2"></a>Version 2.0
