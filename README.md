@@ -40,7 +40,7 @@ Beautiful Lines' main focus is to be a study tool for artists - for artists to p
 
 ## <a name="login"></a>Logging in with Pinterest
 ####OAutho 2.0
-![Logging in with Pinterest](/static/readmeimgs/welcomepage)
+![Logging in with Pinterest](/static/readmeimgs/welcomepage.png)
 ![Logging in with Pinterest](/static/readmeimgs/oauth.png)
 Pinterest uses OAuth 2.0. When clicking on the 'Login' button on the homepage, users are redirected to login with their Pinterest account. In the future users will be able to login without a Pinterest account.
 
