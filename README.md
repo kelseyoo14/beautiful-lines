@@ -16,7 +16,6 @@ Beautiful Lines is a visual library and study tool for Artists. In a real life d
 * [Studying](#studying)
 * [Searching](#searching)
 * [Version 2.0](#v2)
-* [Author](#author)
 
 
 ## <a name="technologies"></a>Technologies Used
@@ -32,7 +31,7 @@ Beautiful Lines is a visual library and study tool for Artists. In a real life d
 
 ## <a name="terms"></a>Terms
 ####Art Terminology
-Beautiful Lines' main focus is to be a study tool for artists - for artists to practice life and gesture drawing. In the art world, studying forms and other works of art are important for progression as an artist, and for developing skills and a good eye for recognizing colors, values, and lines. The mind fills in gaps for what we see constantly, which blurs the line between what we think we see and the reality of what we are actually looking at. Beautiful Lines is a tool to make that practice easier.
+Beautiful Lines' main focus is to be a study tool for artists - for artists to practice life and gesture drawing. In the art world, studying forms and other works of art is important for progression as an artist, and for developing skills and a good eye for recognizing colors, values, shapes, and lines. The mind fills in gaps for what we see constantly, which blurs the line between what we think we see and the reality of what we are actually looking at. Beautiful Lines is a tool to make that practice easier.
 
 [Life or Figure Drawing] (https://en.wikipedia.org/wiki/Figure_drawing) - a drawing of the human form in any of its various shapes and postures. Simply put, practicing drawing the human form, inlcuding the body, face and the ever so complicated hands and feet.
 
@@ -96,5 +95,4 @@ A user can also search all images that have been saved to Beautiful Lines! Above
 
 Next features that will be added are a login for users who don't have or want to use a Pinterest account, an account and settings page, a more robust search that can find words related to a user's search words, a page for creating reference/project boards for saving images, process images, and color palettes together (possibly with an eyedropper for finding colors in an image), and an upload option so that users can upload their own images to boards.
 
-## <a name="author"></a>Author
-Kelsey Onstenk is a software engineer from San Francisco, CA.
+

@@ -9,11 +9,9 @@ from flask import Flask, request, render_template, session, flash
 from flask import redirect as flaskredirect
 
 
-CLIENT_ID = os.environ['PINTEREST_CLIENT_ID']
+APP_ID = os.environ['PINTEREST_APP_ID']
 APP_SECRET = os.environ['PINTEREST_APP_SECRET']
 
-# My Global access_token. Need to use session to store user's access token
-ACCESS_TOKEN1 = os.environ['ACCESS_TOKEN']
 
 app = Flask(__name__)
 
@@ -49,8 +47,8 @@ def login():
                    # Route I want Pinterest to go to once user logs in and Pinterest processes the log in
                    # Need to remember to register this redirect route on pinterest app!
                    'redirect_uri': 'https://localhost:5000/process_login',
-                   # My apps's client_id, so pinterest know's who's redirecting the user to their page
-                   'client_id': CLIENT_ID,
+                   # My apps's id, so pinterest know's who's redirecting the user to their page
+                   'client_id': APP_ID,
                    # What I want to be able to do with user's account
                    'scope': 'read_public,write_public,read_relationships,write_relationships',
                    # Note for myself
@@ -74,8 +72,8 @@ def redirect():
     # Data I need to send to Pinterest to retrieve access_token
     request_data = {
         'grant_type': 'authorization_code',
-        # My app's client_id and client_secret, so Pinterest knows who is requesting the user's access token
-        'client_id': CLIENT_ID,
+        # My app's id and client_secret, so Pinterest knows who is requesting the user's access token
+        'client_id': APP_ID,
         'client_secret': APP_SECRET,
         # Grabbing code from pinterest that is sent when pinterest redirect's to this route
         'code': request.args.get('code')
