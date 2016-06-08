@@ -79,7 +79,7 @@ The Study feature is the main feature for beautiful lines, where a user can choo
 
 ####Recursively Displaying Images
 ![Studying](/static/readmeimgs/studymodal3.gif)
-This feature may have been the most difficult but also the most rewarding feature of the website (since it is the main feature!). After a user chooses a number of images to display and a time interval to display them at, on the front end in javascript, the images are shuffled (so that each study session is unique) and then displayed in a modal. The modal displays each image for the selected time interval, and closes after all the images have been displayed. This was accomplished with a function that edits the "img src"of the modal, and then recursively calls itself after a setTimeout(), which is set to the time interval the user selects for their study session.
+This feature may have been the most difficult but also the most rewarding feature of the website. After a user chooses a number of images to display and a time interval to display them at, on the front end in javascript, the images are shuffled (so that each study session is unique) and then displayed in a modal. The modal displays each image for the selected time interval, and closes after all the images have been displayed. This was accomplished with a function that edits the "img src"of the modal, and then recursively calls itself after a setTimeout(), which is set to the time interval the user selects for their study session.
 
 
 ## <a name="#searching"></a>Searching
