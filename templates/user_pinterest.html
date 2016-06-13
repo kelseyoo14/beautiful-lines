@@ -46,7 +46,8 @@
         {% for board in boards['data'] %}
             <div class='board'>
                 <!-- need to be able to click board -->
-                <h5>{{ board['name'] }}</h5>
+                <a href="/pinterest_board_images/{{ board['url'] }}" class='board-name'>{{ board['name'] }}</a>
+                <!-- <h5>{{ board['name'] }}</h5> -->
 
                 <!-- Need to pass specific board! -->
                 <a href="/pinterest_board_images/{{ board['url'] }}"><img src="{{ board['image']['60x60']['url'] }}"></a>

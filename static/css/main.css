@@ -48,7 +48,7 @@ a h2:hover,
 .board {
     display: inline-block;
     background-color: white;
-    border: 1px solid #656565;
+    border: 1px solid rgba(82, 82, 82, 0.5);
     border-radius: 12px;
     max-width: 250px;
     padding: 25px;
@@ -67,7 +67,7 @@ a h2:hover,
 
 .board > a:first-child {
     color: black;
-    font-size: 1.5em;
+    font-size: 1.4em;
 }
 
 .board a:nth-child(-n+2) {
@@ -87,8 +87,9 @@ a h2:hover,
 }
 
 .btn {
-    background-color: rgba(7, 12, 16, 0.22);
-    border-color: rgba(10, 4, 4, 0.11);
+    background-color: rgba(82, 82, 82, 0.5);
+    border-color: rgba(82, 82, 82, 0.5);
+    font-weight: bold;
 }
 
 .pin-container .btn,
@@ -100,7 +101,8 @@ a h2:hover,
 .btn:focus,
 .btn:active,
 .btn:active:focus {
-    background-color: rgba(7, 12, 16, 0.61);
+    background-color: rgba(78, 78, 78, 0.2);
+    border-color: rgba(78, 78, 78, 0.2);
 }
 
 .delete-image-from-board {
