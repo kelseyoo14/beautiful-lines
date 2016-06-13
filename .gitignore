@@ -1,7 +1,6 @@
 env
 secrets.sh
 *.pyc
-*test*
 *example*
 *prototype*
 .idea/

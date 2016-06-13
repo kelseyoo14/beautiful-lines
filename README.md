@@ -7,7 +7,6 @@ Beautiful Lines is a visual library and study tool for Artists. In a real life d
 
 ## Table of Contents
 * [Technologies Used](#technologies)
-* [Terms](#terms)
 * [Logging in with Pinterest](#login)
 * [Saving From Pinterest](#pinterest)
 * [Creating Boards and Images](#newboardsandimages)
@@ -29,20 +28,12 @@ Beautiful Lines is a visual library and study tool for Artists. In a real life d
 * [Bootstrap](http://getbootstrap.com/2.3.2/)
 * [Pinterest API](https://developers.pinterest.com/)
 
-## <a name="terms"></a>Terms
-####Art Terminology
-Beautiful Lines' main focus is to be a study tool for artists - for artists to practice life and gesture drawing. In the art world, studying forms and other works of art is important for progression as an artist, and for developing skills and a good eye for recognizing colors, values, shapes, and lines. The mind fills in gaps for what we see constantly, which blurs the line between what we think we see and the reality of what we are actually looking at. Beautiful Lines is a tool to make that practice easier.
-
-[Life or Figure Drawing] (https://en.wikipedia.org/wiki/Figure_drawing) - a drawing of the human form in any of its various shapes and postures. Simply put, practicing drawing the human form, inlcuding the body, face and the ever so complicated hands and feet.
-
-[Gesture Drawing](https://en.wikipedia.org/wiki/Gesture_drawing) - is a laying in of the action, form, and pose of a model/figure. It is generally a quick drawing done in under 2 minutes to quickly capture the general shape or movement of a model/figure, but can also can be applied to any form of life or object.
-
 
 ## <a name="login"></a>Logging in with Pinterest
 ####OAutho 2.0
 ![Logging in with Pinterest](/static/readmeimgs/welcomepage.png)
 ![Logging in with Pinterest](/static/readmeimgs/oauth.png)
-Pinterest uses OAuth 2.0. When clicking on the 'Login' button on the homepage, users are redirected to login with their Pinterest account. In the future users will be able to login without a Pinterest account.
+Pinterest uses OAuth 2.0. When clicking on the 'Login' button on the homepage, users are redirected to login with their Pinterest account. In the future users will also have the option to login without a Pinterest account.
 
 ## <a name="pinterest"></a>Saving from Pinterest
 ####Saving Boards
@@ -77,9 +68,9 @@ A user can edit or delete a board or image by clicking the 'Edit' or 'Delete' bu
 The Study feature is the main feature for beautiful lines, where a user can choose how many images they want to study, and at what time interval they want to study each image. 
 
 
-####Recursively Displaying Images
+####Displaying Images
 ![Studying](/static/readmeimgs/studymodal3.gif)
-This feature may have been the most difficult but also the most rewarding feature of the website. After a user chooses a number of images to display and a time interval to display them at, on the front end in javascript, the images are shuffled (so that each study session is unique) and then displayed in a modal. The modal displays each image for the selected time interval, and closes after all the images have been displayed. This was accomplished with a function that edits the "img src"of the modal, and then recursively calls itself after a setTimeout(), which is set to the time interval the user selects for their study session.
+After a user chooses a number of images to display and a time interval to display them at, the images are shuffled (so that each study session is unique) and then displayed in a modal. The modal displays each image for the selected time interval, and closes after all the images have been displayed.
 
 
 ## <a name="#searching"></a>Searching
