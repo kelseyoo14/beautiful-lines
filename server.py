@@ -16,7 +16,7 @@ APP_SECRET = os.environ['PINTEREST_APP_SECRET']
 app = Flask(__name__)
 
 # Required to use Flask sessions and the debug toolbar
-app.secret_key = "ABC"
+app.config['SECRET_KEY'] = os.environ.get("FLASK_SECRET_KEY", "abcdef")
 
 
 # O(1)
@@ -435,17 +435,22 @@ def show_user_search():
                            search=user_search)
 
 
+@app.route("/error")
+def error():
+    raise Exception("Error!")
+
+
 # End Routes ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     # app.debug = True
 
-    connect_to_db(app)
+    connect_to_db(app, os.environ.get("DATABASE_URL"))
 
     context = ('server-files/yourserver.crt', 'server-files/yourserver.key')
     app.run(ssl_context=context)
 
-    # DEBUG = "NO_DEBUG" not in os.environ
+    DEBUG = "NO_DEBUG" not in os.environ
     PORT = int(os.environ.get("PORT", 5000))
 
     app.run(host="0.0.0.0", port=PORT, debug=DEBUG)
