@@ -234,11 +234,11 @@ def test_example_data():
 ##############################################################################
 # Helper functions
 
-def connect_to_db(app, database='postgresql:///blines'):
+def connect_to_db(app, database=None):
     """Connect the database to our Flask app."""
 
     # Configure to use our PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = database
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] or 'postgresql:///blines'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
     db.app = app

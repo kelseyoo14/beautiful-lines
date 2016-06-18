@@ -9,7 +9,7 @@ from flask import Flask, request, render_template, session, flash
 from flask import redirect as flaskredirect
 
 
-APP_ID = os.environ['PINTEREST_APP_ID']
+APP_ID = os.environ['PINTEREST_CLIENT_ID']
 APP_SECRET = os.environ['PINTEREST_APP_SECRET']
 
 
@@ -17,6 +17,14 @@ app = Flask(__name__)
 
 # Required to use Flask sessions and the debug toolbar
 app.config['SECRET_KEY'] = os.environ.get("FLASK_SECRET_KEY", "abcdef")
+
+
+# Session IDs when Pinterest API is not working
+# session[user_id] = 1
+# session[username] = 'kelseyoo14'
+# session[first_name] = 'Kelsey'
+# session[access_token] = 'AbJW6CgSaxnK6Pdu5rloRTyP6XZyFFRy9aEk'
+
 
 
 # O(1)
@@ -46,8 +54,8 @@ def login():
                    'response_type': 'code',
                    # Route I want Pinterest to go to once user logs in and Pinterest processes the log in
                    # Need to remember to register this redirect route on pinterest app!
-                   # 'redirect_uri': 'https://localhost:5000/process_login',
-                   'redirect_uri': 'https://beautifulines.herokuapp.com/process_login',
+                   'redirect_uri': 'https://localhost:5000/process_login',
+                   # 'redirect_uri': 'https://beautifulines.herokuapp.com/process_login',
                    # My apps's id, so pinterest know's who's redirecting the user to their page
                    'client_id': APP_ID,
                    # What I want to be able to do with user's account
@@ -445,7 +453,7 @@ def error():
 # End Routes ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    # app.debug = True
+    app.debug = True
 
     connect_to_db(app, os.environ.get("DATABASE_URL"))
 
