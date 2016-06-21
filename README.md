@@ -2,7 +2,7 @@
 
 Learn more about the developer: www.linkedin.com/in/kelseyonstenk
 
-Beautiful Lines is a visual library and study tool for Artists. In a real life drawing class, a model would pose in front of a class, changing poses at set intervals for students to study while drawing or painting. Beautiful Lines aims to replicate that experience for practice outside of class. Beautiful Lines makes it easy for artists to save images from anywhere online or users can transfer their saved boards/images from their Pinterest account. Users can also use Beautiful Lines to search the images they haved saved or to search all images that have been saved on Beautiful Lines - to find references or new inspiration!
+Beautiful Lines is a visual library and study tool for Artists. In a real life drawing class, a model would pose in front of a class, changing poses at set intervals for students to study while drawing or painting. Beautiful Lines aims to replicate that experience for practice outside of class. Beautiful Lines makes it easy for artists to save images from anywhere online or they can transfer their saved boards/images from their Pinterest account, that they can then use in timed drawing sessions. Artists can also use Beautiful Lines to search the images they have saved or to search all images that have been saved on Beautiful Lines - to find references or new inspiration!
 
 
 ## Table of Contents
