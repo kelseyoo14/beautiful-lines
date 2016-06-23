@@ -19,15 +19,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("FLASK_SECRET_KEY", "abcdef")
 
 
-# Session IDs when Pinterest API is not working
-# session[user_id] = 1
-# session[username] = 'kelseyoo14'
-# session[first_name] = 'Kelsey'
-# session[access_token] = 'AbJW6CgSaxnK6Pdu5rloRTyP6XZyFFRy9aEk'
-
-
-
-# O(1)
 # 1
 @app.route('/')
 def welcome():
@@ -43,7 +34,6 @@ def welcome():
 
 
 # OAuth and Log In Start ------------------------------------------------------------
-# O(1)
 # 2
 @app.route('/login')
 def login():
@@ -73,7 +63,7 @@ def login():
 
     return flaskredirect(full_url)
 
-# O(1)
+
 # 3
 @app.route('/process_login')
 def redirect():
@@ -132,7 +122,6 @@ def redirect():
 # OAuth and Log In End ---------------------------------------------------------------
 
 
-# O(1)
 # 4
 @app.route('/logout')
 def logout():
@@ -141,7 +130,6 @@ def logout():
     return render_template('homepage.html')
 
 
-# O(1)
 # 5
 @app.route('/home')
 def home():
@@ -153,7 +141,6 @@ def home():
                            first_name=session['first_name'])
 
 
-# O(1)
 # 6
 @app.route('/user_board_images/<int:board_id>')
 def images_in_blines(board_id):
@@ -176,7 +163,6 @@ def images_in_blines(board_id):
 
 # FIX ME - What if user has more boards than initial request???
 # Need to loop through request just like in /pinterest_board_images
-# O(n)
 # 7
 @app.route('/pinterest_boards')
 def pinterest_boards():
@@ -197,7 +183,7 @@ def pinterest_boards():
                            boards=boards_request,
                            first_name=session['first_name'])
 
-# O(n)?
+
 # 8
 @app.route('/pinterest_board_images/<url>')
 def show_pinterest_boards(url):
@@ -230,7 +216,6 @@ def show_pinterest_boards(url):
                            boards=boards_in_blines)
 
 
-# O(1)
 # 9
 @app.route('/save_board', methods=['POST'])
 def save_board():
@@ -254,7 +239,6 @@ def save_board():
     return flaskredirect('/save_images_on_board.json')
 
 
-# O(n)
 # 10
 @app.route('/save_images_on_board.json')
 def save_images_on_board():
@@ -271,7 +255,6 @@ def save_images_on_board():
     return ('Board Saved')
 
 
-# O(n)
 #11
 @app.route('/edit_board.json', methods=['POST'])
 def edit_board():
@@ -289,7 +272,6 @@ def edit_board():
     return ('Board Edited')
 
 
-# O(n)
 # 12
 @app.route('/delete_board.json', methods=['POST'])
 def delete_board():
@@ -304,7 +286,6 @@ def delete_board():
     return ('Board Deleted')
 
 
-# O(1)
 # 13
 @app.route('/save_image.json', methods=['POST'])
 def save_image():
@@ -365,8 +346,6 @@ def create_board():
 
     return flaskredirect('/home')
 
-# FIX ME Image is not deleting!!
-# Thats because a user shouldn't be able to submit an image without a url
 
 # 17
 @app.route('/create_image/<int:board_id>')
