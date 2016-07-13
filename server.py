@@ -86,6 +86,7 @@ def redirect():
 
     headers = {'Authorization': 'Bearer %s' % access_token}
     payload = {'fields': 'id,username,first_name,last_name,bio'}
+
     user_info_request = requests.get('https://api.pinterest.com/v1/me', headers=headers, params=payload)
     user_info = user_info_request.json()
 
@@ -436,7 +437,7 @@ if __name__ == "__main__":
 
     connect_to_db(app, os.environ.get("DATABASE_URL"))
 
-    context = ('server-files/yourserver.crt', 'server-files/yourserver.key')
+    # context = ('server-files/yourserver.crt', 'server-files/yourserver.key')
     app.run(ssl_context=context)
 
     DEBUG = "NO_DEBUG" not in os.environ
