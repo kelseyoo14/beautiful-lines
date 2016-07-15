@@ -12,9 +12,14 @@ a h2:hover,
 .navbar-default .navbar-nav>li>a:focus, 
 .navbar-default .navbar-nav>li>a:hover,
 .navbar-default .navbar-nav .open .dropdown-menu>li>a:hover {
-    color: #656565;
+    color: white;
     text-decoration: underline;
     font-weight: bold;
+}
+
+.navbar-default .navbar-brand,
+.navbar-default .navbar-nav>li>a {
+    color: #efefef;
 }
 
 .pin-image {
@@ -22,7 +27,7 @@ a h2:hover,
 }
 
 .navbar {
-    background-color: white;
+    background-color: #272727;
 }
 
 .navbar-nav{
@@ -203,6 +208,11 @@ a h2:hover,
 
 #search-container {
     display: inline-block;
+}
+
+#brand-name {
+    border-right: 1px solid white;
+    padding: 5px 10px 5px 0px;
 }
 
 

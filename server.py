@@ -438,8 +438,8 @@ if __name__ == "__main__":
 
     connect_to_db(app, os.environ.get("DATABASE_URL"))
 
-    # context = ('server-files/yourserver.crt', 'server-files/yourserver.key')
-    # app.run(ssl_context=context)
+    context = ('server-files/yourserver.crt', 'server-files/yourserver.key')
+    app.run(ssl_context=context)
 
     DEBUG = "NO_DEBUG" not in os.environ
     PORT = int(os.environ.get("PORT", 5000))
