@@ -1,11 +1,16 @@
 body {
-    background-color: #fbfbfb;
+    background-color: #f5f5f5;
     font-family: 'Raleway', sans-serif;
     margin-top: 55px;
 }
 
 a h2 {
     color: #777;
+}
+
+/*Nav*/
+.navbar {
+    background-color: #272727;
 }
 
 a h2:hover,
@@ -22,27 +27,38 @@ a h2:hover,
     color: #efefef;
 }
 
-.pin-image {
-    cursor: zoom-in;
+.navbar-form .btn {
+    width: 40px;
+    text-align: center;
 }
 
-.navbar {
-    background-color: #272727;
+#nav-items {
+    border-right: 1px solid white;
+    padding: 5px 10px 5px 0px;
+}
+
+.nav-right-items {
+    border-left: 1px solid white;
+    padding: 5px 0px 5px 10px;
 }
 
 .navbar-nav{
     float: right;
 }
 
-.navbar-form .btn {
-    width: 40px;
-    text-align: center;
+/*Search*/
+#search-container {
+    display: inline-block;
 }
-
 
 .user-pins-search {
     display: block;
     /*margin: 30px;*/
+}
+
+/*Pins and Boards*/
+.pin-image {
+    cursor: zoom-in;
 }
 
 .boards-container {
@@ -53,14 +69,22 @@ a h2:hover,
 .board {
     display: inline-block;
     background-color: white;
-    border: 1px solid rgba(82, 82, 82, 0.5);
-    border-radius: 12px;
     max-width: 250px;
     padding: 25px;
     margin: 25px;
     text-align: center;
     word-wrap:break-word;
-    box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.2);
+    /*border: 1px solid rgba(82, 82, 82, 0.5);
+    border-radius: 12px;
+    box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.2);*/
+    border-color: #e5e5e5 #dbdbdb #d2d2d2;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+    -moz-box-shadow: rgba(0,0,0,0.3) 0 1px 3px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+
 }
 
 .board img {
@@ -188,10 +212,10 @@ a h2:hover,
     width: 70px;
 }
 
-.full-page-container {
+/*.full-page-container {
     width: 100%;
     padding-left: 4%;
-}
+}*/
 
 .all-images {
     width: 90%;
@@ -206,16 +230,8 @@ a h2:hover,
     margin-left: 20px;
 }
 
-#search-container {
-    display: inline-block;
-}
 
-#brand-name {
-    border-right: 1px solid white;
-    padding: 5px 10px 5px 0px;
-}
-
-
+/*@media queries*/
 @media screen and (min-width: 870px) {
     .navbar-form .form-control {
         min-width: 200px;
