@@ -1,0 +1,110 @@
+<!-- Lists user's boards that are saved to blines db -->
+
+
+{% extends 'base.html' %}
+
+{% block page_title %}
+    <div class="page-title-container">
+        <div class="page-title">
+            <h2>{{ first_name }}'s Boards</h2>
+            <button id='new-board-button' class='btn btn-primary'><i class='glyphicon glyphicon-plus'></i></button>
+            <button id='search-boards-button' class='btn btn-primary'><i class='glyphicon glyphicon-search'></i></button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+<!-- Start Modals -->
+
+<div class="modal fade" id="create-board-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Create New Board</h4>
+        </div>
+      <div class="modal-body">
+        <div>
+            <form action="/create_board" id="create-board-form">
+                <input type="text" name='board_name' class='form-control create-form' placeholder='Board Title' required>
+                <input type="text" name='image_url' class='form-control create-form' placeholder='Cover Image URL' required>
+                <textarea name='board_description' class='form-control create-form' placeholder='Board Description'></textarea>
+                <input type="submit" value="Create" class='btn btn-primary create-form'>
+            </form>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="edit-board-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Edit Board</h4>
+        </div>
+      <div class="modal-body">
+        <div>
+            <form id='edit-board-modal-form'>
+                <br><br>
+                New Title <input type='text' class='form-control' id='edit-board-title' value=''>
+                <br><br>
+                New Cover Image URL <input type='text' class='form-control' id='edit-board-image' value=''>
+                <br><br>
+                New Description <textarea class='form-control' id='edit-board-description'></textarea>
+                <br><br>
+                Private 
+                <input type='hidden' id='board-id-to-edit' value=''>
+                <input type='submit' value='Save Board' class='btn btn-primary'>
+            </form>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- End Modals -->
+
+<div class='boards-container'>
+    <ul>
+        {% if user_boards %}
+            {% for board in user_boards %}
+                <div class='board'>
+                    <a href="/user_board_images/{{ board.board_id }}" class='board-name'>{{ board.board_name }}</a>
+                    <a href="/user_board_images/{{ board.board_id }}"><img src="{{ board.image_url }}"></a>
+                    {% if board.board_description %}
+                        <h6>Description</h6>
+                        <p>{{ board.board_description }}</p>
+                    {% endif %}
+
+                    <!-- <div class='board-options'>
+                        <a class='btn btn-primary' href='/study_board/{{ board.board_id }}'>Study</a>
+                        <br>
+                        <form class='edit-board-form'>
+                            <input type='hidden' class='new-board-title' value='{{ board.board_name }}'>
+                            <input type='hidden' class='new-image-url' value='{{ board.image_url }}'>
+                            <input type='hidden' class='new-board-description' value='{{ board.board_description }}'>
+                            <input type='hidden' class='board-id' value='{{ board.board_id }}'>
+                            <input type='submit' value='Edit' class='btn btn-primary'>
+                        </form>
+                        <form class='delete-board-from-db'>
+                            <input type='hidden' value="{{ board.board_id }}" class='delete-board-id'>
+                            <input type='submit' value='Delete' class='btn btn-primary'>
+                        </form>
+                    </div> -->
+                </div>
+            {% endfor %}
+        {% else %}
+        <br>
+            <p>You currently have no saved boards. Try creating a board by clicking "Create New Board" on this page, or go to "Your Pinterest" in the navbar to save one of your boards from Pinterest!</p>
+        {% endif %}
+    </ul>
+</div>
+
+
+
+{% endblock %}
+
+
