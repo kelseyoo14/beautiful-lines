@@ -26,7 +26,7 @@ def welcome():
 
     try:
         if session['user_id']:
-            return flaskredirect('/home')
+            return flaskredirect('/boards')
         else:
             return render_template('welcome_page.html')
     except KeyError:
@@ -118,7 +118,7 @@ def redirect():
         session['first_name'] = new_user.first_name
         session['access_token'] = new_user.access_token
 
-    return flaskredirect('/homepage')
+    return flaskredirect('/boards')
 
 # OAuth and Log In End ---------------------------------------------------------------
 
