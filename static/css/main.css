@@ -10,7 +10,7 @@ a h2 {
 
 /*Nav*/
 .navbar {
-    background-color: #272727;
+    background-color: rgba(208, 208, 208, 1);
 }
 
 a h2:hover,

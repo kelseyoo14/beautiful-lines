@@ -1,4 +1,4 @@
-<!-- Displays Images(Pins) from user's chosen pinterest board -->
+<!-- Displays Images(Pins) from user's chosen board -->
 
 
 {% extends 'base.html' %}
@@ -7,23 +7,24 @@
   {% if pins %}
      <h2 class='page-title'>{{ pins[0]['board']['name'] }}</h2>
   {% elif images or empty_board %}
-    <div class="page-title">
-      {% if current_board %}
-        {{ current_board.board_name }}
-        <br>
-        <a href="/study_board/{{ current_board.board_id }}" class="btn btn-primary">Study</a>
-      {% else %}
-        Search Results<br>
-        "{{ search }}"
-      {% endif %}
-      {% if current_board %}
-        <button id='new-image-button' class='btn btn-primary'>Create New Image</button>
-      {% endif %}
+    <div class="page-title-container">
+      <div class="page-title">
+        {% if current_board %}
+          <h2>{{ current_board.board_name }}</h2>
+          <a href="/study_board/{{ current_board.board_id }}" class="btn btn-primary">Study</a>
+          <button id='new-image-button' class='btn btn-primary'><i class='glyphicon glyphicon-plus'></i></button>
+        {% else %}
+          Search Results<br>
+          "{{ search }}"
+        {% endif %}
+      </div>
     </div>
   {% endif %}
 {% endblock %}
 
 {% block content %}
+
+<!-- Modals -->
 
 <div class="modal fade" id="create-image-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog">
@@ -119,10 +120,13 @@
 </div><!-- /.modal -->
 
 
+<!-- End Modals -->
+
+
 {% if pins %}
-   <div class="all-images">
+   <div class="all-images-container">
       {% for pin in pins %}
-          <div class='pin-container'>
+          <div class='image-container'>
               <img class="pin-image" src="{{ pin['image']['original']['url'] }}">
               <p>{{ pin['note'] }}</p>
 
@@ -135,16 +139,16 @@
 
 {% if images %}
   <div class='full-page-container'>
-    <div class="all-images">
+    <div class="all-images-container">
         {% for image in images %}
-            <div class='pin-container'>
+            <div class='image-container'>
                 <img class="pin-image" src="{{ image.original_url }}">
-                <p>{{ image.description }}</p>
+                <!-- <p>{{ image.description }}</p> -->
 
-                <button type="button" class="btn btn-primary save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ image.pinterest_image_id }}" data-imageid="{{ image.image_id }}">Save</button>
+                <!-- <button type="button" class="btn btn-primary save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ image.pinterest_image_id }}" data-imageid="{{ image.image_id }}">Save</button> -->
                 {% if current_board %}
                   <!-- <button class='btn btn-primary edit-button'>Edit</button> -->
-                  <form class='edit-image-form'>
+                  <!-- <form class='edit-image-form'>
                     <input type='hidden' class='new-image-description' value='{{ image.description }}'>
                     <input type='hidden' class='image-id' value='{{ image.image_id }}'>
                     <input type='submit' value='Edit' class='btn btn-primary'>
@@ -153,7 +157,7 @@
                     <input type='hidden' class='image_id' value='{{ image.image_id }}'>
                     <input type='hidden' class='board_id' value='{{ current_board.board_id }}'>
                     <input type='submit' value='Delete' class="btn btn-primary">
-                  </form>
+                  </form> -->
                 {% endif %}
             </div>
             <!-- Not Appearing on Page -->

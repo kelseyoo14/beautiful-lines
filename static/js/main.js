@@ -202,13 +202,14 @@ $('body').on('click', 'img', function() {
     $('#zoom-modal').modal('show');
 });
 
-$('#zoom-modal .modal-body').height($('#zoomed-image').height());
+$(document).ready(function () {
+    $('#zoom-modal .modal-body').height($('#zoomed-image').height());
+    $('#zoom-modal .modal-body').width($('#zoomed-image').width());
+});
 
 
 
-// Start Edit Board -------------------------------------------------------------------
-
-// Grab form by ideas and insert value depending on valus grabbed form button?
+// Edit Board -------------------------------------------------------------------
 
 function showEditBoardForm(evt) {
     evt.preventDefault();
@@ -252,7 +253,7 @@ function editBoard(evt) {
 $('#edit-board-modal-form').on('submit', editBoard);
 
 
-// Start Edit Image -------------------------------------------------------------------
+// Edit Image -------------------------------------------------------------------
 
 function showEditImageForm(evt) {
     evt.preventDefault();
@@ -328,12 +329,11 @@ $(window).on('resize', function navbarUpdate () {
 });
 
 
-
-// if (window.matchMedia("(min-width: 766px)").matches) {
-//   $(".nav-list-items").each(function() {
-//     $(this).addClass('.pull-right');
-//   });
-// }
+//Make image-container width equal to image width
+$(document).ready(function() {
+    var imageWidth = $('.pin-image').width();
+    $('.image-container').width(imageWidth);
+});
 
 
 

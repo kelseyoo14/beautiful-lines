@@ -28,9 +28,9 @@ def welcome():
         if session['user_id']:
             return flaskredirect('/home')
         else:
-            return render_template('homepage.html')
+            return render_template('welcome_page.html')
     except KeyError:
-        return render_template('homepage.html')
+        return render_template('welcome_page.html')
 
 
 # OAuth and Log In Start ------------------------------------------------------------
@@ -45,11 +45,11 @@ def login():
                    # Route I want Pinterest to go to once user logs in and Pinterest processes the log in
                    # Need to remember to register this redirect route on pinterest app!
                    # 'redirect_uri': 'https://localhost:5000/process_login',
-                   'redirect_uri': 'https://beautifulines.herokuapp.com/process_login' or 'https://localhost:5000/process_login',
+                   'redirect_uri': 'https://localhost:5000/process_login' or 'https://beautifulines.herokuapp.com/process_login',
                    # My apps's id, so pinterest know's who's redirecting the user to their page
                    'client_id': APP_ID,
                    # What I want to be able to do with user's account
-                   'scope': 'read_public,write_public,read_relationships,write_relationships',
+                   'scope': 'read_public',
                    # 'scope': 'read_public',
                    # Note for myself
                    'state': 'Random!'
@@ -118,7 +118,7 @@ def redirect():
         session['first_name'] = new_user.first_name
         session['access_token'] = new_user.access_token
 
-    return flaskredirect('/home')
+    return flaskredirect('/homepage')
 
 # OAuth and Log In End ---------------------------------------------------------------
 
@@ -128,23 +128,62 @@ def redirect():
 def logout():
     session.clear()
 
+    return render_template('welcome_page.html')
+
+#5
+@app.route('/homepage')
+def homepage():
+    """Displays user's homepage - summary of user's boards, sessions, and projects"""
+
     return render_template('homepage.html')
 
 
-# 5
-@app.route('/home')
-def home():
+# 6
+@app.route('/boards')
+def boards():
     """Lists user's boards that are saved to blines db"""
+
     if session['user_id']:
         user_boards = Board.query.filter(Board.user_id == session['user_id']).all()
-        return render_template('home.html',
-                                user_boards=user_boards,
-                                first_name=session['first_name'])
+        return render_template('boards.html',
+                               user_boards=user_boards,
+                               first_name=session['first_name'])
     else:
         return redirect('/')
 
+#7     
+@app.route('/projects')
+def projects():
+    """Displays user's projects"""
 
-# 6
+    return ('This page will display user projects')
+    # return render_template('projects.html')
+
+#8
+@app.route('/resources')
+def resources():
+    """Displays user's resources"""
+
+    return ('This page will display user resources')
+    # return render_template('resources.html')
+
+#9
+# @app.route('/sessions')
+# def sessions():
+#     """Displays user's drawing sessions"""
+
+#     return ('This page will display user past drawing sessions')
+#     # return render_template('sessions.html')
+
+#9
+@app.route('/account')
+def account():
+    """Displays user's account"""
+
+    return ('This page will display user account')
+    # return render_template('sessions.html')
+
+# 10
 @app.route('/user_board_images/<int:board_id>')
 def images_in_blines(board_id):
     """Displays images from chosen board that exist in blines db"""
@@ -166,7 +205,7 @@ def images_in_blines(board_id):
 
 # FIX ME - What if user has more boards than initial request???
 # Need to loop through request just like in /pinterest_board_images
-# 7
+# 11
 @app.route('/pinterest_boards')
 def pinterest_boards():
     """Displays all of user's boards from their pinterest"""
@@ -187,9 +226,9 @@ def pinterest_boards():
                            first_name=session['first_name'])
 
 
-# 8
+# 12
 @app.route('/pinterest_board_images/<url>')
-def show_pinterest_boards(url):
+def pinterest_board_images(url):
     """Displays pins from user chosen board that is on pinterest"""
 
     # import pdb; pdb.set_trace()
@@ -219,7 +258,7 @@ def show_pinterest_boards(url):
                            boards=boards_in_blines)
 
 
-# 9
+# 13
 @app.route('/save_board', methods=['POST'])
 def save_board():
     """Saves board to Beautiful Lines"""
@@ -242,7 +281,7 @@ def save_board():
     return flaskredirect('/save_images_on_board.json')
 
 
-# 10
+# 14
 @app.route('/save_images_on_board.json')
 def save_images_on_board():
 
@@ -258,7 +297,7 @@ def save_images_on_board():
     return ('Board Saved')
 
 
-#11
+#15
 @app.route('/edit_board.json', methods=['POST'])
 def edit_board():
     """Edits user board"""
@@ -275,7 +314,7 @@ def edit_board():
     return ('Board Edited')
 
 
-# 12
+# 16
 @app.route('/delete_board.json', methods=['POST'])
 def delete_board():
     """Deletes user board from blines db and associated images and tags that don't exist in other boards"""
@@ -289,7 +328,7 @@ def delete_board():
     return ('Board Deleted')
 
 
-# 13
+# 17
 @app.route('/save_image.json', methods=['POST'])
 def save_image():
     """Saves image to Beautiful Lines Board"""
@@ -303,7 +342,7 @@ def save_image():
     return ('Image Saved')
 
 
-# 14
+# 18
 @app.route('/edit_image.json', methods=['POST'])
 def edit_image():
     """Edit user image"""
@@ -318,7 +357,7 @@ def edit_image():
     return ('Image Edited')
 
 
-# 15
+# 19
 @app.route('/delete_image.json', methods=['POST'])
 def delete_image():
     """Deletes user image from blines association table, and from images table if no instances of it exist in association table"""
@@ -333,7 +372,7 @@ def delete_image():
     return ('Image Deleted')
 
 
-# 16
+# 20
 @app.route('/create_board')
 def create_board():
     """Creates new board in blines db"""
@@ -347,10 +386,10 @@ def create_board():
 
     flash('Your board has been successfully created.')
 
-    return flaskredirect('/home')
+    return flaskredirect('/boards')
 
 
-# 17
+# 21
 @app.route('/create_image/<int:board_id>')
 def create_image(board_id):
     """Creates new image in blines db"""
@@ -365,7 +404,7 @@ def create_image(board_id):
     return flaskredirect('/user_board_images/%s' % board_id)
 
 
-# 18
+# 22
 @app.route('/study_board/<int:board_id>')
 def study_board(board_id):
     """Displays pins from board chosen by user to study"""
@@ -382,7 +421,7 @@ def study_board(board_id):
                            current_board=current_board)
 
 
-# 19
+# 23
 @app.route('/study_images.json', methods=['POST'])
 def study():
     """Sends json of images to js for Study Session"""
@@ -397,7 +436,7 @@ def study():
     return json.dumps(list_of_image_urls)
 
 
-# 20
+# 24
 @app.route('/search_bl')
 def show_bl_search():
     """Search user's images and display images related to user search terms"""
@@ -412,7 +451,7 @@ def show_bl_search():
                            search=user_search)
 
 
-# 21
+# 25
 @app.route('/search_user')
 def show_user_search():
     """Search user's images and display images related to user search terms"""
@@ -426,7 +465,7 @@ def show_user_search():
                            boards=boards,
                            search=user_search)
 
-
+# 26
 @app.route("/error")
 def error():
     raise Exception("Error!")
@@ -439,8 +478,8 @@ if __name__ == "__main__":
 
     connect_to_db(app, os.environ.get("DATABASE_URL"))
 
-    # context = ('server-files/yourserver.crt', 'server-files/yourserver.key')
-    # app.run(ssl_context=context)
+    context = ('server-files/yourserver.crt', 'server-files/yourserver.key')
+    app.run(ssl_context=context)
 
     DEBUG = "NO_DEBUG" not in os.environ
     PORT = int(os.environ.get("PORT", 5000))
