@@ -70,6 +70,7 @@ body {
     margin-right: 15px;
 }
 
+/*Pinterest Board Images are small - adjust boards*/
 .pinterest-board {
     max-width: 150px;
     padding: 1.5em;
