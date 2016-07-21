@@ -321,7 +321,7 @@ $('#search-user-form').on('click', function() {
 
 $(window).on('resize', function navbarUpdate () {
     var viewportWidth = $(window).width();
-    if (viewportWidth < 752) {
+    if (viewportWidth < 768) {
         $(".nav-list-items").removeClass('pull-right');
     } else {
         $(".nav-list-items").addClass('pull-right');

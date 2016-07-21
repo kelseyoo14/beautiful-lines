@@ -55,7 +55,7 @@
                 <br><br>
                 New Description <textarea class='form-control' id='edit-board-description'></textarea>
                 <br><br>
-                Private 
+                <!-- Private  -->
                 <input type='hidden' id='board-id-to-edit' value=''>
                 <input type='submit' value='Save Board' class='btn btn-primary'>
             </form>
@@ -69,7 +69,6 @@
 
 <div class='full-page-container'>
     <div class='boards-container'>
-    <!-- <ul> -->
         {% if user_boards %}
             {% for board in user_boards %}
                 <div class='board'>
@@ -101,7 +100,6 @@
         <br>
             <p>You currently have no saved boards. Try creating a board by clicking "Create New Board" on this page, or go to "Your Pinterest" in the navbar to save one of your boards from Pinterest!</p>
         {% endif %}
-    <!-- </ul> -->
     </div>
 </div> <!-- boards-container -->
 

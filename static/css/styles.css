@@ -2,8 +2,6 @@ body {
     background-color: rgba(253, 253, 253, .5);
     font-family: 'Comfortaa', sans-serif;
     margin-top: 3.5em;
-    /*width: 100vw;*/
-    /*margin: 3.5em auto 0 auto;*/
 }
 
 
@@ -47,10 +45,12 @@ body {
     display: block;
     max-height: 350px;
     max-width: 350px;
+    /*min-width: 100px;*/
     min-width: 80px;
 }
 
 .full-page-container {
+    padding: 3em;
     text-align: center;
 }
 
@@ -68,6 +68,16 @@ body {
 #create-board-form,
 #create-image-form {
     margin-right: 15px;
+}
+
+.pinterest-board {
+    max-width: 150px;
+    padding: 1.5em;
+}
+
+.pinterest-board a img {
+    margin: 0 auto;
+    min-width: 103px;
 }
 
 
@@ -196,7 +206,7 @@ body {
     -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
     -moz-box-shadow: rgba(0,0,0,0.3) 0 1px 3px;
     box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
-    width: 200px;
+    width: 230px;
 }
 
 .pin-image:hover {
@@ -239,6 +249,10 @@ body {
 
 
 /*Other*/
+#alert-messages {
+    position: fixed;
+}
+
 .create-form {
     margin: 10px;
     /*margin-right: 20px;*/
@@ -247,7 +261,15 @@ body {
 
 
 /*@media queries*/
-@media screen and (min-width: 870px) {
+@media screen and (max-width: 767px) {
+    #navbar-options li {
+        background-color: rgba(208, 208, 208, 1);
+    }
+}
+
+
+
+/*@media screen and (min-width: 870px) {
     .navbar-form .form-control {
         min-width: 200px;
     }
@@ -257,6 +279,5 @@ body {
     .navbar-form .form-control {
         width: 15vw;
         min-width: 155px;
-        /*float: left;*/
     }
-}
+}*/

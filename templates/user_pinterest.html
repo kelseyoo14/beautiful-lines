@@ -45,20 +45,19 @@
 
 
 <!-- {{ boards }} -->
-<div class='boards-container'>
-    <ul>
+<div class='full-page-container'>
+    <div class='boards-container'>
         {% for board in boards['data'] %}
-            <div class='board'>
+            <div class='board pinterest-board'>
                 <!-- need to be able to click board -->
-                <a href="/pinterest_board_images/{{ board['url'] }}" class='board-name'>{{ board['name'] }}</a>
-                <!-- <h5>{{ board['name'] }}</h5> -->
+                <a href="/pinterest_board_images/{{ board['url'] }}" class='board-name'><h5>{{ board['name'] }}</h5></a>
 
                 <!-- Need to pass specific board! -->
                 <a href="/pinterest_board_images/{{ board['url'] }}"><img src="{{ board['image']['60x60']['url'] }}"></a>
-                {% if board['description'] %}
+                <!-- {% if board['description'] %}
                     <h6>Description</h6>
                     <li>{{ board['description'] }}</li>
-                {% endif %}
+                {% endif %} -->
                 <br><br>
                 <form class='save-pinterest-board'>
                     <input type='hidden' value="{{ board['url'] }}" class='board-url'>
@@ -67,7 +66,7 @@
                 <!-- <a href="/save_board/{{ board['url'] }}" class='save-pinterest-board'>Save Board</a> -->
             </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>
 
 

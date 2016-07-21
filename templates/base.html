@@ -25,18 +25,20 @@
           </div>
           <div class="collapse navbar-collapse" id="navbar-options">
               <ul class=" nav navbar-nav">
-                <li class="dropdown pull-right">
-                    <a href="#" class="dropdown-toggle nav-list-items" data-toggle="dropdown">User Name</a>
+                <!-- <li class="dropdown pull-right">
+                    <a href="#" class="dropdown-toggle nav-list-items" data-toggle="dropdown">Account</a>
                     <ul class="dropdown-menu">
-                        <!-- <li><a href='/sessions' class='nav-dropdown-item'>Sessions</a></li> -->
+                        <li><a href='/sessions' class='nav-dropdown-item'>Sessions</a></li>
                         <li><a href='/pinterest_boards' class='nav-dropdown-item'>Pinterest</a></li>
                         <li><a href='/account' class='nav-dropdown-item'>Account</a></li>
                         <li><a href='/logout' class='nav-dropdown-item'>Logout</a></li>      
                     </ul>
-                </li>
-                <li class='nav-list-items pull-right'><a href="/resources">Resources</a></li>
-                <li class='nav-list-items pull-right'><a href="/projects">Projects</a></li>
+                </li> -->
+                <li class='nav-list-items pull-right'><a href='/logout'>Logout</a></li>  
+                <li class='nav-list-items pull-right'><a href='/pinterest_boards'>Pinterest</a></li>
                 <li class='nav-list-items pull-right'><a href="/boards">Boards</a></li>
+                <!-- <li class='nav-list-items pull-right'><a href="/resources">Resources</a></li>
+                <li class='nav-list-items pull-right'><a href="/projects">Projects</a></li> -->
                 <!-- <li class='nav-list-items pull-right'><a href="/homepage">Home</a></li> -->
               </ul>       
           </div>
@@ -44,26 +46,27 @@
         
 
 
-        {% block page_title %}Put Page Title Here{% endblock %}
+        {% block page_title %} Put Page Title Here {% endblock %}
+        <div id='alert-messages'>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              {% for message in messages %}
+                <div id='alert-container'>
+                    <div class="alert alert-success fade in">
+                        <a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <strong>Success!</strong> <span id='success-message'>{{ message }}</span>
+                    </div>
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
 
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            {% for message in messages %}
-              <div id='alert-container'>
-                  <div class="alert alert-success fade in">
-                      <a href="#" class="close" data-dismiss="alert">&times;</a>
-                      <strong>Success!</strong> <span id='success-message'>{{ message }}</span>
-                  </div>
+          <div id='non-reload-alert-container'>
+              <div class="alert alert-success fade-in">
+                  <a href="#" class="close" data-dismiss="alert">&times;</a>
+                  <strong>Success!</strong> <span id='non-reload-success-message'></span>
               </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-
-        <div id='non-reload-alert-container'>
-            <div class="alert alert-success fade-in">
-                <a href="#" class="close" data-dismiss="alert">&times;</a>
-                <strong>Success!</strong> <span id='non-reload-success-message'></span>
-            </div>
+          </div>
         </div>
 
 
