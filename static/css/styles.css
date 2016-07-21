@@ -70,17 +70,6 @@ body {
     margin-right: 15px;
 }
 
-/*Pinterest Board Images are small - adjust boards*/
-.pinterest-board {
-    max-width: 150px;
-    padding: 1.5em;
-}
-
-.pinterest-board a img {
-    margin: 0 auto;
-    min-width: 103px;
-}
-
 
 /*Buttons*/
 .btn {
@@ -257,6 +246,17 @@ body {
 .create-form {
     margin: 10px;
     /*margin-right: 20px;*/
+}
+
+/*Heroku Not showing below, though localhost is*/
+.pinterest-board {
+    max-width: 150px;
+    padding: 1.5em;
+}
+
+.pinterest-board a img {
+    margin: 0 auto;
+    min-width: 103px;
 }
 
 
