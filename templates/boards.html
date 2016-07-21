@@ -67,8 +67,9 @@
 
 <!-- End Modals -->
 
-<div class='boards-container'>
-    <ul>
+<div class='full-page-container'>
+    <div class='boards-container'>
+    <!-- <ul> -->
         {% if user_boards %}
             {% for board in user_boards %}
                 <div class='board'>
@@ -79,7 +80,7 @@
                         <p>{{ board.board_description }}</p>
                     {% endif %}
 
-                    <!-- <div class='board-options'>
+                    <div class='board-options'>
                         <a class='btn btn-primary' href='/study_board/{{ board.board_id }}'>Study</a>
                         <br>
                         <form class='edit-board-form'>
@@ -93,15 +94,16 @@
                             <input type='hidden' value="{{ board.board_id }}" class='delete-board-id'>
                             <input type='submit' value='Delete' class='btn btn-primary'>
                         </form>
-                    </div> -->
+                    </div>
                 </div>
             {% endfor %}
         {% else %}
         <br>
             <p>You currently have no saved boards. Try creating a board by clicking "Create New Board" on this page, or go to "Your Pinterest" in the navbar to save one of your boards from Pinterest!</p>
         {% endif %}
-    </ul>
-</div>
+    <!-- </ul> -->
+    </div>
+</div> <!-- boards-container -->
 
 
 

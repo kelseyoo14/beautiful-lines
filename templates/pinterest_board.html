@@ -5,7 +5,11 @@
 
 {% block page_title %}
   {% if pins %}
-     <h2 class='page-title'>{{ pins[0]['board']['name'] }}</h2>
+    <div class="page-title-container">
+      <div class='page-title'>
+        <h2>{{ pins[0]['board']['name'] }}</h2>
+      </div>
+    </div>
   {% elif images or empty_board %}
     <div class="page-title-container">
       <div class="page-title">

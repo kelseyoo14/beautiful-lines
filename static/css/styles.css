@@ -2,6 +2,8 @@ body {
     background-color: rgba(253, 253, 253, .5);
     font-family: 'Comfortaa', sans-serif;
     margin-top: 3.5em;
+    /*width: 100vw;*/
+    /*margin: 3.5em auto 0 auto;*/
 }
 
 
@@ -48,9 +50,13 @@ body {
     min-width: 80px;
 }
 
+.full-page-container {
+    text-align: center;
+}
+
 .boards-container,
 .all-images-container {
-    margin: 0 5%;
+    margin: 0 auto;
     padding-top: 7.5em;
 }
 

@@ -291,8 +291,26 @@ def save_images_on_board():
     payload = {'fields': 'id,url,board,image,note'}
     new_request = requests.get('https://api.pinterest.com/v1/boards/%s/%s/pins' % (session['username'], session['board_url']), headers=headers, params=payload)
     pins_request = new_request.json()
+    all_pins = pins_request['data']
+
+    board = Board.query.filter(Board.board_id == board_id).first()
+
+    # if there are images, set board image to first image on board
+    print '*******************************************************'
+    print all_pins
+
+    if all_pins:
+        current_board = Board.query.filter(Board.board_id == board_id).first()
+        current_board.image_url = all_pins[0]['image']['original']['url']
+        print '*******************************************************'
+        print current_board.image_url
+        db.session.commit()
 
     route_functions.save_images_from_pinterest_board(headers, payload, pins_request, user, board_id)
+
+
+    print '*******************************************************'
+    print board_id
 
     return ('Board Saved')
 
