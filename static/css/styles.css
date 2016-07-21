@@ -210,10 +210,6 @@ body {
     float: right;
 }
 
-#study-header {
-    text-align: center;
-}
-
 .page-title {
     /*border-bottom: 1px solid rgba(208, 208, 208, 1);*/
     /*float: right;*/
@@ -237,6 +233,13 @@ body {
     margin-right: .8em;
 }
 
+#study-title {
+    height: 9em;
+}
+
+#study-title a {
+    color: black;
+}
 
 /*Other*/
 #alert-messages {

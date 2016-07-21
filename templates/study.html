@@ -5,7 +5,7 @@
 
 {% block page_title %}
   
-  <div id='study-header'>
+  <div class='page-title-container' id='study-title'>
     <a href="/user_board_images/{{ current_board.board_id }}"><h2 class='page-title'>{{ current_board.board_name }}</h2></a>
     <form id='study-form'>
         Time Intervals:
@@ -77,13 +77,14 @@
 
 
     
-
-    <div class='all-images'>
-    {% for image in images %}
-        <div class='pin-container'>
-            <img class="pin-image" src="{{ image.original_url }}">
-        </div>
-    {% endfor %}
+    <div class='full-page-container'>
+      <div class="all-images-container">
+        {% for image in images %}
+            <div class='image-container'>
+                <img class="pin-image" src="{{ image.original_url }}">
+            </div>
+        {% endfor %}
+      </div>
     </div>
   {% else %}
     <h4>You have no images on this board to study yet.</h4>
