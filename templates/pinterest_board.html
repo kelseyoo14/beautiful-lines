@@ -148,6 +148,21 @@
             <div class='image-container'>
                 <img class="pin-image" src="{{ image.original_url }}">
                 <!-- <p>{{ image.description }}</p> -->
+                <div class="dropdown">
+                  <button class="dropdown-toggle" id='image-dropdown-button' type="button" data-toggle="dropdown"><span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><form class='edit-image-form'>
+                      <input type='hidden' class='new-image-description' value='{{ image.description }}'>
+                      <input type='hidden' class='image-id' value='{{ image.image_id }}'>
+                      <input type='submit' value='Edit' class='btn btn-primary'>
+                    </form></li>
+                    <li><form class="delete-image-from-board">
+                      <input type='hidden' class='image_id' value='{{ image.image_id }}'>
+                      <input type='hidden' class='board_id' value='{{ current_board.board_id }}'>
+                      <input type='submit' value='Delete' class="btn btn-primary">
+                    </form></li>
+                  </ul>
+                </div>
 
                 <!-- <button type="button" class="btn btn-primary save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ image.pinterest_image_id }}" data-imageid="{{ image.image_id }}">Save</button> -->
                 {% if current_board %}

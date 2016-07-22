@@ -36,17 +36,23 @@ body {
     box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
 }
 
-.board > a:first-child {
-    color: black;
-    font-size: 1.3em;
-}
-
 .board img {
     display: block;
     max-height: 350px;
     max-width: 350px;
     /*min-width: 100px;*/
     min-width: 80px;
+}
+
+.board-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.board-header > a:first-child {
+    color: black;
+    font-size: 1.3em;
 }
 
 .full-page-container {
@@ -107,25 +113,20 @@ body {
 
 
 /*Modal*/
-/*#study-modal .modal-dialog,
-#zoom-modal .modal-dialog {
-    min-width: 50vw;
-    min-height: 90vh;
-}*/
-
 #study-modal-image,
 #zoomed-image {
     position: fixed;
-    /* center the element */
     right: 0;
     left: 0;
     margin-right: auto;
     margin-left: auto;
-    /* give it dimensions */
     min-height: 10em;
-    /*max-width: 90%;*/
     height: 80vh;
-    width: auto;
+}
+
+#zoom-modal .modal-dialog {
+    height: auto;
+    width: 70vw;
 }
 
 
@@ -203,6 +204,30 @@ body {
     cursor: zoom-in;
 }
 
+#board-dropdown-button,
+#image-dropdown-button {
+    background-color: white;
+    border: none;
+    margin-top: .2em;
+    text-align: center;
+}
+
+.board-options .dropdown-menu,
+.image-container .dropdown-menu {
+    min-width: 6em;
+}
+
+.board-options input[type='Submit'],
+.image-container input[type='Submit']{
+    margin: .5em;
+    margin-bottom: 0;
+    width: 5em;
+}
+
+/*#board-dropdown-button,
+#image-dropdown-button {
+
+}*/
 
 
 /*Titles & Headers*/
@@ -226,6 +251,7 @@ body {
     position: fixed;
     text-align: center;
     width: 100%;
+    z-index: 1;
 }
 
 .page-title h2 {

@@ -231,6 +231,12 @@ def test_example_data():
     db.session.commit()
 
 
+
+# Guest Account Setup
+# def guest_account():
+    
+
+
 ##############################################################################
 # Helper functions
 
