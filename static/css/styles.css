@@ -10,6 +10,7 @@ body {
 #non-reload-alert-container {
     width: 50%;
     margin: auto;
+    margin-top: 6em;
     text-align: center;
 }
 
@@ -17,6 +18,11 @@ body {
 #non-reload-alert-container {
     display: none;
 }
+
+#alert-messages {
+    position: fixed;
+}
+
 
 /*Boards*/
 .board,
@@ -268,10 +274,6 @@ body {
 }
 
 /*Other*/
-#alert-messages {
-    position: fixed;
-}
-
 .create-form {
     margin: 10px;
     /*margin-right: 20px;*/
