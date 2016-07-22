@@ -44,8 +44,8 @@ def login():
                    'response_type': 'code',
                    # Route I want Pinterest to go to once user logs in and Pinterest processes the log in
                    # Need to remember to register this redirect route on pinterest app!
-                   'redirect_uri': 'https://localhost:5000/process_login',
-                   # 'redirect_uri': 'https://beautifulines.herokuapp.com/process_login',
+                   # 'redirect_uri': 'https://localhost:5000/process_login',
+                   'redirect_uri': 'https://beautifulines.herokuapp.com/process_login',
                    # My apps's id, so pinterest know's who's redirecting the user to their page
                    'client_id': APP_ID,
                    # What I want to be able to do with user's account
@@ -510,8 +510,8 @@ if __name__ == "__main__":
 
     connect_to_db(app, os.environ.get("DATABASE_URL"))
 
-    context = ('server-files/yourserver.crt', 'server-files/yourserver.key')
-    app.run(ssl_context=context)
+    # context = ('server-files/yourserver.crt', 'server-files/yourserver.key')
+    # app.run(ssl_context=context)
 
     DEBUG = "NO_DEBUG" not in os.environ
     PORT = int(os.environ.get("PORT", 5000))
