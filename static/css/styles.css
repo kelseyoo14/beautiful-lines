@@ -10,7 +10,7 @@ body {
 #non-reload-alert-container {
     width: 50%;
     margin: auto;
-    margin-top: 6em;
+    margin-top: 3em;
     text-align: center;
 }
 
@@ -20,7 +20,9 @@ body {
 }
 
 #alert-messages {
+    text-align:left;
     position: fixed;
+    z-index: 2;
 }
 
 

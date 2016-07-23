@@ -47,8 +47,15 @@
 
 
         {% block page_title %} Put Page Title Here {% endblock %}
-        
+
         <div id='alert-messages'>
+          <div id='non-reload-alert-container'>
+              <div class="alert alert-success fade-in">
+                  <a href="#" class="close" data-dismiss="alert">&times;</a>
+                  <strong>Success!</strong> <span id='non-reload-success-message'></span>
+              </div>
+          </div>
+          
           {% with messages = get_flashed_messages() %}
             {% if messages %}
               {% for message in messages %}
@@ -61,13 +68,6 @@
               {% endfor %}
             {% endif %}
           {% endwith %}
-
-          <div id='non-reload-alert-container'>
-              <div class="alert alert-success fade-in">
-                  <a href="#" class="close" data-dismiss="alert">&times;</a>
-                  <strong>Success!</strong> <span id='non-reload-success-message'></span>
-              </div>
-          </div>
         </div>
 
 
