@@ -91,24 +91,22 @@ def redirect():
     user_info = user_info_request.json()
 
     # Query to check if user exists in the db
-    user_exists = User.query.filter(User.pinterest_user_id == user_info['data']['id']).first()
+    current_user = User.query.filter(User.pinterest_user_id == user_info['data']['id']).first()
 
-    if user_exists:
-        session['user_id'] = user_exists.user_id
-        session['username'] = user_exists.username
-        session['first_name'] = user_exists.first_name
-        session['access_token'] = user_exists.access_token
-
+    if current_user:
         # If user edits info on Pinterest
-        user_exists.username = user_info['data']['username']
-        user_exists.first_name = user_info['data']['first_name']
-        user_exists.last_name = user_info['data']['last_name']
-        user_exists.bio = user_info['data']['bio']
-
-        print '*******************************************'
-        print user_exists.first_name
+        current_user.username = user_info['data']['username']
+        current_user.first_name = user_info['data']['first_name']
+        current_user.last_name = user_info['data']['last_name']
+        current_user.bio = user_info['data']['bio']
 
         db.session.commit()
+
+        session['user_id'] = current_user.user_id
+        session['username'] = current_user.username
+        session['first_name'] = current_user.first_name
+        session['access_token'] = current_user.access_token
+
     else:
         pinterest_user_id = user_info['data']['id']
         username = user_info['data']['username']
@@ -117,17 +115,17 @@ def redirect():
         bio = user_info['data']['bio']
 
         # Create new_user for db
-        new_user = User(pinterest_user_id=pinterest_user_id, username=username, first_name=first_name,
+        current_user = User(pinterest_user_id=pinterest_user_id, username=username, first_name=first_name,
                         last_name=last_name, bio=bio, access_token=access_token)
 
-        db.session.add(new_user)
+        db.session.add(current_user)
         db.session.commit()
 
-        # Add user_id and access_token to session for global use
-        session['user_id'] = new_user.user_id
-        session['username'] = new_user.username
-        session['first_name'] = new_user.first_name
-        session['access_token'] = new_user.access_token
+        # Add user info to session for global use
+        session['user_id'] = current_user.user_id
+        session['username'] = current_user.username
+        session['first_name'] = current_user.first_name
+        session['access_token'] = current_user.access_token
 
     return flaskredirect('/boards')
 
@@ -136,7 +134,7 @@ def redirect():
 @app.route('/guestlogin')
 def guest_login():
 
-    guest_user = User.query.filter(User.first_name == 'Beautiful Lines Guest').first()
+    guest_user = User.query.filter(User.first_name == 'BL Guest').first()
 
     session['user_id'] = guest_user.user_id
     session['username'] = guest_user.username
