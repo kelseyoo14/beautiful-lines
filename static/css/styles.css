@@ -44,11 +44,16 @@ body {
     box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
 }
 
+.board,
+.image-container {
+    position: relative;
+}
+
 .board img {
     display: block;
+    margin: auto;
     max-height: 350px;
     max-width: 350px;
-    /*min-width: 100px;*/
     min-width: 80px;
 }
 
@@ -121,6 +126,15 @@ body {
 
 
 /*Modal*/
+
+#save-image-to-board img {
+    width: 70px;
+}
+
+#save-image-to-board div {
+    display: inline-block;
+}
+
 #study-modal-image,
 #zoomed-image {
     position: fixed;
@@ -149,9 +163,9 @@ body {
     padding-bottom: .2em;
 }
 
-/*.navbar-default .navbar-nav>li>a {
-    color: #f1f1f1;
-}*/
+.navbar-collapse {
+    background-color: rgba(208, 208, 208, 1);
+}
 
 .navbar-default .navbar-brand {
     border-right: .1em solid white;
@@ -162,7 +176,7 @@ body {
 .navbar-default .navbar-nav>li>a {
     color: black;
     font-size: 1.1em;
-    padding-bottom: .2em;
+    padding-bottom: .5em;
 }
 
 /*.navbar-form .btn {
@@ -187,15 +201,28 @@ body {
     padding-bottom: 0;
 }
 
+#search-container {
+    margin-top: 4px;
+    min-width: 200px;
+    /*width: 60%;*/
+}
+#search-form-input {
+    width: 35vw;
+}
 
-/*Pins*/
 
-/*.image-container {
-    display: inline-block;
-    max-width: 200px;
-    margin: 50px;
-    word-wrap:break-word;
-}*/
+/*Pins & Images*/
+
+.board-actions,
+.image-actions {
+    visibility: hidden;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    position: absolute;
+    bottom: .2em;
+    left: .4em;
+}
 
 .pin-image {
     border-color: #e5e5e5 #dbdbdb #d2d2d2;
@@ -212,30 +239,10 @@ body {
     cursor: zoom-in;
 }
 
-#board-dropdown-button,
-#image-dropdown-button {
-    background-color: white;
-    border: none;
-    margin-top: .2em;
-    text-align: center;
-}
-
-.board-options .dropdown-menu,
-.image-container .dropdown-menu {
-    min-width: 6em;
-}
-
 .board-options input[type='Submit'],
-.image-container input[type='Submit']{
-    margin: .5em;
-    margin-bottom: 0;
+.image-actions input[type='Submit'] {
     width: 5em;
 }
-
-/*#board-dropdown-button,
-#image-dropdown-button {
-
-}*/
 
 
 /*Titles & Headers*/
@@ -298,6 +305,11 @@ body {
 @media screen and (max-width: 767px) {
     #navbar-options li {
         background-color: rgba(208, 208, 208, 1);
+    }
+
+    #search-container {
+        margin: auto;
+        width: 90%
     }
 }
 

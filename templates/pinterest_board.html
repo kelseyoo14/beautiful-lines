@@ -18,8 +18,8 @@
           <a href="/study_board/{{ current_board.board_id }}" class="btn btn-primary">Study</a>
           <button id='new-image-button' class='btn btn-primary'><i class='glyphicon glyphicon-plus'></i></button>
         {% else %}
-          Search Results<br>
-          "{{ search }}"
+          <h3>Search Results</h3>
+          <h4>"{{ search }}"</h4>
         {% endif %}
       </div>
     </div>
@@ -76,7 +76,7 @@
                   <input type="submit" value="Save Image" id='save-image-submit' class='btn btn-primary'>
               </form>
             {% else %}
-              <p>You don't have any boards saved on Beautiful Lines</p>
+              <p>You don't have any saved boards.</p>
             {% endif %}
         </div>
       </div>
@@ -147,37 +147,21 @@
         {% for image in images %}
             <div class='image-container'>
                 <img class="pin-image" src="{{ image.original_url }}">
-                <!-- <p>{{ image.description }}</p> -->
-                <div class="dropdown">
-                  <button class="dropdown-toggle" id='image-dropdown-button' type="button" data-toggle="dropdown"><span class="caret"></span></button>
-                  <ul class="dropdown-menu">
-                    <li><form class='edit-image-form'>
+                <div class='image-actions'>
+                  {% if current_board %}
+                    <form class='edit-image-form'>
                       <input type='hidden' class='new-image-description' value='{{ image.description }}'>
                       <input type='hidden' class='image-id' value='{{ image.image_id }}'>
                       <input type='submit' value='Edit' class='btn btn-primary'>
-                    </form></li>
-                    <li><form class="delete-image-from-board">
+                    </form>
+                    <form class="delete-image-from-board">
                       <input type='hidden' class='image_id' value='{{ image.image_id }}'>
                       <input type='hidden' class='board_id' value='{{ current_board.board_id }}'>
                       <input type='submit' value='Delete' class="btn btn-primary">
-                    </form></li>
-                  </ul>
+                    </form>
+                  {% endif %}
+                  <button type="button" class="btn btn-primary save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ image.pinterest_image_id }}" data-imageid="{{ image.image_id }}">Save</button>
                 </div>
-
-                <!-- <button type="button" class="btn btn-primary save-button" data-toggle="modal" data-target="#saveImageModal" data-pinid="{{ image.pinterest_image_id }}" data-imageid="{{ image.image_id }}">Save</button> -->
-                {% if current_board %}
-                  <!-- <button class='btn btn-primary edit-button'>Edit</button> -->
-                  <!-- <form class='edit-image-form'>
-                    <input type='hidden' class='new-image-description' value='{{ image.description }}'>
-                    <input type='hidden' class='image-id' value='{{ image.image_id }}'>
-                    <input type='submit' value='Edit' class='btn btn-primary'>
-                  </form>
-                  <form class="delete-image-from-board">
-                    <input type='hidden' class='image_id' value='{{ image.image_id }}'>
-                    <input type='hidden' class='board_id' value='{{ current_board.board_id }}'>
-                    <input type='submit' value='Delete' class="btn btn-primary">
-                  </form> -->
-                {% endif %}
             </div>
             <!-- Not Appearing on Page -->
             {% if images == [] %}
@@ -189,7 +173,9 @@
 {% endif %}
 
 {% if not images and not pins %}
-  <h3 id='no-search-results'>No images were found.</h3>
+  <div class='full-page-container'>
+    <h3 id='no-search-results'>No images were found.</h3>
+  </div>
 {% endif %}
 
 {% endblock %}

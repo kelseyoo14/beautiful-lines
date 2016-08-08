@@ -194,7 +194,7 @@ $('#study-form').on('submit', startStudy);
 
 $('#study-modal .modal-body').height($('#study-modal-image').height());
 
-// Start Image Zoom Modal -------------------------------------------------------------
+// Image Zoom Modal -------------------------------------------------------------
 
 $('body').on('click', 'img', function() {
     var pinsrc = $(this).attr('src');
@@ -329,11 +329,27 @@ $(window).on('resize', function navbarUpdate () {
 });
 
 
-//Make image-container width equal to image width
+// Make image-container width equal to image width
+
 $(document).ready(function() {
     var imageWidth = $('.pin-image').width();
     $('.image-container').width(imageWidth);
 });
+
+// Board/Image buttons display on hover
+
+$('.board').hover(function() {
+    $(this).find('.board-actions').css('visibility', 'visible');
+}, function() {
+    $(this).find('.board-actions').css('visibility', 'hidden');
+})
+
+
+$('.image-container').hover(function() {
+    $(this).find('.image-actions').css('visibility', 'visible');
+}, function() {
+    $(this).find('.image-actions').css('visibility', 'hidden');
+})
 
 
 
