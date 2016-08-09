@@ -3,8 +3,7 @@
 Learn more about the developer: www.linkedin.com/in/kelseyonstenk
 
 Check out the website: http://beautifulines.herokuapp.com/
-
-(If you don't have a Pinterest Account, you can use the 'Guest Login' to check out the project.)
+*(If you don't have a Pinterest Account, you can use the 'Guest Login' to check out the project.)
 
 Beautiful Lines is a visual library and study tool for Artists. In a real life drawing class, a model would pose in front of a class, changing poses at set intervals for students to study while drawing or painting. Beautiful Lines aims to replicate that experience for practice outside of class. Beautiful Lines makes it easy for artists to save images from anywhere online or they can transfer their saved boards/images from their Pinterest account, that they can then use in timed drawing sessions. Artists can also use Beautiful Lines to search the images they have saved or to search all images that have been saved on Beautiful Lines - to find references or new inspiration!
 
